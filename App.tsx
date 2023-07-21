@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import type {PropsWithChildren} from 'react';
 import {
@@ -16,6 +16,7 @@ import {
   Text,
   useColorScheme,
   View,
+  useWindowDimensions,
 } from 'react-native';
 
 import {
@@ -25,6 +26,12 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import QRCode from 'react-native-qrcode-svg';
+import {Key, EVMWallet} from 'doom-wallet-core';
+const mnemonic =
+  'farm library shuffle knee equal blush disease table deliver custom farm stereo fat level dawn book advance lamp clutch crumble gaze law bird jazz';
+const password = 'j1io2u7$@081nf%@au0-,.,3151lijasfa';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -58,6 +65,13 @@ function Section({children, title}: SectionProps): JSX.Element {
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const {width} = useWindowDimensions();
+  const [ur, setUr] = React.useState('https://www.google.com');
+
+  useEffect(() => {
+    const wallet = new EVMWallet(Key.fromMnemonic(mnemonic, password));
+    setUr(wallet.getConnectionUR());
+  }, []);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -73,12 +87,26 @@ function App(): JSX.Element {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={backgroundStyle}>
-          <Header />
+          {/* <Header /> */}
           <View
             style={{
               backgroundColor: isDarkMode ? Colors.black : Colors.white,
             }}>
-            <Section title="Step One">
+            <Text>Wallet</Text>
+            {/* <Text>{ur}</Text> */}
+            <View
+              style={[
+                styles.qrCodeContainer,
+                {
+                  width: width - 40,
+                },
+              ]}>
+              <QRCode size={width - 40} value={ur} />
+            </View>
+
+            {/* ur !== '' ? <QRCode value={ur} />: null */}
+            {/* if (ur !== '') {<QRCode value={ur} />} */}
+            {/* <Section title="Step One">
               Edit <Text style={styles.highlight}>App.tsx</Text> to change this
               screen and then come back to see your edits.
             </Section>
@@ -91,7 +119,7 @@ function App(): JSX.Element {
             <Section title="Learn More">
               Read the docs to discover what to do next:
             </Section>
-            <LearnMoreLinks />
+            <LearnMoreLinks /> */}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -115,6 +143,11 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  qrCodeContainer: {
+    margin: 20,
+    aspectRatio: 1,
+    // height: 100%,
   },
 });
 
