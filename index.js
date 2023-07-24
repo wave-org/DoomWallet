@@ -5,6 +5,7 @@
 import 'fast-text-encoding';
 import Joi from 'joi';
 global.Buffer = require('buffer').Buffer;
+import 'react-native-get-random-values';
 
 import {AppRegistry} from 'react-native';
 

@@ -6,19 +6,38 @@ import {
   View,
   StyleSheet,
   useWindowDimensions,
+  Button,
+  Pressable,
+  Alert,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import {Key, EVMWallet} from 'doom-wallet-core';
-const mnemonic =
-  'farm library shuffle knee equal blush disease table deliver custom farm stereo fat level dawn book advance lamp clutch crumble gaze law bird jazz';
-const password = 'j1io2u7$@081nf%@au0-,.,3151lijasfa';
-const AccountPage = () => {
+import * as wallet from '../../wallet';
+import Routes from '../../routes/Routes';
+
+const AccountPage = ({navigation}) => {
   const [ur, setUr] = React.useState('https://www.google.com');
   const {width} = useWindowDimensions();
   React.useEffect(() => {
-    const wallet = new EVMWallet(Key.fromMnemonic(mnemonic, password));
-    setUr(wallet.getConnectionUR());
+    setUr(wallet.getWallet()!.getConnectionUR());
   }, []);
+
+  const reset = () => {
+    Alert.alert('Alert Title', 'Are you sure to reset wallet', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: 'Reset Wallet',
+        onPress: () => {
+          wallet.resetWallet();
+          navigation.replace(Routes.ROOT.SETUP);
+        },
+      },
+    ]);
+  };
+
   return (
     // <NavigationContainer>
     <SafeAreaView>
@@ -32,6 +51,9 @@ const AccountPage = () => {
             },
           ]}>
           <QRCode size={width - 40} value={ur} />
+          <Pressable style={styles.resetButton} onLongPress={reset}>
+            <Text>Reset wallet! (Long press)</Text>
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>
@@ -44,6 +66,16 @@ const styles = StyleSheet.create({
     margin: 20,
     aspectRatio: 1,
     // height: 100%,
+  },
+  resetButton: {
+    marginTop: 100,
+    height: 44,
+    width: '66%',
+    backgroundColor: 'red',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
   },
 });
 export default AccountPage;

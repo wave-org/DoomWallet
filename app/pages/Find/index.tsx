@@ -44,7 +44,7 @@ const FindPage = () => {
 
   const onSuccess = (ur: string) => {
     // setUrText(ur);
-    navigation.navigate(Routes.SIGN, {ur});
+    navigation.navigate(Routes.TABS.SIGN, {ur});
   };
 
   const showResult = () => {
@@ -67,11 +67,11 @@ const FindPage = () => {
             if (cameraPermission === 'authorized') {
               // Navigate to QR Scanner
               setUrText('');
-              navigation.navigate(Routes.QR_SCANNER, {onSuccess});
+              navigation.navigate(Routes.TABS.QR_SCANNER, {onSuccess});
             } else {
               request(PERMISSIONS.IOS.CAMERA).then(permission => {
                 setCameraPermission(permission);
-                navigation.navigate(Routes.QR_SCANNER, {onSuccess});
+                navigation.navigate(Routes.TABS.QR_SCANNER, {onSuccess});
               });
             }
           }}
