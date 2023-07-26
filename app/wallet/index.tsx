@@ -3,10 +3,6 @@ import {Key, EVMWallet, SignRequest} from 'doom-wallet-core';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
 
-// const mnemonic =
-//   'farm library shuffle knee equal blush disease table deliver custom farm stereo fat level dawn book advance lamp clutch crumble gaze law bird jazz';
-// const password = 'j1io2u7$@081nf%@au0-,.,3151lijasfa';
-
 let wallet: EVMWallet | null = null;
 
 export type PasswordType =
@@ -92,13 +88,6 @@ export function getWalletHeader() {
   }
   return walletHeader;
 }
-
-// export function getPasswordType() {
-//   if (walletHeader === null) {
-//     throw new Error('walletJSON is null');
-//   }
-//   return walletHeader.passwordType;
-// }
 
 export async function checkBiometrics() {
   if (walletHeader === null) {

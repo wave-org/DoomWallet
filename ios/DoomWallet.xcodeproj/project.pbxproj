@@ -184,7 +184,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				145BF6CB17C2C4640F2B0635 /* [CP-User] [RNGoogleMobileAds] Configuration */,
+				48B6270F39B074831C756C2A /* [CP-User] [RNGoogleMobileAds] Configuration */,
 			);
 			buildRules = (
 			);
@@ -284,7 +284,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DoomWallet/Pods-DoomWallet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		145BF6CB17C2C4640F2B0635 /* [CP-User] [RNGoogleMobileAds] Configuration */ = {
+		48B6270F39B074831C756C2A /* [CP-User] [RNGoogleMobileAds] Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
