@@ -21,7 +21,7 @@ import {loadWallet, checkWalletExists, getWallet} from './wallet';
 import LoginPage from './pages/Login';
 import SetupPage from './pages/Setup';
 import SetPasswordPage from './pages/Setup/SetPassword';
-import SetSimplePasswordPage from './pages/Setup/SetSimplePassword';
+import SecuritySettingPage from './pages/Setup/SecuritySetting';
 import Toast from 'react-native-toast-message';
 
 const Tab = createBottomTabNavigator();
@@ -72,20 +72,23 @@ function App(): JSX.Element {
   useEffect(() => {
     async function checkExisting() {
       let wallet = getWallet();
-      console.log('checkExisting wallet', wallet);
       if (wallet !== null) {
         setRoute(Routes.ROOT.TABS);
       } else {
         try {
-          const passwordType = await checkWalletExists();
-          console.log('passwordType', passwordType);
-          if (passwordType !== null) {
+          const walletHeader = await checkWalletExists();
+          if (walletHeader !== null) {
             setRoute(Routes.ROOT.LOGIN);
           } else {
             setRoute(Routes.ROOT.SETUP);
           }
         } catch (error) {
-          console.log(error);
+          let message = (error as Error).message;
+          Toast.show({
+            type: 'error',
+            text1: 'Error happened, please try again later',
+            text2: message,
+          });
         }
       }
     }
@@ -126,8 +129,8 @@ function App(): JSX.Element {
               component={SetPasswordPage}
             />
             <RootStack.Screen
-              name={Routes.ROOT.SET_SIMPLE_PASSWORD}
-              component={SetSimplePasswordPage}
+              name={Routes.ROOT.SECURITY_SETTING}
+              component={SecuritySettingPage}
             />
           </RootStack.Group>
         </RootStack.Navigator>

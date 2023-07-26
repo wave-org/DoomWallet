@@ -4,7 +4,7 @@ const Routes = {
     LOGIN: 'Login',
     SETUP: 'Setup',
     SETPASSWORD: 'SetPassword',
-    SET_SIMPLE_PASSWORD: 'SetSimplePassword',
+    SECURITY_SETTING: 'SecuritySetting',
   },
   TABS: {
     FIND: 'FIND',

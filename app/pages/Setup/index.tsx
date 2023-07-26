@@ -12,12 +12,14 @@ import {
 } from 'react-native';
 import Routes from '../../routes/Routes';
 import * as wallet from '../../wallet';
+import Toast from 'react-native-toast-message';
 
 const SetupPage = ({route, navigation}) => {
   const [text, setText] = React.useState<string>('');
   const [mnemonic, setMnemonic] = React.useState<string>('');
   const [success, setSuccess] = React.useState<boolean>(false);
   const [password, setPassword] = React.useState<string>('');
+  const [useBiometrics, setUseBiometrics] = React.useState<boolean>(false);
   const [passwordType, setPasswordType] =
     React.useState<wallet.PasswordType>('FullPassword');
   const [simplePassword, setSimplePassword] = React.useState<string>('');
@@ -48,11 +50,13 @@ const SetupPage = ({route, navigation}) => {
     password: string;
     passwordType: wallet.PasswordType;
     simplePassword: string | undefined;
+    useBiometrics: boolean;
   }) => {
     setSuccess(true);
     setMnemonic(keyInfo.mnemonic);
     setPassword(keyInfo.password);
     setPasswordType(keyInfo.passwordType);
+    setUseBiometrics(keyInfo.useBiometrics);
     if (keyInfo.simplePassword !== undefined) {
       setSimplePassword(keyInfo.simplePassword);
     }
@@ -66,11 +70,15 @@ const SetupPage = ({route, navigation}) => {
         password,
         passwordType,
         simplePassword,
-        useBiometrics: false,
+        useBiometrics,
       });
       navigation.replace(Routes.ROOT.TABS);
     } catch (error) {
-      console.log(error);
+      let message = (error as Error).message;
+      Toast.show({
+        type: 'error',
+        text1: message,
+      });
     }
   };
 
@@ -87,6 +95,8 @@ const SetupPage = ({route, navigation}) => {
             <Text>{mnemonic}</Text>
             <Text>Password:</Text>
             <Text>{password}</Text>
+            <Text>Use Biometrics:</Text>
+            <Text>{useBiometrics ? 'use' : 'not use'}</Text>
             <Text>PasswordType:</Text>
             <Text>{passwordType}</Text>
             {simplePassword !== '' ? (

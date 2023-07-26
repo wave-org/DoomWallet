@@ -18,20 +18,11 @@ const SetPasswordPage = ({route, navigation}) => {
   const [password, setPassword] = React.useState<string>('');
   //   const navigation = useNavigation();
 
-  const useSimplePassword = () => {
-    navigation.navigate(Routes.ROOT.SET_SIMPLE_PASSWORD, {
+  const goSecurityPage = () => {
+    navigation.navigate(Routes.ROOT.SECURITY_SETTING, {
       mnemonic,
       password,
       setupComplete,
-    });
-  };
-
-  const usePassword = () => {
-    navigation.popToTop();
-    setupComplete({
-      mnemonic,
-      password,
-      passwordType: 'password',
     });
   };
 
@@ -66,8 +57,7 @@ const SetPasswordPage = ({route, navigation}) => {
           {password.length > 10 ? (
             <View>
               <Text>TODO not bad password</Text>
-              <Button title="Use simple password" onPress={useSimplePassword} />
-              <Button title="Just use password" onPress={usePassword} />
+              <Button title="Security Setting" onPress={goSecurityPage} />
             </View>
           ) : (
             <View>

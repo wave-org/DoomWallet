@@ -11,39 +11,64 @@ import {
   Keyboard,
   Pressable,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import * as wallet from '../../wallet';
 import Routes from '../../routes/Routes';
 import Toast from 'react-native-toast-message';
 
 const LoginPage = ({navigation}) => {
-  const passwordType = wallet.getPasswordType();
+  const walletHeader = wallet.getWalletHeader();
   const [password, setPassword] = React.useState<string>('');
+  const [simplePassword, setSimplePassword] = React.useState<string>('');
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const login = () => {
     Keyboard.dismiss();
-    if (passwordType === 'FullPassword') {
-      if (wallet.loadWallet(password)) {
-        console.log('Login success');
-        navigation.replace(Routes.ROOT.TABS);
-      } else {
+    setLoading(true);
+
+    async function loadWallet() {
+      // console.log('walletHeader', new Date());
+      let success = false;
+      try {
+        if (walletHeader.passwordType === 'FullPassword') {
+          success = await wallet.loadWallet(password, undefined);
+        } else if (walletHeader.passwordType === 'NoPassword') {
+          success = await wallet.loadWallet(undefined, undefined);
+        } else {
+          success = await wallet.loadWallet(undefined, simplePassword);
+        }
+        setLoading(false);
+        if (success) {
+          // about 4000ms...
+          // console.log('success', new Date());
+          Toast.show({
+            type: 'success',
+            text1: 'Login success',
+          });
+          setTimeout(() => {
+            navigation.replace(Routes.ROOT.TABS);
+          }, 300);
+        } else {
+          // TODO max try times
+          Toast.show({
+            type: 'error',
+            text1: 'Password is wrong',
+          });
+        }
+      } catch (error) {
+        setLoading(false);
+        let message = (error as Error).message;
         Toast.show({
           type: 'error',
-          text1: 'Password is wrong',
-        });
-      }
-    } else {
-      // simple password
-      if (wallet.loadWalletBySimplePassword(password)) {
-        console.log('Login success');
-        navigation.replace(Routes.ROOT.TABS);
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Password is wrong',
+          text1: message,
         });
       }
     }
+
+    setImmediate(() => {
+      loadWallet();
+    });
   };
   const reset = () => {
     Keyboard.dismiss();
@@ -64,7 +89,7 @@ const LoginPage = ({navigation}) => {
   };
 
   const inputView = () => {
-    if (passwordType === 'FullPassword') {
+    if (walletHeader.passwordType === 'FullPassword') {
       return (
         <View style={styles.inputView}>
           <Text>Input your password</Text>
@@ -79,15 +104,15 @@ const LoginPage = ({navigation}) => {
           />
         </View>
       );
-    } else if (passwordType === 'SimplePassword') {
+    } else if (walletHeader.passwordType === 'SimplePassword') {
       return (
         <View style={styles.inputView}>
           <Text>Input your simple password to unlock your wallet</Text>
           <TextInput
             style={styles.textInput}
             placeholder="Type your password"
-            onChangeText={newText => setPassword(newText)}
-            defaultValue={password}
+            onChangeText={newText => setSimplePassword(newText)}
+            defaultValue={simplePassword}
             autoComplete="off"
             autoCorrect={false}
             autoCapitalize="none"
@@ -95,16 +120,15 @@ const LoginPage = ({navigation}) => {
           />
         </View>
       );
-    } else {
-      // passwordType === 'PinPassword'
+    } else if (walletHeader.passwordType === 'PinPassword') {
       return (
         <View style={styles.inputView}>
           <Text>Input your PIN password to unlock your wallet</Text>
           <TextInput
             style={styles.textInput}
             placeholder="Type your password"
-            onChangeText={newText => setPassword(newText)}
-            defaultValue={password}
+            onChangeText={newText => setSimplePassword(newText)}
+            defaultValue={simplePassword}
             autoComplete="off"
             autoCorrect={false}
             autoCapitalize="none"
@@ -112,10 +136,12 @@ const LoginPage = ({navigation}) => {
           />
         </View>
       );
+    } else {
+      return null;
     }
   };
 
-  if (passwordType === 'GesturePassword') {
+  if (walletHeader.passwordType === 'GesturePassword') {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
@@ -139,6 +165,11 @@ const LoginPage = ({navigation}) => {
             </Pressable>
           </View>
         </TouchableWithoutFeedback>
+        {loading ? (
+          <View style={styles.indicatorView}>
+            <ActivityIndicator size="large" color="#00ff00" />
+          </View>
+        ) : null}
       </SafeAreaView>
     );
   }
@@ -172,6 +203,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+  },
+  indicatorView: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
 });
 

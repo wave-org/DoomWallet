@@ -25,6 +25,8 @@
     "react-native-camera": "^4.2.1",
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-get-random-values": "^1.9.0",
+    "react-native-google-mobile-ads": "^11.5.0",
+    "react-native-keychain": "^8.1.1",
     "react-native-permissions": "^3.8.4",
     "react-native-qrcode-scanner": "^1.5.5",
     "react-native-qrcode-svg": "^6.2.0",
@@ -61,7 +63,8 @@
     }
   },
   "reactNativePermissionsIOS": [
-    "Camera"
+    "Camera",
+    "FaceID"
   ],
   "engines": {
     "node": ">=18"

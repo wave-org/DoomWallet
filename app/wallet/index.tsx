@@ -1,6 +1,7 @@
 import QRCode from 'react-native-qrcode-svg';
 import {Key, EVMWallet, SignRequest} from 'doom-wallet-core';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import * as Keychain from 'react-native-keychain';
 
 // const mnemonic =
 //   'farm library shuffle knee equal blush disease table deliver custom farm stereo fat level dawn book advance lamp clutch crumble gaze law bird jazz';
@@ -12,8 +13,8 @@ export type PasswordType =
   | 'FullPassword'
   | 'SimplePassword'
   | 'PinPassword'
-  | 'GesturePassword';
-//   | 'NoPassword';
+  | 'GesturePassword'
+  | 'NoPassword';
 
 type WalletSetupParam = {
   mnemonic: string;
@@ -23,16 +24,23 @@ type WalletSetupParam = {
   simplePassword?: string;
 };
 
-let walletJSON: WalletJSON | null = null;
-/// stored in storage
-type WalletJSON = {
+let walletSecret: WalletSecret | null = null;
+/// stored in Keychain. If user use biometrics, this is encrypted by biometrics.
+type WalletSecret = {
   mnemonic: string;
+  /// if only use biometrics, password will be stored here
+  password?: string;
+};
+let walletHeader: WalletHeader | null = null;
+/// stored in EncryptedStorage
+export type WalletHeader = {
   passwordType: PasswordType;
   useBiometrics: boolean;
   encryptedPassword: string | undefined;
   /// use hash to check password is correct
   passwordHash: string;
 };
+const KEY_WALLET_HEADER = 'wallet_header';
 
 // encrypt password
 function encryptPassword(password: string, simplePassword: string) {
@@ -41,8 +49,12 @@ function encryptPassword(password: string, simplePassword: string) {
   const passwordData = encoder.encode(password);
   const simplePasswordData = encoder.encode(simplePassword);
   const encryptedPasswordData = passwordData.map((value, index) => {
-    // eslint-disable-next-line no-bitwise
-    return value ^ simplePasswordData[index % simplePasswordData.length];
+    return (
+      // eslint-disable-next-line no-bitwise
+      value ^
+      index % simplePasswordData.length ^
+      simplePasswordData[index % simplePasswordData.length]
+    );
   });
   return Buffer.from(encryptedPasswordData).toString('hex');
 }
@@ -53,95 +65,197 @@ function decryptPassword(encryptedPassword: string, simplePassword: string) {
   const encryptedPasswordData = Buffer.from(encryptedPassword, 'hex');
   const simplePasswordData = encoder.encode(simplePassword);
   const passwordData = encryptedPasswordData.map((value, index) => {
-    // eslint-disable-next-line no-bitwise
-    return value ^ simplePasswordData[index % simplePasswordData.length];
+    return (
+      // eslint-disable-next-line no-bitwise
+      value ^
+      index % simplePasswordData.length ^
+      simplePasswordData[index % simplePasswordData.length]
+    );
   });
   return Buffer.from(passwordData).toString();
 }
 
-export async function checkWalletExists(): Promise<PasswordType | null> {
-  const storedValue = await EncryptedStorage.getItem('wallet_json');
+export async function checkWalletExists(): Promise<WalletHeader | null> {
+  const storedValue = await EncryptedStorage.getItem(KEY_WALLET_HEADER);
   if (storedValue !== null && storedValue !== undefined) {
-    // Congrats! You've just retrieved your first value!
-    console.log(storedValue);
-    walletJSON = JSON.parse(storedValue);
-    if (walletJSON !== null) {
-      return walletJSON.passwordType;
+    walletHeader = JSON.parse(storedValue);
+    if (walletHeader !== null) {
+      return walletHeader;
     }
   }
   return null;
 }
 
-export function getPasswordType() {
-  if (walletJSON === null) {
-    throw new Error('walletJSON is null');
+export function getWalletHeader() {
+  if (walletHeader === null) {
+    throw new Error('walletHeader is null');
   }
-  return walletJSON.passwordType;
+  return walletHeader;
 }
 
-/// if password is correct, return true
-export function loadWallet(password: string) {
-  if (walletJSON === null) {
-    throw new Error('walletJSON is null');
-  }
+// export function getPasswordType() {
+//   if (walletHeader === null) {
+//     throw new Error('walletJSON is null');
+//   }
+//   return walletHeader.passwordType;
+// }
 
-  if (Key.hashPassword(password) === walletJSON.passwordHash) {
-    wallet = new EVMWallet(Key.fromMnemonic(walletJSON.mnemonic, password));
-    return true;
+export async function checkBiometrics() {
+  if (walletHeader === null) {
+    throw new Error('walletHeader is null');
   }
-  return false;
+  if (!walletHeader.useBiometrics) {
+    throw new Error('useBiometrics is false');
+  }
+  // TODO permission check again
+  const result = await Keychain.getGenericPassword({
+    authenticationPrompt: {
+      title: 'Doom wallet need use your biometrics to secure your wallet',
+    },
+  });
+  if (result === false) {
+    throw new Error('save failed. Unknown error');
+  }
+  walletSecret = JSON.parse(result.password);
+  if (walletSecret === null) {
+    throw new Error('walletSecret is null');
+  }
 }
 
-export function loadWalletBySimplePassword(simplePassword: string) {
-  if (walletJSON === null) {
-    throw new Error('walletJSON is null');
+/// if password is correct and pass the Biometrics check, return true
+/// if password is wrong, it will return false
+export async function loadWallet(
+  password: string | undefined,
+  simplePassword: string | undefined,
+) {
+  if (walletHeader === null) {
+    throw new Error('walletHeader is null');
+  }
+  let correctPassword = password;
+  if (walletHeader.passwordType === 'FullPassword') {
+    if (password === undefined) {
+      throw new Error('password is undefined');
+    }
+    if (Key.hashPassword(password) !== walletHeader.passwordHash) {
+      return false;
+    }
+  } else if (
+    walletHeader.passwordType === 'SimplePassword' ||
+    walletHeader.passwordType === 'GesturePassword' ||
+    walletHeader.passwordType === 'PinPassword'
+  ) {
+    if (simplePassword === undefined) {
+      throw new Error('simplePassword is undefined');
+    }
+    if (walletHeader.encryptedPassword === undefined) {
+      throw new Error('encryptedPassword is undefined');
+    }
+    const fullPassword = decryptPassword(
+      walletHeader.encryptedPassword,
+      simplePassword,
+    );
+    if (Key.hashPassword(fullPassword) !== walletHeader.passwordHash) {
+      return false;
+    }
+    correctPassword = fullPassword;
+  } else {
+    correctPassword = undefined;
   }
 
-  if (walletJSON.passwordType === 'FullPassword') {
-    throw new Error('passwordType should not be FullPassword');
+  if (walletHeader.useBiometrics) {
+    if (walletSecret === null) {
+      await checkBiometrics();
+    }
+    if (walletSecret === null) {
+      throw new Error('walletSecret is null');
+    }
+    if (walletSecret.password === undefined && correctPassword === undefined) {
+      throw new Error('walletSecret.password is null');
+    }
+    if (correctPassword === undefined) {
+      correctPassword = walletSecret.password!;
+    }
+  } else {
+    const result = await Keychain.getGenericPassword();
+    if (result === false) {
+      throw new Error('save failed. Unknown error');
+    }
+    walletSecret = JSON.parse(result.password);
+    if (walletSecret === null) {
+      throw new Error('walletSecret is null');
+    }
   }
-  if (walletJSON.encryptedPassword === undefined) {
-    throw new Error('encryptedPassword is undefined');
+  if (correctPassword === undefined) {
+    throw new Error('correctPassword is undefined');
   }
-  const password = decryptPassword(
-    walletJSON.encryptedPassword,
-    simplePassword,
+  wallet = new EVMWallet(
+    Key.fromMnemonic(walletSecret.mnemonic, correctPassword),
   );
-  if (Key.hashPassword(password) === walletJSON.passwordHash) {
-    wallet = new EVMWallet(Key.fromMnemonic(walletJSON.mnemonic, password));
-    return true;
-  }
-  return false;
+  return true;
 }
 
 export async function setupWallet(walletInfo: WalletSetupParam) {
   // get password hash.
   const passwordHash = Key.hashPassword(walletInfo.password);
+  walletHeader = {
+    passwordType: walletInfo.passwordType,
+    useBiometrics: walletInfo.useBiometrics,
+    passwordHash: passwordHash,
+    encryptedPassword: undefined,
+  };
   if (walletInfo.passwordType === 'FullPassword') {
-    walletJSON = {
+    walletSecret = {
       mnemonic: walletInfo.mnemonic,
-      passwordType: walletInfo.passwordType,
-      useBiometrics: walletInfo.useBiometrics,
-      passwordHash: passwordHash,
-      encryptedPassword: undefined,
+    };
+  } else if (walletInfo.passwordType === 'NoPassword') {
+    walletSecret = {
+      mnemonic: walletInfo.mnemonic,
+      password: walletInfo.password,
     };
   } else {
     if (walletInfo.simplePassword === undefined) {
       throw new Error('simplePassword is undefined');
     }
-    walletJSON = {
+    walletHeader.encryptedPassword = encryptPassword(
+      walletInfo.password,
+      walletInfo.simplePassword,
+    );
+    walletSecret = {
       mnemonic: walletInfo.mnemonic,
-      passwordType: walletInfo.passwordType,
-      useBiometrics: walletInfo.useBiometrics,
-      passwordHash: passwordHash,
-      encryptedPassword: encryptPassword(
-        walletInfo.password,
-        walletInfo.simplePassword,
-      ),
+    };
+  }
+  let keyChainOptions: Keychain.Options | undefined;
+  if (walletInfo.useBiometrics) {
+    keyChainOptions = {
+      accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET,
+      accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+      // accessGroup: null,
+      authenticationPrompt: {
+        title: 'Doom wallet need use your biometrics to secure your wallet',
+      },
+      authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
+      securityLevel: Keychain.SECURITY_LEVEL.SECURE_HARDWARE,
+      storage: Keychain.STORAGE_TYPE.RSA,
+      rules: Keychain.SECURITY_RULES.NONE,
     };
   }
 
-  await EncryptedStorage.setItem('wallet_json', JSON.stringify(walletJSON));
+  const secretString = JSON.stringify(walletSecret);
+  const result = await Keychain.setGenericPassword(
+    'doom',
+    secretString,
+    keyChainOptions,
+  );
+  if (result === false) {
+    throw new Error('save failed. Unknown error');
+  }
+
+  // save header info
+  await EncryptedStorage.setItem(
+    KEY_WALLET_HEADER,
+    JSON.stringify(walletHeader),
+  );
+
   wallet = new EVMWallet(
     Key.fromMnemonic(walletInfo.mnemonic, walletInfo.password),
   );
@@ -149,28 +263,11 @@ export async function setupWallet(walletInfo: WalletSetupParam) {
 
 export async function resetWallet() {
   wallet = null;
-  walletJSON = null;
-  await EncryptedStorage.removeItem('wallet_json');
+  walletHeader = null;
+  walletSecret = null;
+  await EncryptedStorage.removeItem(KEY_WALLET_HEADER);
+  await Keychain.resetGenericPassword();
 }
-
-// export async function loadWallet(_password: string) {
-//   // TODO load data from storage
-//   if (wallet === null) {
-//     wallet = new EVMWallet(Key.fromMnemonic(mnemonic, _password));
-//   }
-//   return wallet;
-// }
-
-// export async function loadWalletWithSimplePassword(simplePassword: string) {
-//   // TODO load data from storage
-//   if (wallet === null) {
-//     // TODO : password =  storedpassword + simplePassword
-//     wallet = new EVMWallet(
-//       Key.fromMnemonic(mnemonic, password + simplePassword),
-//     );
-//   }
-//   return wallet;
-// }
 
 export function parseRequest(ur: string) {
   if (wallet === null) {
