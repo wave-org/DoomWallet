@@ -6,7 +6,13 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, Text, View, useWindowDimensions} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  useWindowDimensions,
+  Image,
+} from 'react-native';
 
 import HomePage from './pages/Home';
 import FindPage from './pages/Find';
@@ -56,11 +62,77 @@ const FindStackScreen = () => (
 // }, []);
 
 const TabHome = () => {
+  const networkTabIcon = ({
+    color,
+    focused,
+    size,
+  }: {
+    focused: boolean;
+    color: string;
+    size: number;
+  }) => (
+    <Image
+      source={require('./tabIcons/network.png')}
+      tintColor={color}
+      width={size}
+      height={size}
+    />
+  );
+  const scanTabIcon = ({
+    color,
+    focused,
+    size,
+  }: {
+    focused: boolean;
+    color: string;
+    size: number;
+  }) => (
+    <Image
+      source={require('./tabIcons/scan.png')}
+      tintColor={color}
+      width={size}
+      height={size}
+    />
+  );
+  const accountTabIcon = ({
+    color,
+    focused,
+    size,
+  }: {
+    focused: boolean;
+    color: string;
+    size: number;
+  }) => (
+    <Image
+      source={require('./tabIcons/account.png')}
+      tintColor={color}
+      width={size}
+      height={size}
+    />
+  );
   return (
     <Tab.Navigator screenOptions={{headerShown: false}}>
-      <Tab.Screen name="Home" component={HomePage} />
-      <Tab.Screen name="Find" component={FindStackScreen} />
-      <Tab.Screen name="Account" component={AccountPage} />
+      <Tab.Screen
+        name="Network"
+        component={HomePage}
+        options={{
+          tabBarIcon: networkTabIcon,
+        }}
+      />
+      <Tab.Screen
+        name="Scan"
+        component={FindStackScreen}
+        options={{
+          tabBarIcon: scanTabIcon,
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountPage}
+        options={{
+          tabBarIcon: accountTabIcon,
+        }}
+      />
     </Tab.Navigator>
   );
 };
