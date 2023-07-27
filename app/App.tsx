@@ -1,17 +1,13 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   Text,
   View,
-  useWindowDimensions,
+  // useWindowDimensions,
   Image,
+  StyleSheet,
+  StatusBar,
+  Appearance,
 } from 'react-native';
 
 import HomePage from './pages/Home';
@@ -23,7 +19,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Routes from './routes/Routes';
-import {loadWallet, checkWalletExists, getWallet} from './wallet';
+import {checkWalletExists, getWallet} from './wallet';
 import LoginPage from './pages/Login';
 import SetupPage from './pages/Setup';
 import SetPasswordPage from './pages/Setup/SetPassword';
@@ -48,23 +44,10 @@ const FindStackScreen = () => (
   </FindStack.Navigator>
 );
 
-// useEffect(() => {
-//   async function checkExisting() {
-//     const existingUser = await AsyncStorage.getItem(EXISTING_USER);
-//     const route = !existingUser
-//       ? Routes.ONBOARDING.ROOT_NAV
-//       : Routes.ONBOARDING.LOGIN;
-//     setRoute(route);
-//   }
-
-//   checkExisting();
-//   /* eslint-disable react-hooks/exhaustive-deps */
-// }, []);
-
 const TabHome = () => {
   const networkTabIcon = ({
     color,
-    focused,
+    // focused,
     size,
   }: {
     focused: boolean;
@@ -80,7 +63,7 @@ const TabHome = () => {
   );
   const scanTabIcon = ({
     color,
-    focused,
+    // focused,
     size,
   }: {
     focused: boolean;
@@ -96,7 +79,7 @@ const TabHome = () => {
   );
   const accountTabIcon = ({
     color,
-    focused,
+    // focused,
     size,
   }: {
     focused: boolean;
@@ -171,6 +154,15 @@ function App(): JSX.Element {
   return (
     (route !== '' && (
       <NavigationContainer>
+        <StatusBar
+          animated={true}
+          // backgroundColor="#61dafb"
+          barStyle={
+            Appearance.getColorScheme() === 'light'
+              ? 'light-content'
+              : 'dark-content'
+          }
+        />
         <RootStack.Navigator initialRouteName={route}>
           <RootStack.Group
             screenOptions={{
@@ -210,7 +202,7 @@ function App(): JSX.Element {
       </NavigationContainer>
     )) || (
       <NavigationContainer>
-        <SafeAreaView style={{backgroundColor: 'white'}}>
+        <SafeAreaView style={styles.background}>
           <View>
             <Text>Loding</Text>
           </View>
@@ -219,5 +211,11 @@ function App(): JSX.Element {
     )
   );
 }
+
+const styles = StyleSheet.create({
+  background: {
+    backgroundColor: 'white',
+  },
+});
 
 export default App;
