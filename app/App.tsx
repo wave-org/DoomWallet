@@ -55,7 +55,7 @@ const TabHome = () => {
     size: number;
   }) => (
     <Image
-      source={require('./tabIcons/network.png')}
+      source={require('./images/network.png')}
       tintColor={color}
       width={size}
       height={size}
@@ -71,7 +71,7 @@ const TabHome = () => {
     size: number;
   }) => (
     <Image
-      source={require('./tabIcons/scan.png')}
+      source={require('./images/scan.png')}
       tintColor={color}
       width={size}
       height={size}
@@ -87,7 +87,7 @@ const TabHome = () => {
     size: number;
   }) => (
     <Image
-      source={require('./tabIcons/account.png')}
+      source={require('./images/account.png')}
       tintColor={color}
       width={size}
       height={size}
@@ -158,7 +158,7 @@ function App(): JSX.Element {
           animated={true}
           // backgroundColor="#61dafb"
           barStyle={
-            Appearance.getColorScheme() === 'light'
+            Appearance.getColorScheme() === 'dark'
               ? 'light-content'
               : 'dark-content'
           }

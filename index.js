@@ -14,9 +14,10 @@ mobileAds()
     // Initialization complete!
   });
 
-import {AppRegistry} from 'react-native';
+import {AppRegistry, Appearance} from 'react-native';
 
 import App from './app/App';
 import {name as appName} from './app.json';
-
+// TODO not support darm mode now.
+Appearance.setColorScheme('light');
 AppRegistry.registerComponent(appName, () => App);
