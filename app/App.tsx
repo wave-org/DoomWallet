@@ -179,7 +179,7 @@ function App(): JSX.Element {
             <RootStack.Screen
               name={Routes.ROOT.SETUP}
               component={SetupPage}
-              options={{headerShown: false}}
+              options={{headerShown: true, title: 'Create Wallet'}}
             />
             <RootStack.Screen
               name={Routes.ROOT.TABS}
