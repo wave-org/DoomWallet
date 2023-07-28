@@ -191,10 +191,12 @@ function App(): JSX.Element {
             <RootStack.Screen
               name={Routes.ROOT.SETPASSWORD}
               component={SetPasswordPage}
+              options={{title: 'Set Password'}}
             />
             <RootStack.Screen
               name={Routes.ROOT.SECURITY_SETTING}
               component={SecuritySettingPage}
+              options={{title: 'Security Setting'}}
             />
           </RootStack.Group>
         </RootStack.Navigator>

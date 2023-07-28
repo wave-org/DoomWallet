@@ -118,6 +118,7 @@ const LoginPage = ({navigation}: {navigation: any}) => {
             autoComplete="off"
             autoCorrect={false}
             returnKeyType="done"
+            maxLength={32}
             // inputMode="search"
             clearButtonMode="while-editing"
             autoCapitalize="none"
@@ -146,6 +147,7 @@ const LoginPage = ({navigation}: {navigation: any}) => {
             onChangeText={newText => setSimplePassword(newText)}
             defaultValue={simplePassword}
             autoComplete="off"
+            maxLength={16}
             autoCorrect={false}
             returnKeyType="done"
             // inputMode="search"
@@ -176,6 +178,7 @@ const LoginPage = ({navigation}: {navigation: any}) => {
             onChangeText={newText => setSimplePassword(newText)}
             defaultValue={simplePassword}
             autoComplete="off"
+            maxLength={10}
             autoCorrect={false}
             returnKeyType="done"
             // inputMode="search"
