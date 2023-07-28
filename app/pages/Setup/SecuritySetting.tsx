@@ -4,7 +4,7 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
+  TouchableOpacity,
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
@@ -17,7 +17,13 @@ import * as Keychain from 'react-native-keychain';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
-const SecuritySettingPage = ({route, navigation}) => {
+const SecuritySettingPage = ({
+  route,
+  navigation,
+}: {
+  route: any;
+  navigation: any;
+}) => {
   const {mnemonic, password, setupComplete} = route.params;
   const [supportBiometrics, setSupportBiometrics] = React.useState<
     boolean | undefined
@@ -89,6 +95,14 @@ const SecuritySettingPage = ({route, navigation}) => {
     toggleSimplePasswordSwitch();
   };
 
+  const buttonIsDisable = () => {
+    if (!useSimplePassword) {
+      return false;
+    } else {
+      return simplePassword.length < 4;
+    }
+  };
+
   const [useType1, setUseType1] = React.useState<boolean>(false);
   const toggleType1Switch = () => {
     if (!useType1) {
@@ -110,21 +124,21 @@ const SecuritySettingPage = ({route, navigation}) => {
   };
 
   const [useType3, setUseType3] = React.useState<boolean>(false);
-  const toggleType3Switch = () => {
-    if (!useType3) {
-      setUseType2(false);
-      setUseType1(false);
-    }
-    setSimplePassword('');
-    setUseType3(previousState => !previousState);
-  };
+  // const toggleType3Switch = () => {
+  //   if (!useType3) {
+  //     setUseType2(false);
+  //     setUseType1(false);
+  //   }
+  //   setSimplePassword('');
+  //   setUseType3(previousState => !previousState);
+  // };
 
-  const useGesturePassword = () => {
-    Toast.show({
-      type: 'error',
-      text1: 'TODO set Gesture Password',
-    });
-  };
+  // const useGesturePassword = () => {
+  //   Toast.show({
+  //     type: 'error',
+  //     text1: 'TODO set Gesture Password',
+  //   });
+  // };
 
   const complete = () => {
     // check if simple password is valid
@@ -170,111 +184,153 @@ const SecuritySettingPage = ({route, navigation}) => {
         onPress={Keyboard.dismiss}
         accessible={false}>
         <View style={styles.container}>
-          <Text>
-            With biometrics, you can use your face or fingerprint to unlock your
-            wallet.
-          </Text>
-          <Text>
-            It's much safer. The data will be encrypted by your biometrics.
-            Without your biometrics, no one can access your wallet.
-          </Text>
-          {supportBiometrics === false ? (
-            <View style={styles.passwordContainer}>
-              <Text>Sorry, your device don't support biometrics.</Text>
-            </View>
-          ) : (
-            <View style={styles.passwordContainer}>
-              <Text>check biometrics every time.</Text>
-              <Switch
-                trackColor={{false: '#767577', true: '#81b0ff'}}
-                thumbColor={usebiometrics ? '#f5dd4b' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={switchBiometrics}
-                value={usebiometrics}
-              />
-            </View>
-          )}
-          <View style={styles.passwordContainer}>
-            <Text>Password: {password} , Check password every time.</Text>
-            <Switch
-              trackColor={{false: '#767577', true: '#81b0ff'}}
-              thumbColor={usePassword ? '#f5dd4b' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={switchUsePassword}
-              value={usePassword}
-            />
-          </View>
-          <Text>
-            SimplePassword: {simplePassword} , Check simplePassword every time.
-          </Text>
-          <Switch
-            trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={useSimplePassword ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={switchUseSimplePassword}
-            value={useSimplePassword}
-          />
-          {useSimplePassword ? (
-            <View style={styles.passwordContainer}>
-              <View style={styles.passwordContainer}>
-                <Text>We have three options for Simple password:</Text>
-                <Text>1. Normal simple password:</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.normalText}>
+              With biometrics, you can use your face or fingerprint to store
+              your secret and unlock your wallet.
+            </Text>
+            <Text style={styles.normalText}>
+              It's much safer. The data will be encrypted by your biometrics.
+              Without your biometrics, no one can access your secret.
+            </Text>
+            {supportBiometrics === false ? (
+              <Text style={styles.normalText}>
+                Sorry, your device don't support biometrics. It's better to use
+                another device which support biometrics.
+              </Text>
+            ) : (
+              <View style={styles.subArea}>
+                <View style={styles.line}>
+                  <Text style={styles.lineLabel}>Biometrics:</Text>
+                  <Switch
+                    trackColor={{false: '#767577', true: '#81b0ff'}}
+                    thumbColor={usebiometrics ? '#f5dd4b' : '#f4f3f4'}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={switchBiometrics}
+                    value={usebiometrics}
+                  />
+                </View>
+              </View>
+            )}
+            <View style={styles.subArea}>
+              <View style={styles.line}>
+                <Text style={styles.lineLabel}>Password:</Text>
+                <Text style={styles.lineText}>{password}</Text>
+              </View>
+              <View style={styles.line}>
+                <Text style={styles.lineText}>Login by full password:</Text>
                 <Switch
                   trackColor={{false: '#767577', true: '#81b0ff'}}
-                  thumbColor={useType1 ? '#f5dd4b' : '#f4f3f4'}
+                  thumbColor={usePassword ? '#f5dd4b' : '#f4f3f4'}
                   ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleType1Switch}
-                  value={useType1}
+                  onValueChange={switchUsePassword}
+                  value={usePassword}
                 />
-                {useType1 ? (
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Type a simple password"
-                    onChangeText={newText => setSimplePassword(newText)}
-                    defaultValue={simplePassword}
-                    autoComplete="off"
-                    autoCorrect={false}
-                    autoCapitalize="none"
-                  />
-                ) : null}
-                <Text>2. Use PIN:</Text>
-                <Switch
-                  trackColor={{false: '#767577', true: '#81b0ff'}}
-                  thumbColor={useType2 ? '#f5dd4b' : '#f4f3f4'}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleType2Switch}
-                  value={useType2}
-                />
-                {useType2 ? (
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Type a PIN"
-                    onChangeText={newText => setSimplePassword(newText)}
-                    defaultValue={simplePassword}
-                    autoComplete="off"
-                    autoCorrect={false}
-                    autoCapitalize="none"
-                    keyboardType="numeric"
-                  />
-                ) : null}
-                <Text>3. Use Gesture Password:</Text>
-                <Switch
-                  trackColor={{false: '#767577', true: '#81b0ff'}}
-                  thumbColor={useType3 ? '#f5dd4b' : '#f4f3f4'}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleType3Switch}
-                  value={useType3}
-                />
-                {useType3 ? (
-                  <Button
-                    title="TODO set Gesture Password"
-                    onPress={useGesturePassword}
-                  />
-                ) : null}
               </View>
             </View>
-          ) : null}
-          <Button title="Complete" onPress={complete} />
+
+            <View style={styles.line}>
+              <Text style={styles.lineLabel}>Simple Password:</Text>
+              <Text style={styles.lineText}>{simplePassword}</Text>
+            </View>
+            <Text style={styles.normalText}>
+              Simple password is a password which is easy to remember. If you
+              trust this device, you can use simple password to login.
+            </Text>
+            <View style={styles.line}>
+              <Text style={styles.lineText}>Login by simple password:</Text>
+              <Switch
+                trackColor={{false: '#767577', true: '#81b0ff'}}
+                thumbColor={useSimplePassword ? '#f5dd4b' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={switchUseSimplePassword}
+                value={useSimplePassword}
+              />
+            </View>
+            {useSimplePassword ? (
+              <View style={styles.subArea}>
+                <View style={styles.subArea}>
+                  <Text style={styles.normalText}>
+                    We have 2 options for Simple password:
+                  </Text>
+                  <View style={styles.line}>
+                    <Text style={styles.lineText}>
+                      1. Normal simple password:
+                    </Text>
+                    <Switch
+                      trackColor={{false: '#767577', true: '#81b0ff'}}
+                      thumbColor={useType1 ? '#f5dd4b' : '#f4f3f4'}
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={toggleType1Switch}
+                      value={useType1}
+                    />
+                  </View>
+                  {useType1 ? (
+                    <TextInput
+                      style={styles.textInput}
+                      placeholder="Type a simple password"
+                      onChangeText={newText => setSimplePassword(newText)}
+                      defaultValue={simplePassword}
+                      autoComplete="off"
+                      autoCorrect={false}
+                      autoCapitalize="none"
+                    />
+                  ) : null}
+                  <View style={styles.line}>
+                    <Text style={styles.lineText}>2. Use PIN:</Text>
+                    <Switch
+                      trackColor={{false: '#767577', true: '#81b0ff'}}
+                      thumbColor={useType2 ? '#f5dd4b' : '#f4f3f4'}
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={toggleType2Switch}
+                      value={useType2}
+                    />
+                  </View>
+                  {useType2 ? (
+                    <TextInput
+                      style={styles.textInput}
+                      placeholder="Type a PIN"
+                      onChangeText={newText => setSimplePassword(newText)}
+                      defaultValue={simplePassword}
+                      autoComplete="off"
+                      autoCorrect={false}
+                      autoCapitalize="none"
+                      keyboardType="numeric"
+                    />
+                  ) : null}
+                  {/* <View style={styles.line}>
+                    <Text style={styles.lineText}>
+                      3. Use Gesture Password::
+                    </Text>
+                    <Switch
+                      trackColor={{false: '#767577', true: '#81b0ff'}}
+                      thumbColor={useType3 ? '#f5dd4b' : '#f4f3f4'}
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={toggleType3Switch}
+                      value={useType3}
+                    />
+                  </View>
+                  {useType3 ? (
+                    <Button
+                      title="TODO set Gesture Password"
+                      onPress={useGesturePassword}
+                    />
+                  ) : null} */}
+                </View>
+              </View>
+            ) : null}
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            disabled={buttonIsDisable()}
+            style={[
+              styles.button,
+              // eslint-disable-next-line react-native/no-inline-styles
+              {opacity: buttonIsDisable() ? 0.5 : 1},
+            ]}
+            onPress={complete}>
+            <Text style={styles.buttonText}>Complete</Text>
+          </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
@@ -282,22 +338,99 @@ const SecuritySettingPage = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  passwordContainer: {
+    width: '90%',
+  },
+  subArea: {
+    width: '100%',
+  },
   container: {
     flex: 1,
     height: '100%',
     width: '100%',
     // padding: 20,
     flexDirection: 'column',
-    justifyContent: 'center',
+  },
+  textContainer: {
+    flex: 2,
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 20,
+  },
+  passwordStrengthContainer: {
+    width: '100%',
+    marginTop: 20,
+    flexDirection: 'column',
     alignItems: 'center',
   },
-  passwordContainer: {
-    width: '90%',
+  normalText: {
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'left',
+    width: '100%',
+  },
+  passwordStrengthText: {
+    fontSize: 16,
+    marginTop: 24,
+    textAlign: 'left',
+    width: '100%',
+  },
+  highlightText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'left',
+    width: '100%',
   },
   textInput: {
-    height: 40,
+    height: 50,
     width: '80%',
-    borderWidth: 1,
+    alignSelf: 'center',
+    borderWidth: 1.5,
+    borderColor: '#aaaaaa',
+    padding: 10,
+    fontSize: 18,
+    borderRadius: 4,
+    marginBottom: 5,
+  },
+  buttonContainer: {
+    width: '100%',
+    padding: 30,
+  },
+  button: {
+    height: 44,
+    width: '80%',
+    backgroundColor: 'dodgerblue',
+    flexDirection: 'column',
+    alignSelf: 'center',
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 22,
+  },
+  buttonText: {
+    fontSize: 17,
+    color: '#ffffff',
+  },
+  line: {
+    height: 44,
+    width: '100%',
+    paddingRight: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  lineLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'left',
+  },
+  lineText: {
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'left',
   },
 });
 
