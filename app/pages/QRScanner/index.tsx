@@ -10,17 +10,45 @@ import {
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera, BarCodeReadEvent} from 'react-native-camera';
+import {URRegistryDecoder} from '@doomjs/keystonehq-ur-decoder';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
 
-// TODO support animated QR code
 const QRScannerPage = ({route}: {route: any}) => {
   const {onSuccess} = route.params;
+  const [progress, setProgress] = React.useState(0);
 
   const navigation = useNavigation();
 
-  const onScanSuccess = (e: BarCodeReadEvent) => {
-    navigation.goBack();
-    onSuccess(e.data);
-  };
+  const decoder = React.useRef(new URRegistryDecoder());
+
+  const onScanSuccess = React.useCallback(
+    (e: BarCodeReadEvent) => {
+      const _decoder = decoder.current;
+      if (!_decoder.isComplete()) {
+        _decoder.receivePart(e.data);
+        if (_decoder.isComplete()) {
+          if (_decoder.isSuccess()) {
+            navigation.goBack();
+            onSuccess(_decoder.resultUR());
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Scan failed, please try again',
+            });
+            navigation.goBack();
+          }
+        } else {
+          // console.log(decoder.estimatedPercentComplete());
+          let _progress =
+            Math.round(_decoder.estimatedPercentComplete() * 100) / 100;
+          setProgress(_progress);
+          console.log(_progress);
+          // console.log(decoder.getProgress());
+        }
+      }
+    },
+    [navigation, onSuccess],
+  );
 
   const close = () => {
     navigation.goBack();
@@ -30,6 +58,8 @@ const QRScannerPage = ({route}: {route: any}) => {
     <View style={styles.container}>
       <QRCodeScanner
         onRead={onScanSuccess}
+        reactivate={true}
+        vibrate={false}
         flashMode={RNCamera.Constants.FlashMode.off}
         cameraStyle={styles.container}
       />
@@ -44,6 +74,13 @@ const QRScannerPage = ({route}: {route: any}) => {
                 source={require('../../images/close.png')}
               />
             </TouchableWithoutFeedback>
+            {progress !== 0 ? (
+              <View style={styles.progressBarBackground}>
+                <View
+                  style={[styles.progressBar, {width: `${progress * 100}%`}]}
+                />
+              </View>
+            ) : null}
             <View style={styles.markView} />
           </View>
         </SafeAreaView>
@@ -67,6 +104,19 @@ const styles = StyleSheet.create({
   },
   closeContainer: {
     position: 'relative',
+    width: '100%',
+    height: '100%',
+  },
+  progressBarBackground: {
+    backgroundColor: 'white',
+    position: 'absolute',
+    top: 70,
+    width: '100%',
+    left: 0,
+    height: 4,
+  },
+  progressBar: {
+    backgroundColor: 'deepskyblue',
     width: '100%',
     height: '100%',
   },

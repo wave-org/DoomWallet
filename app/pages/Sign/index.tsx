@@ -20,10 +20,7 @@ import {
   TypedDataSignRequest,
 } from 'doom-wallet-core';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
-
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
+import {UR} from '@ngraveio/bc-ur';
 
 const typeText = (type: RequestType) => {
   switch (type) {
@@ -39,7 +36,8 @@ const typeText = (type: RequestType) => {
 };
 
 const SignPage = ({route}: {route: any}) => {
-  const {ur} = route.params;
+  const ur = route.params.ur as UR;
+  const scrollViewRef = React.useRef<ScrollView>(null);
   // if the address or type is wrong.
   const [wrongUr, setWrongUr] = React.useState<boolean>(false);
   const [request, setRequest] = React.useState<SignRequest | undefined | null>(
@@ -67,6 +65,8 @@ const SignPage = ({route}: {route: any}) => {
         text2: errorMessage,
       });
       setWrongUr(true);
+      setRequest(null);
+      console.log(error);
     }
   }, [ur]);
 
@@ -84,7 +84,9 @@ const SignPage = ({route}: {route: any}) => {
   if (request === null) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.highlightText}>Invalid UR</Text>
+        <Text style={styles.errorText}>
+          Invalid UR, Please check the QR code
+        </Text>
       </SafeAreaView>
     );
   }
@@ -92,6 +94,11 @@ const SignPage = ({route}: {route: any}) => {
   const sign = () => {
     const signedUr = wallet.signRequest(request);
     setSignedUrText(signedUr);
+    setTimeout(() => {
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollToEnd({animated: true});
+      }
+    }, 100);
   };
 
   const payloadView = () => {
@@ -107,7 +114,7 @@ const SignPage = ({route}: {route: any}) => {
                 <Text style={styles.lineText}>{payload.nonce}</Text>
               </View>
               <Text style={styles.highlightText}>To:</Text>
-              <Text style={styles.lineText}>{payload.to}</Text>
+              <Text style={styles.addressText}>{payload.to}</Text>
               <View style={styles.line}>
                 <Text style={styles.lineLabel}>Value:</Text>
                 <Text style={styles.lineText}>{payload.value.toString()}</Text>
@@ -143,7 +150,7 @@ const SignPage = ({route}: {route: any}) => {
                 <Text style={styles.lineText}>{payload.nonce}</Text>
               </View>
               <Text style={styles.highlightText}>To:</Text>
-              <Text style={styles.lineText}>{payload.to}</Text>
+              <Text style={styles.addressText}>{payload.to}</Text>
               <View style={styles.line}>
                 <Text style={styles.lineLabel}>Value:</Text>
                 <Text style={styles.lineText}>{payload.value.toString()}</Text>
@@ -201,6 +208,7 @@ const SignPage = ({route}: {route: any}) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
+        ref={scrollViewRef}
         style={styles.scrollView}
         contentContainerStyle={styles.textContainer}>
         {wrongUr ? (
@@ -211,18 +219,15 @@ const SignPage = ({route}: {route: any}) => {
           <Text style={styles.lineText}>{typeText(request.type)}</Text>
         </View>
         <Text style={styles.highlightText}>Address:</Text>
-        <Text style={styles.lineText}>{request.address}</Text>
+        <Text style={styles.addressText}>{request.address}</Text>
         {request.type === RequestType.transaction ? (
           <View style={styles.line}>
             <Text style={styles.lineLabel}>Chain ID:</Text>
             <Text style={styles.lineText}>{request.chainID}</Text>
           </View>
         ) : null}
-        <Text style={styles.highlightText}>{typeText(request.type)}:</Text>
+        <View style={styles.line} />
         {payloadView()}
-        {/* <Text>Request :</Text>
-        <Text>{JSON.stringify(request.payload)}</Text> */}
-
         {signedUrText === '' && !wrongUr ? (
           <TouchableOpacity
             activeOpacity={0.6}
@@ -232,7 +237,9 @@ const SignPage = ({route}: {route: any}) => {
           </TouchableOpacity>
         ) : null}
 
-        {!wrongUr ? <Text style={styles.highlightText}>Result :</Text> : null}
+        {!wrongUr && signedUrText !== '' ? (
+          <Text style={styles.highlightText}>Result :</Text>
+        ) : null}
 
         {signedUrText !== '' && !wrongUr ? (
           <View
@@ -286,6 +293,12 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     width: '100%',
   },
+  addressText: {
+    fontSize: 15,
+    marginBottom: 10,
+    textAlign: 'right',
+    width: '100%',
+  },
   dataText: {
     fontSize: 16,
     marginBottom: 10,
@@ -296,7 +309,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'lightslategrey',
     borderRadius: 8,
-    multiline: true,
     overflow: 'hidden',
   },
   highlightText: {
@@ -304,6 +316,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
     textAlign: 'left',
+    width: '100%',
+  },
+  errorText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    textAlign: 'center',
     width: '100%',
   },
   button: {

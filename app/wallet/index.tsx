@@ -1,7 +1,7 @@
-import QRCode from 'react-native-qrcode-svg';
 import {Key, EVMWallet, SignRequest} from 'doom-wallet-core';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
+import {UR} from '@ngraveio/bc-ur';
 
 let wallet: EVMWallet | null = null;
 
@@ -258,7 +258,7 @@ export async function resetWallet() {
   await Keychain.resetGenericPassword();
 }
 
-export function parseRequest(ur: string) {
+export function parseRequest(ur: UR) {
   if (wallet === null) {
     throw new Error('Wallet is not loaded');
   }
@@ -292,5 +292,9 @@ export function checkAddressCanBeDerived(
 }
 
 export function getWallet() {
+  // const mnemonic =
+  //   'farm library shuffle knee equal blush disease table deliver custom farm stereo fat level dawn book advance lamp clutch crumble gaze law bird jazz';
+  // const password = 'j1io2u7$@081nf%@au0-,.,3151lijasfa';
+  // wallet = new EVMWallet(Key.fromMnemonic(mnemonic, password));
   return wallet;
 }

@@ -3212,19 +3212,19 @@ domutils@^3.0.1:
     domelementtype "^2.3.0"
     domhandler "^5.0.3"
 
-doom-wallet-core@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/doom-wallet-core/-/doom-wallet-core-0.3.0.tgz#3cd48ce6c7baed8a7292561a5231ddafd1012ca8"
-  integrity sha512-d+eEAttAxm2vw16C9m1N8wkLQTDQ7rGcXoQyVvOFVk6Un27SAlTs8Ds95CFKgrpURu+/ZUqYdZznMEMMlmsGVA==
+doom-wallet-core@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/doom-wallet-core/-/doom-wallet-core-0.3.2.tgz#421f3df5fd7d28bcf34198d18f0ce50e3375bc6c"
+  integrity sha512-2UTqCrJiIg2zUvSuZJPJk7sTyRv+aBq/6A95QnLURIwdgEtFnw1Vbv8/F8BepNfH3IdJbEqbav/pl44AzD3LwA==
   dependencies:
     "@doomjs/ethereumjs-common" "^4.0.1"
     "@doomjs/ethereumjs-rlp" "^5.0.0"
     "@doomjs/ethereumjs-tx" "^5.0.1"
     "@doomjs/ethereumjs-util" "^9.0.0"
     "@doomjs/keystonehq-bc-ur-registry-eth" "^0.19.2"
-    "@doomjs/keystonehq-ur-decoder" "^0.12.3"
     "@doomjs/metamask-eth-sig-util" "^6.0.0"
     "@keystonehq/bc-ur-registry" "^0.6.3"
+    "@ngraveio/bc-ur" "^1.1.6"
     "@noble/curves" "^1.1.0"
     ethereum-cryptography "^2.1.1"
 

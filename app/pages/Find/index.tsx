@@ -1,15 +1,14 @@
 import React, {useEffect} from 'react';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {
   SafeAreaView,
   Text,
   View,
-  Button,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import Routes from '../../routes/Routes';
+import {UR} from '@ngraveio/bc-ur';
 
 function QRCodeButton({
   cameraPermission,
@@ -69,8 +68,7 @@ function QRCodeButton({
   }
 }
 
-const FindPage = () => {
-  const [urText, setUrText] = React.useState<string>('');
+const FindPage = ({navigation}: {navigation: any}) => {
   const [cameraPermission, setCameraPermission] =
     React.useState('not-determined');
   useEffect(() => {
@@ -82,23 +80,11 @@ const FindPage = () => {
 
     fetchPermission();
   }, []);
-  const navigation = useNavigation();
-
-  const onSuccess = (ur: string) => {
-    // setUrText(ur);
+  const onSuccess = (ur: UR) => {
     navigation.navigate(Routes.TABS.SIGN, {ur});
   };
 
-  const showResult = () => {
-    if (urText !== '') {
-      return <Text>{urText}</Text>;
-    } else {
-      return null;
-    }
-  };
-
   const onClickScan = () => {
-    setUrText('');
     if (cameraPermission === 'authorized') {
       // Navigate to QR Scanner
       navigation.navigate(Routes.TABS.QR_SCANNER, {onSuccess});
@@ -111,11 +97,9 @@ const FindPage = () => {
   };
 
   return (
-    // <NavigationContainer>
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <View style={styles.textContainer}>
-          {showResult()}
           <QRCodeButton
             cameraPermission={cameraPermission}
             onPress={onClickScan}
@@ -123,7 +107,6 @@ const FindPage = () => {
         </View>
       </View>
     </SafeAreaView>
-    // </NavigationContainer>
   );
 };
 
@@ -132,9 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     width: '100%',
-    // padding: 20,
     flexDirection: 'column',
-    // justifyContent: 'center',
     alignItems: 'center',
   },
   normalText: {
@@ -167,7 +148,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
-    // fontWeight: 'bold',
     color: '#ffffff',
   },
 });
