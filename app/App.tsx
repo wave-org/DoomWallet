@@ -30,12 +30,21 @@ const Tab = createBottomTabNavigator();
 
 const FindStack = createNativeStackNavigator();
 const FindStackScreen = () => (
-  <FindStack.Navigator screenOptions={{headerShown: false}}>
+  <FindStack.Navigator>
     <FindStack.Group>
-      <FindStack.Screen name={Routes.TABS.FIND} component={FindPage} />
-      <FindStack.Screen name={Routes.TABS.SIGN} component={SignPage} />
+      <FindStack.Screen
+        name={Routes.TABS.FIND}
+        options={{title: 'Scan'}}
+        component={FindPage}
+      />
+      <FindStack.Screen
+        name={Routes.TABS.SIGN}
+        options={{title: 'Sign'}}
+        component={SignPage}
+      />
     </FindStack.Group>
-    <FindStack.Group screenOptions={{presentation: 'modal'}}>
+    <FindStack.Group
+      screenOptions={{presentation: 'fullScreenModal', headerShown: false}}>
       <FindStack.Screen
         name={Routes.TABS.QR_SCANNER}
         component={QRScannerPage}
@@ -94,7 +103,7 @@ const TabHome = () => {
     />
   );
   return (
-    <Tab.Navigator screenOptions={{headerShown: false}}>
+    <Tab.Navigator>
       <Tab.Screen
         name="Network"
         component={HomePage}
@@ -106,6 +115,7 @@ const TabHome = () => {
         name="Scan"
         component={FindStackScreen}
         options={{
+          headerShown: false,
           tabBarIcon: scanTabIcon,
         }}
       />
@@ -113,6 +123,7 @@ const TabHome = () => {
         name="Account"
         component={AccountPage}
         options={{
+          // headerShown: false,
           tabBarIcon: accountTabIcon,
         }}
       />

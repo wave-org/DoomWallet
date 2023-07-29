@@ -280,6 +280,17 @@ export function generateMnemonicByHashingText(text: string) {
   return Key.generateMenoicByHashString(text);
 }
 
+export function checkAddressCanBeDerived(
+  address: string,
+  derivationPath: string,
+) {
+  if (wallet === null) {
+    throw new Error('Wallet is not loaded');
+  }
+  const expectedAddress = wallet.getDerivedAddressByPath(derivationPath);
+  return expectedAddress === address;
+}
+
 export function getWallet() {
   return wallet;
 }
