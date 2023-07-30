@@ -13,6 +13,7 @@ const Routes = {
     CONNECTION: 'CONNECTION',
     ADDRESS_LIST: 'AddressList',
     AUTOLOCK: 'AutoLock',
+    LANGUAGE: 'Language',
   },
 };
 

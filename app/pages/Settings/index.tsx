@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -16,8 +16,14 @@ import Routes from '../../routes/Routes';
 import Icon from 'react-native-vector-icons/Ionicons';
 // @ts-ignore
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  // getApplicationName,
+  getBuildNumber,
+  getVersion,
+} from 'react-native-device-info';
 
 const AccountPage = ({navigation}: {navigation: any}) => {
+  const [version, setVersion] = React.useState('');
   const reset = () => {
     Alert.alert(
       'Warning',
@@ -55,6 +61,19 @@ const AccountPage = ({navigation}: {navigation: any}) => {
   const jumpToAutoLock = () => {
     navigation.navigate(Routes.TABS.AUTOLOCK);
   };
+
+  const jumpToLanuage = () => {
+    navigation.navigate(Routes.TABS.LANGUAGE);
+  };
+
+  useEffect(() => {
+    async function loadVersion() {
+      const ver = await getVersion();
+      const buildNumber = await getBuildNumber();
+      setVersion(`${ver}(${buildNumber})`);
+    }
+    loadVersion();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -101,41 +120,81 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell}>
-            <Icon name="qr-code" size={25} color="#333333" />
+          <TouchableOpacity style={styles.cell} onPress={jumpToLanuage}>
+            <Icon name="language" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Language</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>
+
+          {/*
+            // TODO: add dark mode
           <TouchableOpacity style={styles.cell}>
-            <Icon name="qr-code" size={25} color="#333333" />
+            <Icon name="contrast" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Dark Mode</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>About</Text>
+          <View style={styles.cell}>
+            <Icon name="build-outline" size={25} color="#333333" />
+            <View style={styles.line}>
+              <Text style={styles.label}>Version</Text>
+              <Text style={styles.text}>{version}</Text>
+            </View>
+          </View>
+          {/*
+            // TODO add rate link for ios and android
           <TouchableOpacity style={styles.cell}>
-            <Icon name="qr-code" size={25} color="#333333" />
+            <Icon name="thumbs-up-outline" size={25} color="#333333" />
+            <View style={styles.line}>
+              <Text style={styles.label}>Rate us</Text>
+              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            </View>
+          </TouchableOpacity> */}
+          <TouchableOpacity style={styles.cell}>
+            <Icon name="information-circle-outline" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Privacy Policy</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell}>
-            <Icon name="qr-code" size={25} color="#333333" />
+            <Icon name="document-text-outline" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Terms of Service</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell}>
-            <Icon name="qr-code" size={25} color="#333333" />
+          {/* <TouchableOpacity style={styles.cell}>
+            <Icon name="trophy-outline" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>About Doom Wallet</Text>
+              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            </View>
+          </TouchableOpacity> */}
+          <TouchableOpacity style={styles.cell}>
+            <Icon name="book-outline" size={25} color="#333333" />
+            <View style={styles.line}>
+              <Text style={styles.label}>Documentation</Text>
+              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cell}>
+            <Icon name="logo-github" size={25} color="#333333" />
+            <View style={styles.line}>
+              <Text style={styles.label}>Github</Text>
+              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cell}>
+            <Icon name="bug-outline" size={25} color="#333333" />
+            <View style={styles.line}>
+              <Text style={styles.label}>Report Bugs</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>
@@ -193,11 +252,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    fontSize: 18,
+    fontSize: 17,
   },
   redLable: {
-    fontSize: 17,
+    fontSize: 18,
     color: '#ff0000',
+  },
+  text: {
+    fontSize: 17,
+    color: '#444444',
+    marginRight: 16,
   },
 });
 export default AccountPage;

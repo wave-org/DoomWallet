@@ -18,6 +18,7 @@ import SignPage from './pages/Sign';
 import ConnectionQRCodePage from './pages/Settings/ConnectionQR';
 import AddressList from './pages/Settings/AddressList';
 import AutoLockPage from './pages/Settings/AutoLock';
+import LanguagePage from './pages/Settings/LanguagePage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -157,6 +158,7 @@ function App(): JSX.Element {
       if (nextAppState === 'active') {
         if (!AutoLock.enterForeground() && !showingLoginpage) {
           showingLoginpage = true;
+          // @ts-ignore
           navigation.current!.navigate(Routes.ROOT.LOGIN, {onLogin});
         }
       } else if (nextAppState === 'background') {
@@ -234,6 +236,11 @@ function App(): JSX.Element {
               name={Routes.TABS.AUTOLOCK}
               options={{title: 'Auto Lock Setting'}}
               component={AutoLockPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.LANGUAGE}
+              options={{title: 'Language Setting'}}
+              component={LanguagePage}
             />
           </RootStack.Group>
           <RootStack.Group
