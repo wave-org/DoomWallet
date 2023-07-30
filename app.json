@@ -1,8 +1,4 @@
 {
   "name": "DoomWallet",
-  "displayName": "Doom Wallet",
-  "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-3888403638443368~8712530970",
-    "ios_app_id": "ca-app-pub-3888403638443368~5434742898"
-  }
+  "displayName": "Doom Wallet"
 }
