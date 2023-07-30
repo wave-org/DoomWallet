@@ -53,7 +53,10 @@ export async function setAutoLockTime(value: AutoLockTime) {
 }
 
 export function enterBackground() {
-  lastTime = new Date().getTime();
+  /// if wallet is null, we should not lock it
+  if (wallet.getWallet() !== null) {
+    lastTime = new Date().getTime();
+  }
 }
 
 /// return true if app should not lock
