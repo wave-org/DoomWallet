@@ -17,12 +17,13 @@ import * as wallet from '../../wallet';
 import Routes from '../../routes/Routes';
 import Toast from 'react-native-toast-message';
 
-const LoginPage = ({navigation}: {navigation: any}) => {
+const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
   const walletHeader = wallet.getWalletHeader();
   const [password, setPassword] = React.useState<string>('');
   const [simplePassword, setSimplePassword] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editingPassword, setEditingPassword] = React.useState<boolean>(false);
+  const onLogin = route.params?.onLogin;
   const loginButtonIsDisable = () => {
     if (walletHeader.passwordType === 'FullPassword') {
       return password.length === 0;
@@ -58,9 +59,14 @@ const LoginPage = ({navigation}: {navigation: any}) => {
           //   type: 'success',
           //   text1: 'Login success',
           // });
-          setTimeout(() => {
-            navigation.replace(Routes.ROOT.TABS);
-          }, 300);
+          if (onLogin !== undefined) {
+            onLogin();
+            navigation.goBack();
+          } else {
+            setTimeout(() => {
+              navigation.replace(Routes.ROOT.TABS);
+            }, 300);
+          }
         } else {
           // TODO max try times
           Toast.show({

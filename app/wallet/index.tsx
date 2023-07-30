@@ -177,6 +177,7 @@ export async function loadWallet(
   if (correctPassword === undefined) {
     throw new Error('correctPassword is undefined');
   }
+  walletSecret.password = correctPassword;
   wallet = new EVMWallet(
     Key.fromMnemonic(walletSecret.mnemonic, correctPassword),
   );
@@ -250,6 +251,11 @@ export async function setupWallet(walletInfo: WalletSetupParam) {
   );
 }
 
+export async function logout() {
+  wallet = null;
+  walletSecret = null;
+}
+
 export async function resetWallet() {
   wallet = null;
   walletHeader = null;
@@ -289,6 +295,29 @@ export function checkAddressCanBeDerived(
   }
   const expectedAddress = wallet.getDerivedAddressByPath(derivationPath);
   return expectedAddress === address;
+}
+
+export function derivedAddressList(length: number) {
+  if (wallet === null) {
+    throw new Error('Wallet is not loaded');
+  }
+  let list: string[] = [];
+  for (let i = 0; i < length; i++) {
+    list.push(wallet.getDerivedAddressByIndex(i));
+  }
+  return list;
+}
+
+export function getWalletSecuritySetting() {
+  if (wallet === null) {
+    throw new Error('wallet is null');
+  }
+  return {
+    mnemonic: walletSecret!.mnemonic,
+    password: walletSecret!.password!,
+    passwordType: walletHeader!.passwordType,
+    useBiometrics: walletHeader!.useBiometrics,
+  };
 }
 
 export function getWallet() {

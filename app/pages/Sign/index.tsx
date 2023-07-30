@@ -66,7 +66,7 @@ const SignPage = ({route}: {route: any}) => {
       });
       setWrongUr(true);
       setRequest(null);
-      console.log(error);
+      // console.log(error);
     }
   }, [ur]);
 
@@ -261,7 +261,6 @@ const styles = StyleSheet.create({
   qrCodeContainer: {
     margin: 20,
     aspectRatio: 1,
-    // height: 100%,
   },
   scrollView: {
     width: '100%',

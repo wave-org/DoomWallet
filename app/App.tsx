@@ -3,7 +3,7 @@ import {
   SafeAreaView,
   Text,
   View,
-  // useWindowDimensions,
+  AppState,
   Image,
   StyleSheet,
   StatusBar,
@@ -12,9 +12,12 @@ import {
 
 import HomePage from './pages/Home';
 import FindPage from './pages/Find';
-import AccountPage from './pages/Account';
+import AccountPage from './pages/Settings';
 import QRScannerPage from './pages/QRScanner';
 import SignPage from './pages/Sign';
+import ConnectionQRCodePage from './pages/Settings/ConnectionQR';
+import AddressList from './pages/Settings/AddressList';
+import AutoLockPage from './pages/Settings/AutoLock';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -25,33 +28,9 @@ import SetupPage from './pages/Setup';
 import SetPasswordPage from './pages/Setup/SetPassword';
 import SecuritySettingPage from './pages/Setup/SecuritySetting';
 import Toast from 'react-native-toast-message';
+import * as AutoLock from './wallet/autolock';
 
 const Tab = createBottomTabNavigator();
-
-const FindStack = createNativeStackNavigator();
-const FindStackScreen = () => (
-  <FindStack.Navigator>
-    <FindStack.Group>
-      <FindStack.Screen
-        name={Routes.TABS.FIND}
-        options={{title: 'Scan'}}
-        component={FindPage}
-      />
-      <FindStack.Screen
-        name={Routes.TABS.SIGN}
-        options={{title: 'Sign'}}
-        component={SignPage}
-      />
-    </FindStack.Group>
-    <FindStack.Group
-      screenOptions={{presentation: 'fullScreenModal', headerShown: false}}>
-      <FindStack.Screen
-        name={Routes.TABS.QR_SCANNER}
-        component={QRScannerPage}
-      />
-    </FindStack.Group>
-  </FindStack.Navigator>
-);
 
 const TabHome = () => {
   const networkTabIcon = ({
@@ -113,9 +92,8 @@ const TabHome = () => {
       />
       <Tab.Screen
         name="Scan"
-        component={FindStackScreen}
+        component={FindPage}
         options={{
-          headerShown: false,
           tabBarIcon: scanTabIcon,
         }}
       />
@@ -123,7 +101,6 @@ const TabHome = () => {
         name="Account"
         component={AccountPage}
         options={{
-          // headerShown: false,
           tabBarIcon: accountTabIcon,
         }}
       />
@@ -134,6 +111,7 @@ const TabHome = () => {
 const RootStack = createNativeStackNavigator();
 function App(): JSX.Element {
   const [route, setRoute] = useState('');
+  const navigation = React.useRef(null);
 
   useEffect(() => {
     async function checkExisting() {
@@ -143,6 +121,7 @@ function App(): JSX.Element {
       } else {
         try {
           const walletHeader = await checkWalletExists();
+          AutoLock.loadAutoLockTime();
           if (walletHeader !== null) {
             setRoute(Routes.ROOT.LOGIN);
           } else {
@@ -162,12 +141,39 @@ function App(): JSX.Element {
     checkExisting();
   }, []);
 
+  useEffect(() => {
+    // auto lock
+    let showingLoginpage = false;
+    const onLogin = () => {
+      // because of while the faceid is showing, the app will be in background. So, we need to wait for a while to avoid the app will be locked immediately.
+      setTimeout(() => {
+        showingLoginpage = false;
+      }, 1000);
+    };
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (showingLoginpage) {
+        return;
+      }
+      if (nextAppState === 'active') {
+        if (!AutoLock.enterForeground() && !showingLoginpage) {
+          showingLoginpage = true;
+          navigation.current!.navigate(Routes.ROOT.LOGIN, {onLogin});
+        }
+      } else if (nextAppState === 'background') {
+        AutoLock.enterBackground();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     (route !== '' && (
-      <NavigationContainer>
+      <NavigationContainer ref={navigation}>
         <StatusBar
           animated={true}
-          // backgroundColor="#61dafb"
           barStyle={
             Appearance.getColorScheme() === 'dark'
               ? 'light-content'
@@ -179,13 +185,11 @@ function App(): JSX.Element {
             screenOptions={{
               headerShown: false,
               presentation: 'modal',
-              // cardStyle: {backgroundColor: importedColors.transparent},
-              // animationEnabled: false,
             }}>
             <RootStack.Screen
               name={Routes.ROOT.LOGIN}
               component={LoginPage}
-              options={{headerShown: false}}
+              options={{headerShown: false, presentation: 'fullScreenModal'}}
             />
             <RootStack.Screen
               name={Routes.ROOT.SETUP}
@@ -208,6 +212,38 @@ function App(): JSX.Element {
               name={Routes.ROOT.SECURITY_SETTING}
               component={SecuritySettingPage}
               options={{title: 'Security Setting'}}
+            />
+          </RootStack.Group>
+          <RootStack.Group>
+            <RootStack.Screen
+              name={Routes.TABS.SIGN}
+              options={{title: 'Sign'}}
+              component={SignPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.CONNECTION}
+              options={{title: 'Connection QR Code'}}
+              component={ConnectionQRCodePage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.ADDRESS_LIST}
+              options={{title: 'Address List'}}
+              component={AddressList}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.AUTOLOCK}
+              options={{title: 'Auto Lock Setting'}}
+              component={AutoLockPage}
+            />
+          </RootStack.Group>
+          <RootStack.Group
+            screenOptions={{
+              presentation: 'fullScreenModal',
+              headerShown: false,
+            }}>
+            <RootStack.Screen
+              name={Routes.TABS.QR_SCANNER}
+              component={QRScannerPage}
             />
           </RootStack.Group>
         </RootStack.Navigator>

@@ -38,12 +38,9 @@ const QRScannerPage = ({route}: {route: any}) => {
             navigation.goBack();
           }
         } else {
-          // console.log(decoder.estimatedPercentComplete());
           let _progress =
             Math.round(_decoder.estimatedPercentComplete() * 100) / 100;
           setProgress(_progress);
-          console.log(_progress);
-          // console.log(decoder.getProgress());
         }
       }
     },

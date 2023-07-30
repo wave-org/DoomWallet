@@ -10,6 +10,9 @@ const Routes = {
     FIND: 'FIND',
     QR_SCANNER: 'QRScanner',
     SIGN: 'SIGN',
+    CONNECTION: 'CONNECTION',
+    ADDRESS_LIST: 'AddressList',
+    AUTOLOCK: 'AutoLock',
   },
 };
 
