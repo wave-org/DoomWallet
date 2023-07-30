@@ -122,7 +122,7 @@ It will show a QR code. You need to scan this QR code with Doom Wallet.
 
 ![](./docs/5-4.jpg)
 
-You can use Doom Wallet to scan the QR code on the MetaMask.
+Scan that QR code.
 
 ![](./docs/5-5.jpg)
 
