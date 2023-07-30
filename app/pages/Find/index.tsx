@@ -20,6 +20,11 @@ function QRCodeButton({
   if (cameraPermission === RESULTS.GRANTED) {
     return (
       <View style={styles.beforeScanContainer}>
+        <Text style={styles.normalText}>
+          If you want to sign a transaction, you need to use MetaMask to start a
+          transaction and get a QR code. Then you can scan the QR code to sign
+          the transaction.
+        </Text>
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.button}
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
   },
   normalText: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 25,
     textAlign: 'left',
     width: '100%',
   },
@@ -128,6 +133,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
   },
   beforeScanContainer: {
