@@ -27,20 +27,24 @@ const HomePage = () => {
             </Text>
           </View>
         </View>
-        <Text style={styles.adsText}>
-          If you have network connection, you can see the ads below:
-        </Text>
-        <View style={styles.adContainer}>
-          <BannerAd
-            unitId={TestIds.BANNER}
-            // size="600x400"
-            // size="INLINE_ADAPTIVE_BANNER"
-            size="ANCHORED_ADAPTIVE_BANNER"
-            requestOptions={{
-              requestNonPersonalizedAdsOnly: true,
-            }}
-          />
-        </View>
+        {networkState?.isConnected ? (
+          <Text style={styles.adsText}>
+            If you have network connection, you can see the ads below:
+          </Text>
+        ) : null}
+        {networkState?.isConnected ? (
+          <View style={styles.adContainer}>
+            <BannerAd
+              unitId={TestIds.BANNER}
+              // size="600x400"
+              // size="INLINE_ADAPTIVE_BANNER"
+              size="ANCHORED_ADAPTIVE_BANNER"
+              requestOptions={{
+                requestNonPersonalizedAdsOnly: true,
+              }}
+            />
+          </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
