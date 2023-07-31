@@ -66,6 +66,24 @@ const AccountPage = ({navigation}: {navigation: any}) => {
     navigation.navigate(Routes.TABS.LANGUAGE);
   };
 
+  const jumpToGithub = () => {
+    Linking.openURL('https://github.com/wave-org/DoomWallet');
+  };
+
+  const jumpToIssues = () => {
+    Linking.openURL('https://github.com/wave-org/DoomWallet/issues');
+  };
+
+  const jumpToDocuments = () => {
+    Linking.openURL(
+      'https://github.com/wave-org/DoomWallet#how-to-use-doom-wallet',
+    );
+  };
+
+  const jumpToPrivacyPolicy = () => {
+    Linking.openURL('https://prosurfer.net/privacy-policy.html');
+  };
+
   useEffect(() => {
     async function loadVersion() {
       const ver = await getVersion();
@@ -156,20 +174,20 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity> */}
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={jumpToPrivacyPolicy}>
             <Icon name="information-circle-outline" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Privacy Policy</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell}>
+          {/* <TouchableOpacity style={styles.cell}>
             <Icon name="document-text-outline" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Terms of Service</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {/* <TouchableOpacity style={styles.cell}>
             <Icon name="trophy-outline" size={25} color="#333333" />
             <View style={styles.line}>
@@ -177,21 +195,21 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity> */}
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={jumpToDocuments}>
             <Icon name="book-outline" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Documentation</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={jumpToGithub}>
             <Icon name="logo-github" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Github</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={jumpToIssues}>
             <Icon name="bug-outline" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>Report Bugs</Text>
