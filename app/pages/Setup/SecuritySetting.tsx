@@ -11,6 +11,7 @@ import {
   Platform,
   Switch,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import {
   PasswordType,
@@ -247,7 +248,10 @@ const SecuritySettingPage = ({
           style={styles.container}
           onPress={Keyboard.dismiss}
           accessible={false}>
-          <View style={styles.container}>
+          <ScrollView
+            style={styles.container}
+            // contentContainerStyle={styles.contentContainer}
+          >
             <View style={styles.textContainer}>
               <Text style={styles.normalText}>
                 With biometrics, you can use your face or fingerprint to store
@@ -397,7 +401,7 @@ const SecuritySettingPage = ({
                 {setupComplete !== undefined ? 'Complete' : 'Save'}
               </Text>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         </TouchableWithoutFeedback>
       </SafeAreaView>
       {loading ? (
@@ -421,7 +425,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     // padding: 20,
-    flexDirection: 'column',
+    // flexDirection: 'column',
   },
   textContainer: {
     flex: 2,
