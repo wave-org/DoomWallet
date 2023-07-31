@@ -40,7 +40,7 @@ const AddressList = () => {
     const _addressList = wallet
       .derivedAddressList(100)
       .map((address, index) => {
-        return {id: index, address: address};
+        return {id: index + 1, address: address};
       });
 
     setAddressList(_addressList);
