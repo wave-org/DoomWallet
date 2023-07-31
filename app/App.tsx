@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
   StatusBar,
-  Appearance,
+  // Appearance,
 } from 'react-native';
 
 import HomePage from './pages/Home';
@@ -176,11 +176,12 @@ function App(): JSX.Element {
       <NavigationContainer ref={navigation}>
         <StatusBar
           animated={true}
-          barStyle={
-            Appearance.getColorScheme() === 'dark'
-              ? 'light-content'
-              : 'dark-content'
-          }
+          barStyle="dark-content"
+          // barStyle={
+          //   Appearance.getColorScheme() === 'dark'
+          //     ? 'light-content'
+          //     : 'dark-content'
+          // }
         />
         <RootStack.Navigator initialRouteName={route}>
           <RootStack.Group

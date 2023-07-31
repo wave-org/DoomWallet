@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
-import {BannerAd, TestIds} from 'react-native-google-mobile-ads';
+// import {BannerAd, TestIds} from 'react-native-google-mobile-ads';
 import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
 
 const HomePage = () => {
@@ -27,7 +27,7 @@ const HomePage = () => {
             </Text>
           </View>
         </View>
-        {networkState?.isConnected ? (
+        {/* {networkState?.isConnected ? (
           <Text style={styles.adsText}>
             If you have network connection, you can see the ads below:
           </Text>
@@ -44,7 +44,7 @@ const HomePage = () => {
               }}
             />
           </View>
-        ) : null}
+        ) : null} */}
       </View>
     </SafeAreaView>
   );
