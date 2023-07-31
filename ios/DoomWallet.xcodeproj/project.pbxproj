@@ -518,7 +518,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.wave.DoomWallet;
+				PRODUCT_BUNDLE_IDENTIFIER = org.wave.doom;
 				PRODUCT_NAME = DoomWallet;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -552,7 +552,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.wave.DoomWallet;
+				PRODUCT_BUNDLE_IDENTIFIER = org.wave.doom;
 				PRODUCT_NAME = DoomWallet;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
