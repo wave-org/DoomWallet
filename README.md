@@ -40,6 +40,12 @@ So, when you back up your wallet, you should back up the mnemonic and the passwo
 
 We will support Bitcoin and other chains in the future.
 
+## Support
+
+- If you meet any problems, please open an issue.
+- You can join our [Telegram group](https://t.me/doomvault) to discuss with us.
+- You can send an email to info@prosurfer.net
+
 ## How to use Doom Wallet?
 
 #### 1. Use MetaMask
