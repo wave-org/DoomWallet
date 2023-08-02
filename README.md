@@ -44,7 +44,7 @@ We will support Bitcoin and other chains in the future.
 
 - If you meet any problems, please open an issue.
 - You can join our [Telegram group](https://t.me/doomvault) to discuss with us.
-- You can send an email to info@prosurfer.net
+- You can send an email to [info@prosurfer.net](mailto:info@prosurfer.net)
 
 ## How to use Doom Wallet?
 
