@@ -38,7 +38,7 @@ const AddressList = () => {
 
   React.useEffect(() => {
     const _addressList = wallet
-      .derivedEVMAddressList(100)
+      .derivedBTCAddressList(1, true)
       .map((address, index) => {
         return {id: index + 1, address: address};
       });

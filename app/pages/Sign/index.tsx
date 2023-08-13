@@ -45,8 +45,11 @@ const SignPage = ({route}: {route: any}) => {
   );
   React.useEffect(() => {
     try {
-      const req = wallet.parseRequest(ur);
-      if (!wallet.checkAddressCanBeDerived(req.address, req.derivationPath)) {
+      // TODO btc sign page, check ur type
+      const req = wallet.parseEVMRequest(ur);
+      if (
+        !wallet.checkEVMAddressCanBeDerived(req.address, req.derivationPath)
+      ) {
         setWrongUr(true);
         // console.log('address can not be derived');
         Toast.show({
@@ -92,7 +95,7 @@ const SignPage = ({route}: {route: any}) => {
   }
 
   const sign = () => {
-    const signedUr = wallet.signRequest(request);
+    const signedUr = wallet.signEVMRequest(request);
     setSignedUrText(signedUr);
     setTimeout(() => {
       if (scrollViewRef.current) {

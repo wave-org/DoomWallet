@@ -200,7 +200,6 @@ const SetupPage = ({navigation}: {navigation: any}) => {
             <TextInput
               style={[
                 styles.textInput,
-                // eslint-disable-next-line react-native/no-inline-styles
                 {borderColor: editingText ? 'deepskyblue' : '#aaaaaa'},
               ]}
               placeholder="Type random text, at least 16 characters"
@@ -227,11 +226,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
             <TouchableOpacity
               activeOpacity={0.6}
               disabled={hashButtonDisable()}
-              style={[
-                styles.button,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {opacity: hashButtonDisable() ? 0.5 : 1},
-              ]}
+              style={[styles.button, {opacity: hashButtonDisable() ? 0.5 : 1}]}
               onPress={generateMnemonicByText}>
               <Text style={styles.buttonText}>Hash Text</Text>
             </TouchableOpacity>
@@ -242,12 +237,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
               {/* <Text>{mnemonic}</Text> */}
               <MnemonicView mnemonic={mnemonic.split(' ')} />
 
-              <Text
-                style={[
-                  styles.normalText,
-                  // eslint-disable-next-line react-native/no-inline-styles
-                  {paddingLeft: 20},
-                ]}>
+              <Text style={[styles.normalText, {paddingLeft: 20}]}>
                 Now, you can set password.
               </Text>
               <TouchableOpacity

@@ -78,7 +78,6 @@ const SetPasswordPage = ({
             <TextInput
               style={[
                 styles.textInput,
-                // eslint-disable-next-line react-native/no-inline-styles
                 {borderColor: editingPassword ? 'deepskyblue' : '#aaaaaa'},
               ]}
               placeholder="Password: at least 8 characters"

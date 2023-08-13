@@ -1,9 +1,20 @@
-import {Key, EVMWallet, SignRequest} from 'doom-wallet-core';
+import {
+  Key,
+  EVMWallet,
+  SignRequest,
+  BTCWallet,
+  BTCSignRequest,
+} from 'doom-wallet-core';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
 import {UR} from '@ngraveio/bc-ur';
 
-let wallet: EVMWallet | null = null;
+export type Wallet = {
+  EVMWallet: EVMWallet;
+  BTCWallet: BTCWallet;
+};
+
+let wallet: Wallet | null = null;
 
 export type PasswordType =
   | 'FullPassword'
@@ -178,9 +189,11 @@ export async function loadWallet(
     throw new Error('correctPassword is undefined');
   }
   walletSecret.password = correctPassword;
-  wallet = new EVMWallet(
-    Key.fromMnemonic(walletSecret.mnemonic, correctPassword),
-  );
+  const key = Key.fromMnemonic(walletSecret.mnemonic, correctPassword);
+  wallet = {
+    EVMWallet: new EVMWallet(key),
+    BTCWallet: new BTCWallet(key),
+  };
   return true;
 }
 
@@ -246,9 +259,11 @@ export async function setupWallet(walletInfo: WalletSetupParam) {
     JSON.stringify(walletHeader),
   );
 
-  wallet = new EVMWallet(
-    Key.fromMnemonic(walletInfo.mnemonic, walletInfo.password),
-  );
+  const key = Key.fromMnemonic(walletInfo.mnemonic, walletInfo.password);
+  wallet = {
+    EVMWallet: new EVMWallet(key),
+    BTCWallet: new BTCWallet(key),
+  };
 }
 
 export async function logout() {
@@ -264,18 +279,32 @@ export async function resetWallet() {
   await Keychain.resetGenericPassword();
 }
 
-export function parseRequest(ur: UR) {
+export function parseEVMRequest(ur: UR) {
   if (wallet === null) {
     throw new Error('Wallet is not loaded');
   }
-  return wallet.parseRequest(ur);
+  return wallet.EVMWallet.parseRequest(ur);
 }
 
-export function signRequest(request: SignRequest) {
+export function signEVMRequest(request: SignRequest) {
   if (wallet === null) {
     throw new Error('Wallet is not loaded');
   }
-  return wallet.signRequest(request);
+  return wallet.EVMWallet.signRequest(request);
+}
+
+export function parseBTCRequest(ur: UR): BTCSignRequest {
+  if (wallet === null) {
+    throw new Error('Wallet is not loaded');
+  }
+  return wallet.BTCWallet.parseRequest(ur);
+}
+
+export function signBTCRequest(request: BTCSignRequest) {
+  if (wallet === null) {
+    throw new Error('Wallet is not loaded');
+  }
+  return wallet.BTCWallet.signRequest(request);
 }
 
 export function generateRandomMnemonic() {
@@ -286,24 +315,54 @@ export function generateMnemonicByHashingText(text: string) {
   return Key.generateMenoicByHashString(text);
 }
 
-export function checkAddressCanBeDerived(
+export function checkEVMAddressCanBeDerived(
   address: string,
   derivationPath: string,
 ) {
   if (wallet === null) {
     throw new Error('Wallet is not loaded');
   }
-  const expectedAddress = wallet.getDerivedAddressByPath(derivationPath);
+  const expectedAddress =
+    wallet.EVMWallet.getDerivedAddressByPath(derivationPath);
   return expectedAddress === address;
 }
 
-export function derivedAddressList(length: number) {
+export function checkBTCAddressCanBeDerived(
+  address: string,
+  derivationPath: string,
+) {
+  if (wallet === null) {
+    throw new Error('Wallet is not loaded');
+  }
+  const expectedAddress =
+    wallet.BTCWallet.getDerivedAddressByPath(derivationPath);
+  return expectedAddress === address;
+}
+
+export function derivedEVMAddressList(length: number) {
   if (wallet === null) {
     throw new Error('Wallet is not loaded');
   }
   let list: string[] = [];
   for (let i = 0; i < length; i++) {
-    list.push(wallet.getDerivedAddressByIndex(i));
+    list.push(wallet.EVMWallet.getDerivedAddressByIndex(i));
+  }
+  return list;
+}
+
+// change is true mean it is change/external address, or it is receive/internal address
+// pageNumber start from 0
+export function derivedBTCAddressList(pageNumber: number, change: boolean) {
+  if (wallet === null) {
+    throw new Error('Wallet is not loaded');
+  }
+  let list: string[] = [];
+  for (let i = pageNumber * BTCWallet.PAGE_SIZE; i < BTCWallet.PAGE_SIZE; i++) {
+    if (change) {
+      list.push(wallet.BTCWallet.getChangeAddress(i));
+    } else {
+      list.push(wallet.BTCWallet.getExternalAddress(i));
+    }
   }
   return list;
 }

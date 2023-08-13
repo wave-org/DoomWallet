@@ -114,7 +114,6 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
           <TextInput
             style={[
               styles.textInput,
-              // eslint-disable-next-line react-native/no-inline-styles
               {borderColor: editingPassword ? 'deepskyblue' : '#aaaaaa'},
             ]}
             placeholder="Type your password"
@@ -145,7 +144,6 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
           <TextInput
             style={[
               styles.textInput,
-              // eslint-disable-next-line react-native/no-inline-styles
               {borderColor: editingPassword ? 'deepskyblue' : '#aaaaaa'},
             ]}
             placeholder="Type simple password"
@@ -176,7 +174,6 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
           <TextInput
             style={[
               styles.textInput,
-              // eslint-disable-next-line react-native/no-inline-styles
               {borderColor: editingPassword ? 'deepskyblue' : '#aaaaaa'},
             ]}
             placeholder="Type your PIN"
@@ -239,7 +236,6 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
                   disabled={loginButtonIsDisable()}
                   style={[
                     styles.loginButton,
-                    // eslint-disable-next-line react-native/no-inline-styles
                     {opacity: loginButtonIsDisable() ? 0.5 : 1},
                   ]}
                   onPress={login}>

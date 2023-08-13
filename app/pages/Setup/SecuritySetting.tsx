@@ -391,11 +391,7 @@ const SecuritySettingPage = ({
             <TouchableOpacity
               activeOpacity={0.6}
               disabled={buttonIsDisable()}
-              style={[
-                styles.button,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {opacity: buttonIsDisable() ? 0.5 : 1},
-              ]}
+              style={[styles.button, {opacity: buttonIsDisable() ? 0.5 : 1}]}
               onPress={complete}>
               <Text style={styles.buttonText}>
                 {setupComplete !== undefined ? 'Complete' : 'Save'}
