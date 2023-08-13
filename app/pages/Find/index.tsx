@@ -9,6 +9,7 @@ import {
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import Routes from '../../routes/Routes';
 import {UR} from '@ngraveio/bc-ur';
+import * as wallet from '../../wallet';
 
 function QRCodeButton({
   cameraPermission,
@@ -86,7 +87,12 @@ const FindPage = ({navigation}: {navigation: any}) => {
     fetchPermission();
   }, []);
   const onSuccess = (ur: UR) => {
-    navigation.navigate(Routes.TABS.SIGN, {ur});
+    const type = wallet.getRequestType(ur);
+    if (type === wallet.WalletType.EVM) {
+      navigation.navigate(Routes.TABS.SIGN, {ur});
+    } else if (type === wallet.WalletType.BTC) {
+      navigation.navigate(Routes.TABS.BTCSIGN, {ur});
+    }
   };
 
   const onClickScan = () => {

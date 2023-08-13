@@ -15,6 +15,7 @@ import FindPage from './pages/Find';
 import AccountPage from './pages/Settings';
 import QRScannerPage from './pages/QRScanner';
 import SignPage from './pages/Sign';
+import BTCSignPage from './pages/Sign/BTCSign';
 import ConnectionQRCodePage from './pages/Settings/ConnectionQR';
 import AddressList from './pages/Settings/AddressList';
 import AutoLockPage from './pages/Settings/AutoLock';
@@ -221,8 +222,13 @@ function App(): JSX.Element {
           <RootStack.Group>
             <RootStack.Screen
               name={Routes.TABS.SIGN}
-              options={{title: 'Sign'}}
+              options={{title: 'Sign EVM Transaction'}}
               component={SignPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.BTCSIGN}
+              options={{title: 'Sign BTC Transaction'}}
+              component={BTCSignPage}
             />
             <RootStack.Screen
               name={Routes.TABS.CONNECTION}

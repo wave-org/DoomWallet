@@ -35,7 +35,7 @@ const typeText = (type: RequestType) => {
   }
 };
 
-const SignPage = ({route}: {route: any}) => {
+const EVMSignPage = ({route}: {route: any}) => {
   const ur = route.params.ur as UR;
   const scrollViewRef = React.useRef<ScrollView>(null);
   // if the address or type is wrong.
@@ -45,7 +45,6 @@ const SignPage = ({route}: {route: any}) => {
   );
   React.useEffect(() => {
     try {
-      // TODO btc sign page, check ur type
       const req = wallet.parseEVMRequest(ur);
       if (
         !wallet.checkEVMAddressCanBeDerived(req.address, req.derivationPath)
@@ -363,4 +362,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignPage;
+export default EVMSignPage;

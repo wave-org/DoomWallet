@@ -300,11 +300,16 @@ export function parseBTCRequest(ur: UR): BTCSignRequest {
   return wallet.BTCWallet.parseRequest(ur);
 }
 
+// fragement lengths in bytes
+const DEFAULT_QR_CODE_SIZE = 200;
+// TODO setting.
+const qrCodefragmentSize = DEFAULT_QR_CODE_SIZE;
+
 export function signBTCRequest(request: BTCSignRequest) {
   if (wallet === null) {
     throw new Error('Wallet is not loaded');
   }
-  return wallet.BTCWallet.signRequest(request);
+  return wallet.BTCWallet.signRequest(request, qrCodefragmentSize);
 }
 
 export function generateRandomMnemonic() {
@@ -387,6 +392,29 @@ export function getWallet() {
   // const mnemonic =
   //   'farm library shuffle knee equal blush disease table deliver custom farm stereo fat level dawn book advance lamp clutch crumble gaze law bird jazz';
   // const password = 'j1io2u7$@081nf%@au0-,.,3151lijasfa';
-  // wallet = new EVMWallet(Key.fromMnemonic(mnemonic, password));
+  // const key = Key.fromMnemonic(mnemonic, password);
+  // wallet = {
+  //   EVMWallet: new EVMWallet(key),
+  //   BTCWallet: new BTCWallet(key),
+  // };
   return wallet;
+}
+
+export enum WalletType {
+  EVM = 'EVM',
+  BTC = 'BTC',
+}
+
+export function getRequestType(ur: UR): WalletType {
+  if (ur.type === 'eth-sign-request') {
+    return WalletType.EVM;
+  } else if (ur.type === 'crypto-psbt') {
+    return WalletType.BTC;
+  } else {
+    throw new Error('Unknown request type');
+  }
+}
+
+export function canSignBTCRequest(request: BTCSignRequest): boolean {
+  return request.canSignByKey(wallet!.BTCWallet.key);
 }

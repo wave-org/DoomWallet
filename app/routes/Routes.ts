@@ -10,6 +10,7 @@ const Routes = {
     FIND: 'FIND',
     QR_SCANNER: 'QRScanner',
     SIGN: 'SIGN',
+    BTCSIGN: 'BTCSign',
     CONNECTION: 'CONNECTION',
     ADDRESS_LIST: 'AddressList',
     BTC_ADDRESS_LIST: 'BTCAddressList',

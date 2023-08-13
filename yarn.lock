@@ -3303,10 +3303,10 @@ domutils@^3.0.1:
     domelementtype "^2.3.0"
     domhandler "^5.0.3"
 
-doom-wallet-core@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/doom-wallet-core/-/doom-wallet-core-0.4.1.tgz#e2614d18e4bb7bab5b3d2e8d55cca18e5cf759ef"
-  integrity sha512-Q+Q/91qWjNVfBxfP2JeZxp/ILK1bYLXIySFXMI76Kjgb4890ySmdx3kHmZlES0NdJ+CxBASMBTidN0tbwMtFhQ==
+doom-wallet-core@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/doom-wallet-core/-/doom-wallet-core-0.4.3.tgz#079721d427d0a06fbd46302d47dae9361805767d"
+  integrity sha512-cr3HHq22ElQSenEStOlpPeJqK09xBKRBe6SSN0xQyRAPYIsgBIglYP2w/ZDdvqZ0DHU/Sy5HAbMw2M3Z3JFGOw==
   dependencies:
     "@doomjs/ethereumjs-common" "^4.0.1"
     "@doomjs/ethereumjs-rlp" "^5.0.0"
