@@ -357,7 +357,11 @@ export function derivedBTCAddressList(pageNumber: number, change: boolean) {
     throw new Error('Wallet is not loaded');
   }
   let list: string[] = [];
-  for (let i = pageNumber * BTCWallet.PAGE_SIZE; i < BTCWallet.PAGE_SIZE; i++) {
+  for (
+    let i = pageNumber * BTCWallet.PAGE_SIZE;
+    i < pageNumber * BTCWallet.PAGE_SIZE + BTCWallet.PAGE_SIZE;
+    i++
+  ) {
     if (change) {
       list.push(wallet.BTCWallet.getChangeAddress(i));
     } else {

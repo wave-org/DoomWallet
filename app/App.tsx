@@ -28,6 +28,7 @@ import LoginPage from './pages/Login';
 import SetupPage from './pages/Setup';
 import SetPasswordPage from './pages/Setup/SetPassword';
 import SecuritySettingPage from './pages/Setup/SecuritySetting';
+import BtcAddressListPage from './pages/Settings/BtcAddressList';
 import Toast from 'react-native-toast-message';
 import * as AutoLock from './wallet/autolock';
 
@@ -230,8 +231,13 @@ function App(): JSX.Element {
             />
             <RootStack.Screen
               name={Routes.TABS.ADDRESS_LIST}
-              options={{title: 'Address List'}}
+              options={{title: 'EVM Address List'}}
               component={AddressList}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.BTC_ADDRESS_LIST}
+              options={{title: 'BTC Address List'}}
+              component={BtcAddressListPage}
             />
             <RootStack.Screen
               name={Routes.TABS.AUTOLOCK}

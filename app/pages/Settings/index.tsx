@@ -54,6 +54,10 @@ const AccountPage = ({navigation}: {navigation: any}) => {
     navigation.navigate(Routes.TABS.ADDRESS_LIST);
   };
 
+  const jumpToBTCAddressList = () => {
+    navigation.navigate(Routes.TABS.BTC_ADDRESS_LIST);
+  };
+
   const jumpToSecuritySetting = () => {
     navigation.navigate(Routes.ROOT.SECURITY_SETTING);
   };
@@ -111,6 +115,13 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <MCIcon name="ethereum" size={25} color="#333333" />
             <View style={styles.line}>
               <Text style={styles.label}>EVM Derived Addresses</Text>
+              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cell} onPress={jumpToBTCAddressList}>
+            <MCIcon name="bitcoin" size={25} color="#333333" />
+            <View style={styles.line}>
+              <Text style={styles.label}>Bitcoin Derived Addresses</Text>
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity>

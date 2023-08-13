@@ -40,7 +40,7 @@ const AddressList = () => {
     const _addressList = wallet
       .derivedEVMAddressList(100)
       .map((address, index) => {
-        return {id: index + 1, address: address};
+        return {id: index, address: address};
       });
 
     setAddressList(_addressList);

@@ -12,6 +12,7 @@ const Routes = {
     SIGN: 'SIGN',
     CONNECTION: 'CONNECTION',
     ADDRESS_LIST: 'AddressList',
+    BTC_ADDRESS_LIST: 'BTCAddressList',
     AUTOLOCK: 'AutoLock',
     LANGUAGE: 'Language',
   },

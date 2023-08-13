@@ -1,30 +1,32 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   SafeAreaView,
-  Text,
+  // Text,
   View,
   StyleSheet,
-  Linking,
-  TouchableOpacity,
   ActivityIndicator,
   FlatList,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
-
+import {Tab, Text, TabView, Divider, Button} from '@rneui/themed';
 import * as wallet from '../../wallet';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
-
-const jumpToEthscan = (address: string) => {
-  Linking.openURL('https://etherscan.io/address/' + address);
-};
 
 type ItemProps = {
   address: string;
   id: number;
 };
 
+const jumpToExplorer = (address: string) => {
+  Linking.openURL(
+    'https://www.blockchain.com/explorer/addresses/btc/' + address,
+  );
+};
+
 const Item = ({address, index}: {address: string; index: number}) => (
-  <TouchableOpacity style={styles.cell} onPress={() => jumpToEthscan(address)}>
+  <TouchableOpacity style={styles.cell} onPress={() => jumpToExplorer(address)}>
     <Text style={styles.index}>{index}.</Text>
     <View style={styles.line}>
       <Text style={styles.address}>{address}</Text>
@@ -33,55 +35,150 @@ const Item = ({address, index}: {address: string; index: number}) => (
   </TouchableOpacity>
 );
 
-const AddressList = () => {
-  const [addressList, setAddressList] = React.useState<ItemProps[]>([]);
+const BtcAddressListPage = () => {
+  //   const [evmUR, setEvmUR] = React.useState<string | undefined>(undefined);
+  //   const [btcUR, setBtcUR] = React.useState<string | undefined>(undefined);
 
+  const [externalList, setExternalList] = React.useState<ItemProps[]>([]);
+  const [internalList, setInternalList] = React.useState<ItemProps[]>([]);
+  const [pageNumber, setPageNumber] = React.useState<number>(1);
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const [tabIndex, setTabIndex] = React.useState(0);
+
+  const loadAddresses = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => {
+      // external
+      const addressList1 = wallet
+        .derivedBTCAddressList(pageNumber - 1, false)
+        .map((address, index) => {
+          const showIndex = (pageNumber - 1) * 20 + index;
+          return {id: showIndex, address: address};
+        });
+      setExternalList(addressList1);
+      // internal
+      const addressList = wallet
+        .derivedBTCAddressList(pageNumber - 1, true)
+        .map((address, index) => {
+          const showIndex = (pageNumber - 1) * 20 + index;
+          return {id: showIndex, address: address};
+        });
+      setInternalList(addressList);
+      setLoading(false);
+    }, 20);
+  }, [pageNumber]);
+  //   const {width} = useWindowDimensions();
   React.useEffect(() => {
-    const _addressList = wallet
-      .derivedBTCAddressList(1, true)
-      .map((address, index) => {
-        return {id: index + 1, address: address};
-      });
-
-    setAddressList(_addressList);
-  }, []);
-
-  if (addressList.length === 0) {
-    return (
-      <SafeAreaView style={styles.indicatorContainer}>
-        <ActivityIndicator size="large" />
-      </SafeAreaView>
-    );
-  }
+    loadAddresses();
+  }, [loadAddresses]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={addressList}
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-        renderItem={({item}) => <Item address={item.address} index={item.id} />}
-      />
+      <Tab
+        value={tabIndex}
+        onChange={e => setTabIndex(e)}
+        style={{width: '100%', height: 45}}
+        indicatorStyle={{
+          backgroundColor: 'white',
+          height: 3,
+        }}
+        variant="primary">
+        <Tab.Item title="External(Receive)" titleStyle={{fontSize: 14}} />
+        <Tab.Item title="Internal(Change)" titleStyle={{fontSize: 14}} />
+      </Tab>
+      {loading ? (
+        <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            // backgroundColor: 'gray',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : null}
+      <View style={{width: '100%', flex: 1}}>
+        <TabView
+          containerStyle={{
+            // flex: 1,
+            width: '100%',
+            height: '100%',
+          }}
+          value={tabIndex}
+          onChange={setTabIndex}
+          disableSwipe={true}
+          animationType="spring">
+          <TabView.Item style={{width: '100%', height: '100%'}}>
+            <FlatList
+              data={externalList}
+              style={styles.container}
+              contentContainerStyle={styles.contentContainer}
+              renderItem={({item}) => (
+                <Item address={item.address} index={item.id} />
+              )}
+            />
+          </TabView.Item>
+          <TabView.Item style={{width: '100%', height: '100%'}}>
+            <FlatList
+              data={internalList}
+              style={styles.container}
+              contentContainerStyle={styles.contentContainer}
+              renderItem={({item}) => (
+                <Item address={item.address} index={item.id} />
+              )}
+            />
+          </TabView.Item>
+        </TabView>
+        <Divider width={2} />
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 60,
+          }}>
+          <Button
+            title="Preview Page"
+            disabled={pageNumber === 1}
+            onPress={() => setPageNumber(pageNumber - 1)}
+          />
+          <Text style={{width: 50, textAlign: 'center'}}>{pageNumber}</Text>
+          <Button
+            title="Next Page"
+            onPress={() => setPageNumber(pageNumber + 1)}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     height: '100%',
     width: '100%',
-  },
-  indicatorContainer: {
-    flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    overflow: 'hidden',
   },
-  contentContainer: {
+  normalText: {
+    marginTop: 20,
+    fontSize: 16,
+    textAlign: 'center',
+    width: '100%',
+  },
+  textContainer: {
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 10,
+    padding: 20,
   },
   cell: {
     width: '100%',
@@ -114,5 +211,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 2,
   },
+  contentContainer: {
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 10,
+  },
 });
-export default AddressList;
+
+export default BtcAddressListPage;
