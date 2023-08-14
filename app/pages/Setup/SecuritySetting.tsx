@@ -54,25 +54,26 @@ const SecuritySettingPage = ({
           useType1:
             getWalletSecuritySetting().passwordType === 'SimplePassword',
           useType2: getWalletSecuritySetting().passwordType === 'PinPassword',
-          // useType3: getWalletSecuritySetting().passwordType === 'GesturePassword',
         };
 
   const [supportBiometrics, setSupportBiometrics] = React.useState<
     boolean | undefined
   >(undefined);
-  // const [hasPermission, setHasPermission] = React.useState<boolean>(false);
   const [usebiometrics, setUsebiometrics] = React.useState<boolean>(
     defaultSetting.useBiometrics,
   );
   const toggleBiometricsSwitch = () =>
     setUsebiometrics(previousState => !previousState);
   useEffect(() => {
-    const supportedType = Keychain.getSupportedBiometryType();
-    if (supportedType === null) {
-      setSupportBiometrics(false);
-    } else {
-      setSupportBiometrics(true);
+    async function checkBiometrics() {
+      const supportedType = await Keychain.getSupportedBiometryType();
+      if (supportedType === null) {
+        setSupportBiometrics(false);
+      } else {
+        setSupportBiometrics(true);
+      }
     }
+    checkBiometrics();
   }, [setSupportBiometrics]);
 
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -135,11 +136,12 @@ const SecuritySettingPage = ({
   };
 
   const buttonIsDisable = () => {
-    if (!useSimplePassword) {
-      return false;
-    } else {
-      return simplePassword.length < 4;
+    if (useSimplePassword && simplePassword.length < 4) {
+      return true;
+    } else if (!usePassword && !useSimplePassword && !usebiometrics) {
+      return true;
     }
+    return false;
   };
 
   const [useType1, setUseType1] = React.useState<boolean>(
@@ -264,7 +266,8 @@ const SecuritySettingPage = ({
               {supportBiometrics === false ? (
                 <Text style={styles.normalText}>
                   Sorry, your device don't support biometrics. It's better to
-                  use another device which support biometrics.
+                  use another device which support biometrics.{'\n'}
+                  Or, you need to enroll your biometrics in your device.
                 </Text>
               ) : (
                 <View style={styles.subArea}>

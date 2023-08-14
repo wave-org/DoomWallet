@@ -4,6 +4,7 @@ import {
   Text,
   View,
   StyleSheet,
+  Platform,
   TouchableOpacity,
 } from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
@@ -22,9 +23,9 @@ function QRCodeButton({
     return (
       <View style={styles.beforeScanContainer}>
         <Text style={styles.normalText}>
-          If you want to sign a transaction, you need to use MetaMask to start a
-          transaction and get a QR code. Then you can scan the QR code to sign
-          the transaction.
+          If you want to sign a transaction, you need to use MetaMask or
+          BlueWallet to start a transaction and get a QR code. Then you can scan
+          the QR code to sign the transaction.
         </Text>
         <TouchableOpacity
           activeOpacity={0.6}
@@ -77,11 +78,16 @@ function QRCodeButton({
 const FindPage = ({navigation}: {navigation: any}) => {
   const [cameraPermission, setCameraPermission] =
     React.useState('not-determined');
+
   useEffect(() => {
     async function fetchPermission() {
-      // TODO android
-      const permission = await check(PERMISSIONS.IOS.CAMERA);
-      setCameraPermission(permission);
+      if (Platform.OS === 'android') {
+        const permission = await check(PERMISSIONS.ANDROID.CAMERA);
+        setCameraPermission(permission);
+      } else if (Platform.OS === 'ios') {
+        const permission = await check(PERMISSIONS.IOS.CAMERA);
+        setCameraPermission(permission);
+      }
     }
 
     fetchPermission();
@@ -96,14 +102,21 @@ const FindPage = ({navigation}: {navigation: any}) => {
   };
 
   const onClickScan = () => {
-    if (cameraPermission === 'authorized') {
+    if (cameraPermission === 'authorized' || cameraPermission === 'granted') {
       // Navigate to QR Scanner
       navigation.navigate(Routes.TABS.QR_SCANNER, {onSuccess});
     } else {
-      request(PERMISSIONS.IOS.CAMERA).then(permission => {
-        setCameraPermission(permission);
-        navigation.navigate(Routes.TABS.QR_SCANNER, {onSuccess});
-      });
+      if (Platform.OS === 'android') {
+        request(PERMISSIONS.ANDROID.CAMERA).then(permission => {
+          setCameraPermission(permission);
+          navigation.navigate(Routes.TABS.QR_SCANNER, {onSuccess});
+        });
+      } else if (Platform.OS === 'ios') {
+        request(PERMISSIONS.IOS.CAMERA).then(permission => {
+          setCameraPermission(permission);
+          navigation.navigate(Routes.TABS.QR_SCANNER, {onSuccess});
+        });
+      }
     }
   };
 

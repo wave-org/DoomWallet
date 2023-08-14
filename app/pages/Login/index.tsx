@@ -12,6 +12,7 @@ import {
   Alert,
   ActivityIndicator,
   Image,
+  BackHandler,
 } from 'react-native';
 import * as wallet from '../../wallet';
 import Routes from '../../routes/Routes';
@@ -105,6 +106,20 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
       },
     ]);
   };
+
+  // disable back button on android
+  React.useEffect(() => {
+    const backAction = () => {
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const inputView = () => {
     if (walletHeader.passwordType === 'FullPassword') {

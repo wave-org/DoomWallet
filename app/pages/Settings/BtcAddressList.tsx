@@ -78,29 +78,16 @@ const BtcAddressListPage = () => {
       <Tab
         value={tabIndex}
         onChange={e => setTabIndex(e)}
-        style={{width: '100%', height: 45}}
+        style={{width: '100%', height: 52}}
         indicatorStyle={{
           backgroundColor: 'white',
-          height: 3,
+          height: 2,
         }}
         variant="primary">
         <Tab.Item title="External(Receive)" titleStyle={{fontSize: 14}} />
         <Tab.Item title="Internal(Change)" titleStyle={{fontSize: 14}} />
       </Tab>
-      {loading ? (
-        <View
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            // backgroundColor: 'gray',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : null}
+
       <View style={{width: '100%', flex: 1}}>
         <TabView
           containerStyle={{
@@ -154,6 +141,20 @@ const BtcAddressListPage = () => {
           />
         </View>
       </View>
+      {loading ? (
+        <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator size="large" color="#00ff00" />
+        </View>
+      ) : null}
     </SafeAreaView>
   );
 };
