@@ -1,4 +1,4 @@
-package com.doomwallet;
+package org.wave.doom;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

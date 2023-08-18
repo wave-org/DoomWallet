@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import Routes from '../../routes/Routes';
 import * as wallet from '../../wallet';
@@ -16,6 +17,7 @@ import Toast from 'react-native-toast-message';
 import MnemonicView from '../../components/MnemonicView';
 
 const SetupPage = ({navigation}: {navigation: any}) => {
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [text, setText] = React.useState<string>('');
   const [editingText, setEditingText] = React.useState<boolean>(false);
   const [mnemonic, setMnemonic] = React.useState<string>('');
@@ -70,23 +72,34 @@ const SetupPage = ({navigation}: {navigation: any}) => {
   };
 
   const complete = () => {
+    setLoading(true);
     // save to storage
-    try {
-      wallet.setupWallet({
-        mnemonic,
-        password,
-        passwordType,
-        simplePassword,
-        useBiometrics,
-      });
-      navigation.replace(Routes.ROOT.TABS);
-    } catch (error) {
-      let message = (error as Error).message;
-      Toast.show({
-        type: 'error',
-        text1: message,
-      });
+    async function loadWallet() {
+      try {
+        wallet.setupWallet({
+          mnemonic,
+          password,
+          passwordType,
+          simplePassword,
+          useBiometrics,
+        });
+        setTimeout(() => {
+          setLoading(false);
+          navigation.replace(Routes.ROOT.TABS);
+        }, 50);
+      } catch (error) {
+        setLoading(false);
+        let message = (error as Error).message;
+        Toast.show({
+          type: 'error',
+          text1: message,
+        });
+      }
     }
+
+    setTimeout(() => {
+      loadWallet();
+    }, 50);
   };
 
   const successView = () => {
@@ -154,6 +167,11 @@ const SetupPage = ({navigation}: {navigation: any}) => {
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>
+        {loading ? (
+          <View style={styles.indicatorView}>
+            <ActivityIndicator size="large" color="#00ff00" />
+          </View>
+        ) : null}
       </SafeAreaView>
     );
   };
@@ -356,6 +374,17 @@ const styles = StyleSheet.create({
   resetButtonText: {
     fontSize: 16,
     color: '#ffffff',
+  },
+  indicatorView: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
 });
 
