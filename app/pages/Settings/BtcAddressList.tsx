@@ -9,10 +9,11 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import {Tab, Text, TabView, Divider, Button} from '@rneui/themed';
+import {Tab, Text, TabView, Divider} from '@rneui/themed';
 import * as wallet from '../../wallet';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useTheme, Theme} from '../../util/theme';
 
 type ItemProps = {
   address: string;
@@ -25,12 +26,22 @@ const jumpToExplorer = (address: string) => {
   );
 };
 
-const Item = ({address, index}: {address: string; index: number}) => (
+const Item = ({
+  address,
+  index,
+  theme,
+}: {
+  address: string;
+  index: number;
+  theme: Theme;
+}) => (
   <TouchableOpacity style={styles.cell} onPress={() => jumpToExplorer(address)}>
-    <Text style={styles.index}>{index}.</Text>
-    <View style={styles.line}>
-      <Text style={styles.address}>{address}</Text>
-      <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+    <Text style={[styles.index, {color: theme.colors.title}]}>{index}.</Text>
+    <View style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+      <Text style={[styles.address, {color: theme.colors.text}]}>
+        {address}
+      </Text>
+      <Icon name="chevron-forward" size={24} color={theme.colors.placeholder} />
     </View>
   </TouchableOpacity>
 );
@@ -72,20 +83,46 @@ const BtcAddressListPage = () => {
   React.useEffect(() => {
     loadAddresses();
   }, [loadAddresses]);
+  const theme = useTheme();
 
   return (
     <SafeAreaView style={styles.container}>
       <Tab
         value={tabIndex}
         onChange={e => setTabIndex(e)}
-        style={{width: '100%', height: 52}}
-        indicatorStyle={{
-          backgroundColor: 'white',
-          height: 2,
+        style={{
+          width: '100%',
+          height: 50,
+          backgroundColor: theme.colors.surface,
         }}
+        disableIndicator={true}
         variant="primary">
-        <Tab.Item title="External(Receive)" titleStyle={{fontSize: 14}} />
-        <Tab.Item title="Internal(Change)" titleStyle={{fontSize: 14}} />
+        <Tab.Item
+          title="External(Receive)"
+          titleStyle={active => ({
+            fontSize: active ? 15 : 14,
+            fontWeight: active ? 'bold' : 'normal',
+            color: active ? theme.colors.inverse : theme.colors.inverse + '80',
+          })}
+          buttonStyle={active => ({
+            backgroundColor: active
+              ? theme.colors.primary
+              : theme.colors.primary + '80',
+          })}
+        />
+        <Tab.Item
+          title="Internal(Change)"
+          titleStyle={active => ({
+            fontSize: active ? 15 : 14,
+            fontWeight: active ? 'bold' : 'normal',
+            color: active ? theme.colors.inverse : theme.colors.inverse + '80',
+          })}
+          buttonStyle={active => ({
+            backgroundColor: active
+              ? theme.colors.primary
+              : theme.colors.primary + '80',
+          })}
+        />
       </Tab>
 
       <View style={{width: '100%', flex: 1}}>
@@ -105,7 +142,7 @@ const BtcAddressListPage = () => {
               style={styles.container}
               contentContainerStyle={styles.contentContainer}
               renderItem={({item}) => (
-                <Item address={item.address} index={item.id} />
+                <Item address={item.address} index={item.id} theme={theme} />
               )}
             />
           </TabView.Item>
@@ -115,12 +152,12 @@ const BtcAddressListPage = () => {
               style={styles.container}
               contentContainerStyle={styles.contentContainer}
               renderItem={({item}) => (
-                <Item address={item.address} index={item.id} />
+                <Item address={item.address} index={item.id} theme={theme} />
               )}
             />
           </TabView.Item>
         </TabView>
-        <Divider width={2} />
+        <Divider width={2} color={theme.colors.border} />
         <View
           style={{
             width: '100%',
@@ -129,16 +166,43 @@ const BtcAddressListPage = () => {
             justifyContent: 'center',
             height: 60,
           }}>
-          <Button
-            title="Preview Page"
+          <TouchableOpacity
+            activeOpacity={0.6}
             disabled={pageNumber === 1}
-            onPress={() => setPageNumber(pageNumber - 1)}
-          />
-          <Text style={{width: 50, textAlign: 'center'}}>{pageNumber}</Text>
-          <Button
-            title="Next Page"
-            onPress={() => setPageNumber(pageNumber + 1)}
-          />
+            style={[
+              styles.button,
+              {
+                backgroundColor: theme.colors.primary,
+                opacity: pageNumber === 1 ? 0.5 : 1,
+              },
+            ]}
+            onPress={() => setPageNumber(pageNumber - 1)}>
+            <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
+              Preview Page
+            </Text>
+          </TouchableOpacity>
+          <Text
+            style={{
+              width: 50,
+              fontSize: 20,
+              textAlign: 'center',
+              color: theme.colors.title,
+            }}>
+            {pageNumber}
+          </Text>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={[
+              styles.button,
+              {
+                backgroundColor: theme.colors.primary,
+              },
+            ]}
+            onPress={() => setPageNumber(pageNumber + 1)}>
+            <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
+              Next Page
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       {loading ? (
@@ -152,7 +216,7 @@ const BtcAddressListPage = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <ActivityIndicator size="large" color="#00ff00" />
+          <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       ) : null}
     </SafeAreaView>
@@ -165,8 +229,6 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     flexDirection: 'column',
-    // alignItems: 'center',
-    // justifyContent: 'center',
     overflow: 'hidden',
   },
   normalText: {
@@ -195,9 +257,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     borderBottomWidth: 1,
     height: '100%',
-    borderBottomColor: 'lightgray',
     flexDirection: 'row',
-    // justifyContent: 'flex-end',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -217,6 +277,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     padding: 10,
+  },
+  button: {
+    height: 36,
+    width: 140,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+  },
+  buttonText: {
+    fontSize: 17,
   },
 });
 

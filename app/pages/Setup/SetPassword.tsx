@@ -14,6 +14,7 @@ import MnemonicView from '../../components/MnemonicView';
 import {zxcvbn, zxcvbnOptions} from '@zxcvbn-ts/core';
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 import * as zxcvbnEnPackage from '@zxcvbn-ts/language-en';
+import {useTheme} from '../../util/theme';
 
 const SetPasswordPage = ({
   route,
@@ -58,6 +59,7 @@ const SetPasswordPage = ({
     return passwordStrengthByScore[score];
   };
 
+  const theme = useTheme();
   return (
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback
@@ -66,22 +68,29 @@ const SetPasswordPage = ({
         accessible={false}>
         <View style={styles.container}>
           <View style={styles.textContainer}>
-            <Text style={styles.highlightText}>Mnemonic:</Text>
-            <MnemonicView mnemonic={mnemonic.split(' ')} />
-            <Text style={styles.normalText}>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              Mnemonic:
+            </Text>
+            <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
+            <Text style={[styles.normalText, {color: theme.colors.text}]}>
               If you forget your password, you can never recover your private
               key.
             </Text>
-            <Text style={styles.normalText}>
+            <Text style={[styles.normalText, {color: theme.colors.text}]}>
               Input your password(It should be very complex):
             </Text>
             <TextInput
               style={[
                 styles.textInput,
-                {borderColor: editingPassword ? 'deepskyblue' : '#aaaaaa'},
+                {
+                  borderColor: editingPassword
+                    ? theme.colors.primary
+                    : theme.colors.border,
+                  color: theme.colors.text,
+                },
               ]}
               placeholder="Password: at least 8 characters"
-              placeholderTextColor="#aaaaaa"
+              placeholderTextColor={theme.colors.placeholder}
               onChangeText={newText => setPassword(newText)}
               defaultValue={password}
               autoComplete="off"
@@ -101,8 +110,13 @@ const SetPasswordPage = ({
             />
             {password.length >= 8 ? (
               <View style={styles.passwordStrengthContainer}>
-                <Text style={styles.highlightText}>Password Strength:</Text>
-                <Text style={styles.normalText}>{passwordStrength()}</Text>
+                <Text
+                  style={[styles.highlightText, {color: theme.colors.title}]}>
+                  Password Strength:
+                </Text>
+                <Text style={[styles.normalText, {color: theme.colors.text}]}>
+                  {passwordStrength()}
+                </Text>
               </View>
             ) : null}
           </View>
@@ -110,9 +124,17 @@ const SetPasswordPage = ({
             {password.length >= 8 ? (
               <TouchableOpacity
                 activeOpacity={0.6}
-                style={styles.button}
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor: theme.colors.primary,
+                  },
+                ]}
                 onPress={goSecurityPage}>
-                <Text style={styles.buttonText}>Security Setting</Text>
+                <Text
+                  style={[styles.buttonText, {color: theme.colors.inverse}]}>
+                  Security Setting
+                </Text>
               </TouchableOpacity>
             ) : null}
           </View>
@@ -168,7 +190,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: '85%',
     borderWidth: 1.5,
-    borderColor: '#aaaaaa',
     padding: 10,
     fontSize: 18,
     borderRadius: 4,
@@ -180,7 +201,6 @@ const styles = StyleSheet.create({
   button: {
     height: 44,
     width: '100%',
-    backgroundColor: 'dodgerblue',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -188,7 +208,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
-    color: '#ffffff',
   },
 });
 

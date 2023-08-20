@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Image,
 } from 'react-native';
+import {useTheme} from '../../util/theme';
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera, BarCodeReadEvent} from 'react-native-camera';
@@ -20,6 +21,7 @@ const QRScannerPage = ({route}: {route: any}) => {
   const navigation = useNavigation();
 
   const decoder = React.useRef(new URRegistryDecoder());
+  const theme = useTheme();
 
   const onScanSuccess = React.useCallback(
     (e: BarCodeReadEvent) => {
@@ -69,12 +71,19 @@ const QRScannerPage = ({route}: {route: any}) => {
               <Image
                 style={styles.closeImage}
                 source={require('../../images/close.png')}
+                tintColor={theme.colors.primary}
               />
             </TouchableWithoutFeedback>
             {progress !== 0 ? (
               <View style={styles.progressBarBackground}>
                 <View
-                  style={[styles.progressBar, {width: `${progress * 100}%`}]}
+                  style={[
+                    styles.progressBar,
+                    {
+                      width: `${progress * 100}%`,
+                      backgroundColor: theme.colors.primary,
+                    },
+                  ]}
                 />
               </View>
             ) : null}
@@ -113,7 +122,6 @@ const styles = StyleSheet.create({
     height: 4,
   },
   progressBar: {
-    backgroundColor: 'deepskyblue',
     width: '100%',
     height: '100%',
   },

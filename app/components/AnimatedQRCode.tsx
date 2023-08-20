@@ -34,8 +34,10 @@ const AnimatedQRCode = ({
   return (
     <View
       style={{
-        width: viewWidth - 40,
+        width: '100%',
+        padding: 20,
         aspectRatio: 1,
+        backgroundColor: '#DFE0E2',
       }}>
       <QRCode size={viewWidth - 40} value={currentUR} />
     </View>

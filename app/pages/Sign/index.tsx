@@ -21,6 +21,7 @@ import {
 } from 'doom-wallet-core';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {UR} from '@ngraveio/bc-ur';
+import {useTheme} from '../../util/theme';
 
 const typeText = (type: RequestType) => {
   switch (type) {
@@ -71,14 +72,14 @@ const EVMSignPage = ({route}: {route: any}) => {
       // console.log(error);
     }
   }, [ur]);
-
+  const theme = useTheme();
   const [signedUrText, setSignedUrText] = React.useState<string>('');
   const {width} = useWindowDimensions();
 
   if (request === undefined) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator />
+        <ActivityIndicator color={theme.colors.primary} />
       </SafeAreaView>
     );
   }
@@ -86,7 +87,7 @@ const EVMSignPage = ({route}: {route: any}) => {
   if (request === null) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>
+        <Text style={[styles.errorText, {color: theme.colors.error}]}>
           Invalid UR, Please check the QR code
         </Text>
       </SafeAreaView>
@@ -112,35 +113,65 @@ const EVMSignPage = ({route}: {route: any}) => {
           return (
             <View style={styles.payloadView}>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>Nonce:</Text>
-                <Text style={styles.lineText}>{payload.nonce}</Text>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  Nonce:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                  {payload.nonce}
+                </Text>
               </View>
-              <Text style={styles.highlightText}>To:</Text>
-              <Text style={styles.addressText}>{payload.to}</Text>
+              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+                To:
+              </Text>
+              <Text style={[styles.addressText, {color: theme.colors.text}]}>
+                {payload.to}
+              </Text>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>Value:</Text>
-                <Text style={styles.lineText}>{payload.value.toString()}</Text>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  Value:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                  {payload.value.toString()}
+                </Text>
               </View>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>maxFeePerGas:</Text>
-                <Text style={styles.lineText}>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  maxFeePerGas:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {payload.maxFeePerGas.toString()}
                 </Text>
               </View>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>maxPriorityFeePerGas:</Text>
-                <Text style={styles.lineText}>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  maxPriorityFeePerGas:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {payload.maxPriorityFeePerGas.toString()}
                 </Text>
               </View>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>gasLimit:</Text>
-                <Text style={styles.lineText}>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  gasLimit:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {payload.gasLimit.toString()}
                 </Text>
               </View>
-              <Text style={styles.highlightText}>Data:</Text>
-              <Text style={styles.dataText}>{payload.data}</Text>
+              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+                Data:
+              </Text>
+              <Text
+                style={[
+                  styles.dataText,
+                  {
+                    borderColor: theme.colors.border,
+                    backgroundColor: theme.colors.surface,
+                    color: theme.colors.text,
+                  },
+                ]}>
+                {payload.data}
+              </Text>
             </View>
           );
         } else if (request instanceof TransactionSignRequest) {
@@ -148,29 +179,57 @@ const EVMSignPage = ({route}: {route: any}) => {
           return (
             <View style={styles.payloadView}>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>Nonce:</Text>
-                <Text style={styles.lineText}>{payload.nonce}</Text>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  Nonce:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                  {payload.nonce}
+                </Text>
               </View>
-              <Text style={styles.highlightText}>To:</Text>
-              <Text style={styles.addressText}>{payload.to}</Text>
+              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+                To:
+              </Text>
+              <Text style={[styles.addressText, {color: theme.colors.text}]}>
+                {payload.to}
+              </Text>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>Value:</Text>
-                <Text style={styles.lineText}>{payload.value.toString()}</Text>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  Value:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                  {payload.value.toString()}
+                </Text>
               </View>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>gasPrice:</Text>
-                <Text style={styles.lineText}>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  gasPrice:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {payload.gasPrice.toString()}
                 </Text>
               </View>
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>gasLimit:</Text>
-                <Text style={styles.lineText}>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  gasLimit:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {payload.gasLimit.toString()}
                 </Text>
               </View>
-              <Text style={styles.highlightText}>Data:</Text>
-              <Text style={styles.dataText}>{payload.data}</Text>
+              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+                Data:
+              </Text>
+              <Text
+                style={[
+                  styles.dataText,
+                  {
+                    borderColor: theme.colors.border,
+                    backgroundColor: theme.colors.surface,
+                    color: theme.colors.text,
+                  },
+                ]}>
+                {payload.data}
+              </Text>
             </View>
           );
         } else {
@@ -181,8 +240,20 @@ const EVMSignPage = ({route}: {route: any}) => {
         const payload = (request as MessageSignRequest).payload;
         return (
           <View style={styles.payloadView}>
-            <Text style={styles.highlightText}>Message:</Text>
-            <Text style={styles.dataText}>{payload}</Text>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              Message:
+            </Text>
+            <Text
+              style={[
+                styles.dataText,
+                {
+                  borderColor: theme.colors.border,
+                  backgroundColor: theme.colors.surface,
+                  color: theme.colors.text,
+                },
+              ]}>
+              {payload}
+            </Text>
           </View>
         );
       }
@@ -199,8 +270,20 @@ const EVMSignPage = ({route}: {route: any}) => {
 
         return (
           <View style={styles.payloadView}>
-            <Text style={styles.highlightText}>Message:</Text>
-            <Text style={styles.dataText}>{formattedPayload}</Text>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              Message:
+            </Text>
+            <Text
+              style={[
+                styles.dataText,
+                {
+                  borderColor: theme.colors.border,
+                  backgroundColor: theme.colors.surface,
+                  color: theme.colors.text,
+                },
+              ]}>
+              {formattedPayload}
+            </Text>
           </View>
         );
       }
@@ -209,46 +292,67 @@ const EVMSignPage = ({route}: {route: any}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.scrollView}
-        contentContainerStyle={styles.textContainer}>
-        {wrongUr ? (
-          <Text style={styles.highlightText}>Invalid UR, Can't Sign!</Text>
-        ) : null}
-        <View style={styles.line}>
-          <Text style={styles.lineLabel}>Type:</Text>
-          <Text style={styles.lineText}>{typeText(request.type)}</Text>
-        </View>
-        <Text style={styles.highlightText}>Address:</Text>
-        <Text style={styles.addressText}>{request.address}</Text>
-        {request.type === RequestType.transaction ? (
+      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
+        <View style={styles.textContainer}>
+          {wrongUr ? (
+            <Text style={[styles.highlightText, {color: theme.colors.error}]}>
+              Invalid UR, Can't Sign!
+            </Text>
+          ) : null}
           <View style={styles.line}>
-            <Text style={styles.lineLabel}>Chain ID:</Text>
-            <Text style={styles.lineText}>{request.chainID}</Text>
+            <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+              Type:
+            </Text>
+            <Text style={[styles.lineText, {color: theme.colors.text}]}>
+              {typeText(request.type)}
+            </Text>
           </View>
-        ) : null}
-        <View style={styles.line} />
-        {payloadView()}
-        {signedUrText === '' && !wrongUr ? (
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={styles.button}
-            onPress={sign}>
-            <Text style={styles.buttonText}>SIGN</Text>
-          </TouchableOpacity>
-        ) : null}
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            Address:
+          </Text>
+          <Text style={[styles.addressText, {color: theme.colors.text}]}>
+            {request.address}
+          </Text>
+          {request.type === RequestType.transaction ? (
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                Chain ID:
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {request.chainID}
+              </Text>
+            </View>
+          ) : null}
+          <View style={styles.line} />
+          {payloadView()}
+          {signedUrText === '' && !wrongUr ? (
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={[
+                styles.button,
+                {
+                  backgroundColor: theme.colors.primary,
+                },
+              ]}
+              onPress={sign}>
+              <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
+                SIGN
+              </Text>
+            </TouchableOpacity>
+          ) : null}
 
-        {!wrongUr && signedUrText !== '' ? (
-          <Text style={styles.highlightText}>Result :</Text>
-        ) : null}
-
+          {!wrongUr && signedUrText !== '' ? (
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              Result :
+            </Text>
+          ) : null}
+        </View>
         {signedUrText !== '' && !wrongUr ? (
           <View
             style={[
               styles.qrCodeContainer,
               {
-                width: width - 40,
+                backgroundColor: '#DFE0E2',
               },
             ]}>
             <QRCode size={width - 40} value={signedUrText} />
@@ -261,7 +365,7 @@ const EVMSignPage = ({route}: {route: any}) => {
 
 const styles = StyleSheet.create({
   qrCodeContainer: {
-    margin: 20,
+    padding: 20,
     aspectRatio: 1,
   },
   scrollView: {
@@ -305,10 +409,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'left',
     width: '98%',
-    backgroundColor: 'lightgray',
     padding: 5,
     borderWidth: 1,
-    borderColor: 'lightslategrey',
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -331,7 +433,6 @@ const styles = StyleSheet.create({
     width: '88%',
     marginTop: 25,
     marginBottom: 25,
-    backgroundColor: 'dodgerblue',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -339,8 +440,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
-    // fontWeight: 'bold',
-    color: '#ffffff',
   },
   line: {
     height: 36,

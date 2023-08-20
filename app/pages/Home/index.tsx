@@ -1,6 +1,7 @@
 import React from 'react';
 import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
 import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
+import {useTheme} from '../../util/theme';
 
 const HomePage = () => {
   const [networkState, setNetworkState] = React.useState<NetInfoState | null>(
@@ -11,17 +12,20 @@ const HomePage = () => {
       setNetworkState(state);
     });
   }, []);
+  const theme = useTheme();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <View style={styles.textContainer}>
-          <Text style={styles.normalText}>
+          <Text style={[styles.normalText, {color: theme.colors.text}]}>
             {' '}
             Using this wallet in a offline device will be much safer!{' '}
           </Text>
           <View style={styles.line}>
-            <Text style={styles.lineLabel}>Network state:</Text>
-            <Text style={styles.lineText}>
+            <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+              Network state:
+            </Text>
+            <Text style={[styles.lineText, {color: theme.colors.text}]}>
               {networkState?.isConnected ? 'Connected' : 'Not connected'}
             </Text>
           </View>

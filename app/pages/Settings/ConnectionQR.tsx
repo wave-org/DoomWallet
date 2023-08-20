@@ -11,6 +11,7 @@ import {
 import QRCode from 'react-native-qrcode-svg';
 import {Tab, Text, TabView, Button} from '@rneui/themed';
 import * as wallet from '../../wallet';
+import {useTheme} from '../../util/theme';
 
 const ConnectionQRCodePage = () => {
   const [evmUR, setEvmUR] = React.useState<string | undefined>(undefined);
@@ -30,33 +31,56 @@ const ConnectionQRCodePage = () => {
     Linking.openURL('https://bluewallet.io/');
   };
 
+  const theme = useTheme();
+
   return (
     <SafeAreaView style={styles.container}>
       {evmUR === undefined || btcUR === undefined ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={theme.colors.primary} />
       ) : (
         <View style={styles.container}>
           <Tab
             value={tabIndex}
             onChange={e => setTabIndex(e)}
-            style={{width: '100%', height: 60}}
-            indicatorStyle={{
-              backgroundColor: 'white',
-              height: 3,
+            style={{
+              width: '100%',
+              height: 60,
+              backgroundColor: theme.colors.surface,
             }}
+            disableIndicator={true}
             variant="primary">
             <Tab.Item
               title="EVM"
-              titleStyle={{fontSize: 12}}
+              titleStyle={active => ({
+                fontSize: active ? 13 : 12,
+                fontWeight: active ? 'bold' : 'normal',
+                color: theme.colors.inverse,
+              })}
               icon={{
                 name: 'ethereum',
                 type: 'material-community',
                 color: 'white',
               }}
+              containerStyle={active => ({
+                opacity: active ? 1 : 0.5,
+              })}
+              buttonStyle={{
+                backgroundColor: theme.colors.primary,
+              }}
             />
             <Tab.Item
               title="Bitcoin"
-              titleStyle={{fontSize: 12}}
+              titleStyle={active => ({
+                fontSize: active ? 13 : 12,
+                fontWeight: active ? 'bold' : 'normal',
+                color: theme.colors.inverse,
+              })}
+              containerStyle={active => ({
+                opacity: active ? 1 : 0.5,
+              })}
+              buttonStyle={{
+                backgroundColor: theme.colors.primary,
+              }}
               icon={{
                 name: 'bitcoin',
                 type: 'material-community',
@@ -75,8 +99,15 @@ const ConnectionQRCodePage = () => {
             animationType="spring">
             <TabView.Item style={{width: '100%'}}>
               <View style={styles.textContainer}>
-                <QRCode size={width - 40} value={evmUR} />
-                <Text style={styles.normalText}>
+                <View
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#DFE0E2',
+                    padding: 20,
+                  }}>
+                  <QRCode size={width - 40} value={evmUR} />
+                </View>
+                <Text style={[styles.normalText, {color: theme.colors.text}]}>
                   Use your MetaMask Wallet to scan this QRCode to connect.{'\n'}{' '}
                   (Add account or hardware wallet -- Connect a hardware wallet
                   -- QR-Based )
@@ -86,13 +117,21 @@ const ConnectionQRCodePage = () => {
                   type="clear"
                   onPress={getMetaMask}
                   style={{marginTop: 25}}
+                  titleStyle={{color: theme.colors.primary}}
                 />
               </View>
             </TabView.Item>
             <TabView.Item style={{width: '100%'}}>
               <View style={styles.textContainer}>
-                <QRCode size={width - 40} value={btcUR} />
-                <Text style={styles.normalText}>
+                <View
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#DFE0E2',
+                    padding: 20,
+                  }}>
+                  <QRCode size={width - 40} value={btcUR} />
+                </View>
+                <Text style={[styles.normalText, {color: theme.colors.text}]}>
                   Use your hot wallet to scan this QRCode to connect.{'\n'} We
                   recommend Blue Wallet!
                 </Text>
@@ -101,6 +140,7 @@ const ConnectionQRCodePage = () => {
                   type="clear"
                   onPress={getBlueWallet}
                   style={{marginTop: 25}}
+                  titleStyle={{color: theme.colors.primary}}
                 />
               </View>
             </TabView.Item>
@@ -122,7 +162,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   normalText: {
-    marginTop: 20,
+    padding: 20,
     fontSize: 16,
     textAlign: 'center',
     width: '100%',
@@ -131,7 +171,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 20,
   },
 });
 

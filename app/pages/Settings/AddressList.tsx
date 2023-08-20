@@ -13,6 +13,7 @@ import {
 import * as wallet from '../../wallet';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useTheme, Theme} from '../../util/theme';
 
 const jumpToEthscan = (address: string) => {
   Linking.openURL('https://etherscan.io/address/' + address);
@@ -23,18 +24,29 @@ type ItemProps = {
   id: number;
 };
 
-const Item = ({address, index}: {address: string; index: number}) => (
+const Item = ({
+  address,
+  index,
+  theme,
+}: {
+  address: string;
+  index: number;
+  theme: Theme;
+}) => (
   <TouchableOpacity style={styles.cell} onPress={() => jumpToEthscan(address)}>
-    <Text style={styles.index}>{index}.</Text>
-    <View style={styles.line}>
-      <Text style={styles.address}>{address}</Text>
-      <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+    <Text style={[styles.index, {color: theme.colors.title}]}>{index}.</Text>
+    <View style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+      <Text style={[styles.address, {color: theme.colors.text}]}>
+        {address}
+      </Text>
+      <Icon name="chevron-forward" size={24} color={theme.colors.placeholder} />
     </View>
   </TouchableOpacity>
 );
 
-const AddressList = () => {
+const EVMAddressListPage = () => {
   const [addressList, setAddressList] = React.useState<ItemProps[]>([]);
+  const theme = useTheme();
 
   React.useEffect(() => {
     const _addressList = wallet
@@ -49,7 +61,7 @@ const AddressList = () => {
   if (addressList.length === 0) {
     return (
       <SafeAreaView style={styles.indicatorContainer}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </SafeAreaView>
     );
   }
@@ -60,7 +72,9 @@ const AddressList = () => {
         data={addressList}
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
-        renderItem={({item}) => <Item address={item.address} index={item.id} />}
+        renderItem={({item}) => (
+          <Item address={item.address} index={item.id} theme={theme} />
+        )}
       />
     </SafeAreaView>
   );
@@ -76,6 +90,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   contentContainer: {
     width: '100%',
@@ -97,9 +112,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     borderBottomWidth: 1,
     height: '100%',
-    borderBottomColor: 'lightgray',
     flexDirection: 'row',
-    // justifyContent: 'flex-end',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -115,4 +128,4 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
-export default AddressList;
+export default EVMAddressListPage;

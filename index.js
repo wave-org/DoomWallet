@@ -11,6 +11,15 @@ import {AppRegistry, Appearance} from 'react-native';
 
 import App from './app/App';
 import {name as appName} from './app.json';
-// TODO not support darm mode now.
-Appearance.setColorScheme('light');
+import {loadDarkMode, DarkMode} from './app/wallet/setting';
+
+loadDarkMode().then(darkMode => {
+  if (darkMode === DarkMode.Dark) {
+    Appearance.setColorScheme('dark');
+  } else if (darkMode === DarkMode.Light) {
+    Appearance.setColorScheme('light');
+  } else {
+    Appearance.setColorScheme(undefined);
+  }
+});
 AppRegistry.registerComponent(appName, () => App);

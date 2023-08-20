@@ -1,6 +1,7 @@
 import React from 'react';
 import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
 import PickerView from '../../components/PickerView';
+import {useTheme} from '../../util/theme';
 
 const LanguagePage = () => {
   const options = ['English'];
@@ -10,16 +11,18 @@ const LanguagePage = () => {
     console.log('LanguagePage onSelect', index);
   };
 
+  const theme = useTheme();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.textContainer}>
-        <Text style={styles.normalText}>
+        <Text style={[styles.normalText, {color: theme.colors.text}]}>
           Doom Wallet will support more language in the future.
         </Text>
         <PickerView
           options={options}
           onSelect={onSelect}
           selectedIndex={selectedIndex}
+          theme={theme}
         />
       </View>
     </SafeAreaView>

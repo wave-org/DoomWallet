@@ -13,6 +13,7 @@ import {BTCSignRequest} from 'doom-wallet-core';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {UR} from '@ngraveio/bc-ur';
 import AnimatedQRCode from '../../components/AnimatedQRCode';
+import {useTheme} from '../../util/theme';
 
 const BTCSignPage = ({route}: {route: any}) => {
   const ur = route.params.ur as UR;
@@ -23,6 +24,7 @@ const BTCSignPage = ({route}: {route: any}) => {
   const [request, setRequest] = React.useState<
     BTCSignRequest | undefined | null
   >(undefined);
+  const theme = useTheme();
   React.useEffect(() => {
     try {
       const req = wallet.parseBTCRequest(ur);
@@ -55,7 +57,7 @@ const BTCSignPage = ({route}: {route: any}) => {
   if (request === undefined) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator />
+        <ActivityIndicator color={theme.colors.primary} />
       </SafeAreaView>
     );
   }
@@ -63,7 +65,7 @@ const BTCSignPage = ({route}: {route: any}) => {
   if (request === null) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>
+        <Text style={[styles.errorText, {color: theme.colors.error}]}>
           Invalid UR, Please check the QR code
         </Text>
       </SafeAreaView>
@@ -86,8 +88,10 @@ const BTCSignPage = ({route}: {route: any}) => {
     } else if (request.unsignedInputAddresses.length === 1) {
       return (
         <>
-          <Text style={styles.highlightText}>From Address:</Text>
-          <Text style={styles.addressText}>
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            From Address:
+          </Text>
+          <Text style={[styles.addressText, {color: theme.colors.text}]}>
             {request.unsignedInputAddresses[0].address}
           </Text>
         </>
@@ -98,8 +102,18 @@ const BTCSignPage = ({route}: {route: any}) => {
       );
       return (
         <>
-          <Text style={styles.highlightText}>Unsigned address list:</Text>
-          <Text style={styles.dataText}>
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            Unsigned address list:
+          </Text>
+          <Text
+            style={[
+              styles.dataText,
+              {
+                borderColor: theme.colors.border,
+                backgroundColor: theme.colors.surface,
+                color: theme.colors.text,
+              },
+            ]}>
             {JSON.stringify(addressesList, null, 4)}
           </Text>
         </>
@@ -109,63 +123,143 @@ const BTCSignPage = ({route}: {route: any}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.scrollView}
-        contentContainerStyle={styles.textContainer}>
-        {wrongUr ? (
-          <Text style={styles.highlightText}>Invalid UR, Can't Sign!</Text>
-        ) : null}
-        {notThisWallet ? (
-          <Text style={styles.highlightText}>
-            Invalid UR, the input addresses are not in this wallet!
+      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
+        <View style={styles.textContainer}>
+          {wrongUr ? (
+            <Text style={[styles.highlightText, {color: theme.colors.error}]}>
+              Invalid UR, Can't Sign!
+            </Text>
+          ) : null}
+          {notThisWallet ? (
+            <Text style={[styles.highlightText, {color: theme.colors.error}]}>
+              Invalid UR, the input addresses are not in this wallet!
+            </Text>
+          ) : null}
+          {addressesView()}
+          <View style={styles.line}>
+            <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+              Fee:
+            </Text>
+            <Text style={[styles.lineText, {color: theme.colors.text}]}>
+              {request.fee}
+            </Text>
+          </View>
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            Input Tx:
           </Text>
-        ) : null}
-        {addressesView()}
-        <View style={styles.line}>
-          <Text style={styles.lineLabel}>Fee:</Text>
-          <Text style={styles.lineText}>{request.fee}</Text>
-        </View>
-        <Text style={styles.highlightText}>Input Tx:</Text>
-        <Text style={styles.dataText}>{request.inputTx}</Text>
-        <Text style={styles.highlightText}>Output Tx:</Text>
-        <Text style={styles.dataText}>{request.outputTx}</Text>
-        <Text style={styles.highlightText}>Input Data:</Text>
-        <Text style={styles.dataText}>{request.inputData}</Text>
-        <Text style={styles.highlightText}>Output Data:</Text>
-        <Text style={styles.dataText}>{request.outputData}</Text>
-        <Text style={styles.highlightText}>Global Map:</Text>
-        <Text style={styles.dataText}>{request.PSBTGlobalMap}</Text>
-        <View style={styles.line}>
-          <Text style={styles.lineLabel}>Version:</Text>
-          <Text style={styles.lineText}>{request.version}</Text>
-        </View>
-        <View style={styles.line}>
-          <Text style={styles.lineLabel}>Locktime:</Text>
-          <Text style={styles.lineText}>{request.locktime}</Text>
-        </View>
-        {urList.length === 0 && !wrongUr && !notThisWallet ? (
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={styles.button}
-            onPress={sign}>
-            <Text style={styles.buttonText}>SIGN</Text>
-          </TouchableOpacity>
-        ) : null}
-
-        {!wrongUr && urList.length !== 0 && !notThisWallet ? (
           <Text
             style={[
-              styles.highlightText,
+              styles.dataText,
               {
-                marginTop: 25,
-                marginBottom: 20,
+                borderColor: theme.colors.border,
+                backgroundColor: theme.colors.surface,
+                color: theme.colors.text,
               },
             ]}>
-            Result :
+            {request.inputTx}
           </Text>
-        ) : null}
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            Output Tx:
+          </Text>
+          <Text
+            style={[
+              styles.dataText,
+              {
+                borderColor: theme.colors.border,
+                backgroundColor: theme.colors.surface,
+                color: theme.colors.text,
+              },
+            ]}>
+            {request.outputTx}
+          </Text>
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            Input Data:
+          </Text>
+          <Text
+            style={[
+              styles.dataText,
+              {
+                borderColor: theme.colors.border,
+                backgroundColor: theme.colors.surface,
+                color: theme.colors.text,
+              },
+            ]}>
+            {request.inputData}
+          </Text>
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            Output Data:
+          </Text>
+          <Text
+            style={[
+              styles.dataText,
+              {
+                borderColor: theme.colors.border,
+                backgroundColor: theme.colors.surface,
+                color: theme.colors.text,
+              },
+            ]}>
+            {request.outputData}
+          </Text>
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            Global Map:
+          </Text>
+          <Text
+            style={[
+              styles.dataText,
+              {
+                borderColor: theme.colors.border,
+                backgroundColor: theme.colors.surface,
+                color: theme.colors.text,
+              },
+            ]}>
+            {request.PSBTGlobalMap}
+          </Text>
+          <View style={styles.line}>
+            <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+              Version:
+            </Text>
+            <Text style={[styles.lineText, {color: theme.colors.text}]}>
+              {request.version}
+            </Text>
+          </View>
+          <View style={styles.line}>
+            <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+              Locktime:
+            </Text>
+            <Text style={[styles.lineText, {color: theme.colors.text}]}>
+              {request.locktime}
+            </Text>
+          </View>
+          {urList.length === 0 && !wrongUr && !notThisWallet ? (
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={[
+                styles.button,
+                {
+                  backgroundColor: theme.colors.primary,
+                },
+              ]}
+              onPress={sign}>
+              <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
+                SIGN
+              </Text>
+            </TouchableOpacity>
+          ) : null}
 
+          {!wrongUr && urList.length !== 0 && !notThisWallet ? (
+            <Text
+              style={[
+                styles.highlightText,
+                {
+                  marginTop: 25,
+                  marginBottom: 20,
+                  color: theme.colors.title,
+                },
+              ]}>
+              Result :
+            </Text>
+          ) : null}
+        </View>
         {urList.length !== 0 && !wrongUr && !notThisWallet ? (
           <AnimatedQRCode urList={urList} />
         ) : null}
@@ -220,10 +314,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'left',
     width: '98%',
-    backgroundColor: 'lightgray',
     padding: 5,
     borderWidth: 1,
-    borderColor: 'lightslategrey',
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -246,7 +338,6 @@ const styles = StyleSheet.create({
     width: '88%',
     marginTop: 25,
     marginBottom: 25,
-    backgroundColor: 'dodgerblue',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -254,8 +345,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
-    // fontWeight: 'bold',
-    color: '#ffffff',
   },
   line: {
     height: 36,

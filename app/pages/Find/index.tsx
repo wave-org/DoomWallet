@@ -11,27 +11,32 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import Routes from '../../routes/Routes';
 import {UR} from '@ngraveio/bc-ur';
 import * as wallet from '../../wallet';
+import {useTheme, Theme} from '../../util/theme';
 
 function QRCodeButton({
   cameraPermission,
   onPress,
+  theme,
 }: {
   cameraPermission: string;
   onPress: () => void;
+  theme: Theme;
 }) {
   if (cameraPermission === RESULTS.GRANTED) {
     return (
       <View style={styles.beforeScanContainer}>
-        <Text style={styles.normalText}>
+        <Text style={[styles.normalText, {color: theme.colors.text}]}>
           If you want to sign a transaction, you need to use MetaMask or
           BlueWallet to start a transaction and get a QR code. Then you can scan
           the QR code to sign the transaction.
         </Text>
         <TouchableOpacity
           activeOpacity={0.6}
-          style={styles.button}
+          style={[styles.button, {backgroundColor: theme.colors.primary}]}
           onPress={onPress}>
-          <Text style={styles.buttonText}>Scan QR Code</Text>
+          <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
+            Scan QR Code
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -40,9 +45,9 @@ function QRCodeButton({
       <View style={styles.beforeScanContainer}>
         <TouchableOpacity
           activeOpacity={0.6}
-          style={styles.button}
+          style={[styles.button, {backgroundColor: theme.colors.primary}]}
           onPress={onPress}>
-          <Text style={styles.buttonText}>
+          <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
             Grant Camera Permission And Scan
           </Text>
         </TouchableOpacity>
@@ -51,11 +56,11 @@ function QRCodeButton({
   } else if (cameraPermission === RESULTS.BLOCKED) {
     return (
       <View style={styles.beforeScanContainer}>
-        <Text style={styles.normalText}>
+        <Text style={[styles.normalText, {color: theme.colors.text}]}>
           Doom Wallet need camera permission to scan a QR code to sign
           Transaction.
         </Text>
-        <Text style={styles.normalText}>
+        <Text style={[styles.normalText, {color: theme.colors.text}]}>
           Please go to Settings and grant the Camera permission.
         </Text>
       </View>
@@ -63,11 +68,11 @@ function QRCodeButton({
   } else {
     return (
       <View style={styles.beforeScanContainer}>
-        <Text style={styles.normalText}>
+        <Text style={[styles.normalText, {color: theme.colors.text}]}>
           Doom Wallet need camera permission to scan a QR code to sign
           Transaction.
         </Text>
-        <Text style={styles.normalText}>
+        <Text style={[styles.normalText, {color: theme.colors.title}]}>
           Please go to Settings and grant the Camera permission.
         </Text>
       </View>
@@ -78,7 +83,7 @@ function QRCodeButton({
 const FindPage = ({navigation}: {navigation: any}) => {
   const [cameraPermission, setCameraPermission] =
     React.useState('not-determined');
-
+  const theme = useTheme();
   useEffect(() => {
     async function fetchPermission() {
       if (Platform.OS === 'android') {
@@ -127,6 +132,7 @@ const FindPage = ({navigation}: {navigation: any}) => {
           <QRCodeButton
             cameraPermission={cameraPermission}
             onPress={onClickScan}
+            theme={theme}
           />
         </View>
       </View>
@@ -165,7 +171,6 @@ const styles = StyleSheet.create({
   button: {
     height: 44,
     width: '88%',
-    backgroundColor: 'dodgerblue',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -173,7 +178,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
-    color: '#ffffff',
   },
 });
 

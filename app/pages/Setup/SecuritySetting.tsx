@@ -22,6 +22,7 @@ import {
 import * as Keychain from 'react-native-keychain';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {useTheme} from '../../util/theme';
 
 const SecuritySettingPage = ({
   route,
@@ -125,6 +126,7 @@ const SecuritySettingPage = ({
   const [useSimplePassword, setUseSimplePassword] = React.useState<boolean>(
     defaultSetting.useSimplePassword,
   );
+  const [editingPassword, setEditingPassword] = React.useState<boolean>(false);
   const toggleSimplePasswordSwitch = () =>
     setUseSimplePassword(previousState => !previousState);
   const [simplePassword, setSimplePassword] = React.useState<string>('');
@@ -242,6 +244,7 @@ const SecuritySettingPage = ({
       }
     }
   };
+  const theme = useTheme();
 
   return (
     <View style={styles.container}>
@@ -255,16 +258,16 @@ const SecuritySettingPage = ({
             // contentContainerStyle={styles.contentContainer}
           >
             <View style={styles.textContainer}>
-              <Text style={styles.normalText}>
+              <Text style={[styles.normalText, {color: theme.colors.text}]}>
                 With biometrics, you can use your face or fingerprint to store
                 your secret and unlock your wallet.
               </Text>
-              <Text style={styles.normalText}>
+              <Text style={[styles.normalText, {color: theme.colors.text}]}>
                 It's much safer. The data will be encrypted by your biometrics.
                 Without your biometrics, no one can access your secret.
               </Text>
               {supportBiometrics === false ? (
-                <Text style={styles.normalText}>
+                <Text style={[styles.normalText, {color: theme.colors.text}]}>
                   Sorry, your device don't support biometrics. It's better to
                   use another device which support biometrics.{'\n'}
                   Or, you need to enroll your biometrics in your device.
@@ -272,11 +275,21 @@ const SecuritySettingPage = ({
               ) : (
                 <View style={styles.subArea}>
                   <View style={styles.line}>
-                    <Text style={styles.lineLabel}>Biometrics:</Text>
+                    <Text
+                      style={[styles.lineLabel, {color: theme.colors.title}]}>
+                      Biometrics:
+                    </Text>
                     <Switch
-                      trackColor={{false: '#767577', true: '#81b0ff'}}
-                      thumbColor={usebiometrics ? '#f5dd4b' : '#f4f3f4'}
-                      ios_backgroundColor="#3e3e3e"
+                      trackColor={{
+                        false: theme.colors.surface,
+                        true: theme.colors.primary,
+                      }}
+                      thumbColor={
+                        usebiometrics
+                          ? theme.colors.secondary
+                          : theme.colors.text
+                      }
+                      ios_backgroundColor={theme.colors.border}
                       onValueChange={switchBiometrics}
                       value={usebiometrics}
                     />
@@ -285,15 +298,26 @@ const SecuritySettingPage = ({
               )}
               <View style={styles.subArea}>
                 <View style={styles.line}>
-                  <Text style={styles.lineLabel}>Password:</Text>
-                  <Text style={styles.lineText}>{password}</Text>
+                  <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                    Password:
+                  </Text>
+                  <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                    {password}
+                  </Text>
                 </View>
                 <View style={styles.line}>
-                  <Text style={styles.lineText}>Login by full password:</Text>
+                  <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                    Login by full password:
+                  </Text>
                   <Switch
-                    trackColor={{false: '#767577', true: '#81b0ff'}}
-                    thumbColor={usePassword ? '#f5dd4b' : '#f4f3f4'}
-                    ios_backgroundColor="#3e3e3e"
+                    trackColor={{
+                      false: theme.colors.surface,
+                      true: theme.colors.primary,
+                    }}
+                    thumbColor={
+                      usePassword ? theme.colors.secondary : theme.colors.text
+                    }
+                    ios_backgroundColor={theme.colors.border}
                     onValueChange={switchUsePassword}
                     value={usePassword}
                   />
@@ -301,19 +325,32 @@ const SecuritySettingPage = ({
               </View>
 
               <View style={styles.line}>
-                <Text style={styles.lineLabel}>Simple Password:</Text>
-                <Text style={styles.lineText}>{simplePassword}</Text>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  Simple Password:
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                  {simplePassword}
+                </Text>
               </View>
-              <Text style={styles.normalText}>
+              <Text style={[styles.normalText, {color: theme.colors.text}]}>
                 Simple password is a password which is easy to remember. If you
                 trust this device, you can use simple password to login.
               </Text>
               <View style={styles.line}>
-                <Text style={styles.lineText}>Login by simple password:</Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                  Login by simple password:
+                </Text>
                 <Switch
-                  trackColor={{false: '#767577', true: '#81b0ff'}}
-                  thumbColor={useSimplePassword ? '#f5dd4b' : '#f4f3f4'}
-                  ios_backgroundColor="#3e3e3e"
+                  trackColor={{
+                    false: theme.colors.surface,
+                    true: theme.colors.primary,
+                  }}
+                  thumbColor={
+                    useSimplePassword
+                      ? theme.colors.secondary
+                      : theme.colors.text
+                  }
+                  ios_backgroundColor={theme.colors.border}
                   onValueChange={switchUseSimplePassword}
                   value={useSimplePassword}
                 />
@@ -321,52 +358,103 @@ const SecuritySettingPage = ({
               {useSimplePassword ? (
                 <View style={styles.subArea}>
                   <View style={styles.subArea}>
-                    <Text style={styles.normalText}>
-                      We have 2 options for Simple password:
+                    <Text
+                      style={[styles.normalText, {color: theme.colors.text}]}>
+                      We have 2 options for Simple password now:
                     </Text>
                     <View style={styles.line}>
-                      <Text style={styles.lineText}>
+                      <Text
+                        style={[styles.lineText, {color: theme.colors.text}]}>
                         1. Normal simple password:
                       </Text>
                       <Switch
-                        trackColor={{false: '#767577', true: '#81b0ff'}}
-                        thumbColor={useType1 ? '#f5dd4b' : '#f4f3f4'}
-                        ios_backgroundColor="#3e3e3e"
+                        trackColor={{
+                          false: theme.colors.surface,
+                          true: theme.colors.primary,
+                        }}
+                        thumbColor={
+                          useType1 ? theme.colors.secondary : theme.colors.text
+                        }
+                        ios_backgroundColor={theme.colors.border}
                         onValueChange={toggleType1Switch}
                         value={useType1}
                       />
                     </View>
                     {useType1 ? (
                       <TextInput
-                        style={styles.textInput}
+                        style={[
+                          styles.textInput,
+                          {
+                            borderColor: editingPassword
+                              ? theme.colors.primary
+                              : theme.colors.border,
+                            color: theme.colors.text,
+                          },
+                        ]}
                         placeholder="Type a simple password"
+                        placeholderTextColor={theme.colors.placeholder}
                         onChangeText={newText => setSimplePassword(newText)}
                         defaultValue={simplePassword}
+                        maxLength={16}
+                        clearButtonMode="while-editing"
                         autoComplete="off"
                         autoCorrect={false}
                         autoCapitalize="none"
+                        onFocus={() => {
+                          setEditingPassword(true);
+                        }}
+                        onBlur={() => {
+                          setEditingPassword(false);
+                        }}
+                        inputMode="text"
                       />
                     ) : null}
                     <View style={styles.line}>
-                      <Text style={styles.lineText}>2. Use PIN:</Text>
+                      <Text
+                        style={[styles.lineText, {color: theme.colors.text}]}>
+                        2. Use PIN:
+                      </Text>
                       <Switch
-                        trackColor={{false: '#767577', true: '#81b0ff'}}
-                        thumbColor={useType2 ? '#f5dd4b' : '#f4f3f4'}
-                        ios_backgroundColor="#3e3e3e"
+                        trackColor={{
+                          false: theme.colors.surface,
+                          true: theme.colors.primary,
+                        }}
+                        thumbColor={
+                          useType2 ? theme.colors.secondary : theme.colors.text
+                        }
+                        ios_backgroundColor={theme.colors.border}
                         onValueChange={toggleType2Switch}
                         value={useType2}
                       />
                     </View>
                     {useType2 ? (
                       <TextInput
-                        style={styles.textInput}
+                        style={[
+                          styles.textInput,
+                          {
+                            borderColor: editingPassword
+                              ? theme.colors.primary
+                              : theme.colors.border,
+                            color: theme.colors.text,
+                          },
+                        ]}
                         placeholder="Type a PIN"
+                        placeholderTextColor={theme.colors.placeholder}
                         onChangeText={newText => setSimplePassword(newText)}
                         defaultValue={simplePassword}
+                        maxLength={10}
+                        clearButtonMode="while-editing"
                         autoComplete="off"
                         autoCorrect={false}
                         autoCapitalize="none"
-                        keyboardType="numeric"
+                        onFocus={() => {
+                          setEditingPassword(true);
+                        }}
+                        onBlur={() => {
+                          setEditingPassword(false);
+                        }}
+                        inputMode="numeric"
+                        // keyboardType="numeric"
                       />
                     ) : null}
                     {/* <View style={styles.line}>
@@ -394,9 +482,15 @@ const SecuritySettingPage = ({
             <TouchableOpacity
               activeOpacity={0.6}
               disabled={buttonIsDisable()}
-              style={[styles.button, {opacity: buttonIsDisable() ? 0.5 : 1}]}
+              style={[
+                styles.button,
+                {
+                  opacity: buttonIsDisable() ? 0.5 : 1,
+                  backgroundColor: theme.colors.primary,
+                },
+              ]}
               onPress={complete}>
-              <Text style={styles.buttonText}>
+              <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
                 {setupComplete !== undefined ? 'Complete' : 'Save'}
               </Text>
             </TouchableOpacity>
@@ -405,7 +499,7 @@ const SecuritySettingPage = ({
       </SafeAreaView>
       {loading ? (
         <View style={styles.indicatorView}>
-          <ActivityIndicator size="large" color="#00ff00" />
+          <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       ) : null}
     </View>
@@ -423,8 +517,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     width: '100%',
-    // padding: 20,
-    // flexDirection: 'column',
   },
   textContainer: {
     flex: 2,
@@ -463,7 +555,6 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
     borderWidth: 1.5,
-    borderColor: '#aaaaaa',
     padding: 10,
     fontSize: 18,
     borderRadius: 4,
@@ -476,7 +567,6 @@ const styles = StyleSheet.create({
   button: {
     height: 44,
     width: '80%',
-    backgroundColor: 'dodgerblue',
     flexDirection: 'column',
     alignSelf: 'center',
     marginBottom: 10,
@@ -486,7 +576,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
-    color: '#ffffff',
   },
   line: {
     height: 44,

@@ -8,6 +8,7 @@ import {
   ViewStyle,
   FlatList,
 } from 'react-native';
+import {Theme} from '../util/theme';
 
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -17,17 +18,26 @@ const Item = ({
   index,
   selected,
   onSelect,
+  theme,
 }: {
   title: string;
   index: number;
   selected: boolean;
+  theme: Theme;
   onSelect: (index: number) => void;
 }) => (
   <TouchableOpacity style={styles.cell} onPress={() => onSelect(index)}>
-    {/* <Text style={styles.index}>{index}.</Text> */}
-    <View style={styles.line}>
-      <Text style={styles.title}>{title}</Text>
-      {selected ? <Icon name="checkmark" size={30} color="blue" /> : null}
+    <View style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+      <Text
+        style={[
+          styles.title,
+          {color: selected ? theme.colors.primary : theme.colors.text},
+        ]}>
+        {title}
+      </Text>
+      {selected ? (
+        <Icon name="checkmark" size={30} color={theme.colors.primary} />
+      ) : null}
     </View>
   </TouchableOpacity>
 );
@@ -37,11 +47,13 @@ const PickerView = ({
   onSelect,
   style,
   selectedIndex,
+  theme,
 }: {
   options: string[];
   onSelect: (index: number) => void;
   style?: StyleProp<ViewStyle>;
   selectedIndex: number;
+  theme: Theme;
 }) => {
   const items = options.map((title, index) => {
     return {id: index, title: title};
@@ -66,6 +78,7 @@ const PickerView = ({
           index={item.id}
           onSelect={selectItem}
           selected={currentSelectedIndex === item.id}
+          theme={theme}
         />
       )}
     />
@@ -93,9 +106,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     borderBottomWidth: 1,
     height: '100%',
-    borderBottomColor: 'lightgray',
     flexDirection: 'row',
-    // justifyContent: 'flex-end',
     justifyContent: 'space-between',
     alignItems: 'center',
   },

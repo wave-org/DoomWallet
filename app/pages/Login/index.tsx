@@ -17,6 +17,7 @@ import {
 import * as wallet from '../../wallet';
 import Routes from '../../routes/Routes';
 import Toast from 'react-native-toast-message';
+import {useTheme} from '../../util/theme';
 
 const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
   const walletHeader = wallet.getWalletHeader();
@@ -55,11 +56,6 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
         setLoading(false);
         if (success) {
           // about 4000ms...
-          // console.log('success', new Date());
-          // Toast.show({
-          //   type: 'success',
-          //   text1: 'Login success',
-          // });
           if (onLogin !== undefined) {
             onLogin();
             navigation.goBack();
@@ -73,6 +69,9 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
           Toast.show({
             type: 'error',
             text1: 'Password is wrong',
+            position: 'bottom',
+            bottomOffset: 100,
+            visibilityTime: 2500,
           });
         }
       } catch (error) {
@@ -81,6 +80,9 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
         Toast.show({
           type: 'error',
           text1: message,
+          position: 'bottom',
+          bottomOffset: 100,
+          visibilityTime: 2500,
         });
       }
     }
@@ -121,18 +123,27 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
     return () => backHandler.remove();
   }, []);
 
+  const theme = useTheme();
+
   const inputView = () => {
     if (walletHeader.passwordType === 'FullPassword') {
       return (
         <View style={styles.inputView}>
-          <Text style={styles.passwordText}>Password:</Text>
+          <Text style={[styles.passwordText, {color: theme.colors.title}]}>
+            Password:
+          </Text>
           <TextInput
             style={[
               styles.textInput,
-              {borderColor: editingPassword ? 'deepskyblue' : '#aaaaaa'},
+              {
+                borderColor: editingPassword
+                  ? theme.colors.primary
+                  : theme.colors.border,
+                color: theme.colors.text,
+              },
             ]}
             placeholder="Type your password"
-            placeholderTextColor="#aaaaaa"
+            placeholderTextColor={theme.colors.placeholder}
             onChangeText={newText => setPassword(newText)}
             defaultValue={password}
             autoComplete="off"
@@ -155,14 +166,21 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
     } else if (walletHeader.passwordType === 'SimplePassword') {
       return (
         <View style={styles.inputView}>
-          <Text style={styles.passwordText}>Simple Password:</Text>
+          <Text style={[styles.passwordText, {color: theme.colors.title}]}>
+            Simple Password:
+          </Text>
           <TextInput
             style={[
               styles.textInput,
-              {borderColor: editingPassword ? 'deepskyblue' : '#aaaaaa'},
+              {
+                borderColor: editingPassword
+                  ? theme.colors.primary
+                  : theme.colors.border,
+                color: theme.colors.text,
+              },
             ]}
             placeholder="Type simple password"
-            placeholderTextColor="#aaaaaa"
+            placeholderTextColor={theme.colors.placeholder}
             onChangeText={newText => setSimplePassword(newText)}
             defaultValue={simplePassword}
             autoComplete="off"
@@ -185,14 +203,21 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
     } else if (walletHeader.passwordType === 'PinPassword') {
       return (
         <View style={styles.inputView}>
-          <Text style={styles.passwordText}>PIN Password:</Text>
+          <Text style={[styles.passwordText, {color: theme.colors.title}]}>
+            PIN Password:
+          </Text>
           <TextInput
             style={[
               styles.textInput,
-              {borderColor: editingPassword ? 'deepskyblue' : '#aaaaaa'},
+              {
+                borderColor: editingPassword
+                  ? theme.colors.primary
+                  : theme.colors.border,
+                color: theme.colors.text,
+              },
             ]}
             placeholder="Type your PIN"
-            placeholderTextColor="#aaaaaa"
+            placeholderTextColor={theme.colors.placeholder}
             onChangeText={newText => setSimplePassword(newText)}
             defaultValue={simplePassword}
             autoComplete="off"
@@ -235,7 +260,9 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
             accessible={false}>
             <View style={styles.container}>
               <View style={styles.welcome}>
-                <Text style={styles.welcomeText}>Welcome back !</Text>
+                <Text style={[styles.welcomeText, {color: theme.colors.title}]}>
+                  Welcome back !
+                </Text>
               </View>
 
               {inputView()}
@@ -244,6 +271,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
                   <Image
                     source={require('../../images/face-id.png')}
                     style={styles.faceIdIcon}
+                    tintColor={theme.colors.placeholder}
                   />
                 ) : null}
                 <TouchableOpacity
@@ -251,20 +279,38 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
                   disabled={loginButtonIsDisable()}
                   style={[
                     styles.loginButton,
-                    {opacity: loginButtonIsDisable() ? 0.5 : 1},
+                    {
+                      opacity: loginButtonIsDisable() ? 0.5 : 1,
+                      backgroundColor: theme.colors.primary,
+                    },
                   ]}
                   onPress={login}>
-                  <Text style={styles.loginButtonText}>UNLOCK</Text>
+                  <Text
+                    style={[
+                      styles.loginButtonText,
+                      {color: theme.colors.inverse},
+                    ]}>
+                    UNLOCK
+                  </Text>
                 </TouchableOpacity>
               </View>
 
               <TouchableOpacity
                 activeOpacity={0.6}
-                style={styles.resetButton}
+                style={[
+                  styles.resetButton,
+                  {backgroundColor: theme.colors.error},
+                ]}
                 onLongPress={reset}>
-                <Text style={styles.resetButtonText}>Reset wallet!</Text>
+                <Text
+                  style={[
+                    styles.resetButtonText,
+                    {color: theme.colors.inverse},
+                  ]}>
+                  Reset wallet!
+                </Text>
               </TouchableOpacity>
-              <Text>
+              <Text style={{color: theme.colors.placeholder}}>
                 You can long press this button to ERASE your wallet and setup a
                 new one
               </Text>
@@ -273,7 +319,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
         </SafeAreaView>
         {loading ? (
           <View style={styles.indicatorView}>
-            <ActivityIndicator size="large" color="#00ff00" />
+            <ActivityIndicator size="large" color={theme.colors.primary} />
           </View>
         ) : null}
       </View>
@@ -305,7 +351,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: '80%',
     borderWidth: 1.5,
-    borderColor: '#aaaaaa',
     padding: 10,
     fontSize: 18,
     borderRadius: 4,
@@ -314,7 +359,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     height: 36,
     width: 160,
-    backgroundColor: 'red',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -322,7 +366,6 @@ const styles = StyleSheet.create({
   },
   resetButtonText: {
     fontSize: 16,
-    color: '#ffffff',
   },
   indicatorView: {
     position: 'absolute',
@@ -341,14 +384,11 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     width: '80%',
     padding: 10,
-    color: '#111111',
   },
   welcomeText: {
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#111111',
-    backgroundColor: '#eeeeee',
   },
   welcome: {
     flex: 1,
@@ -357,7 +397,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   login: {
-    flex: 2,
+    flex: 3,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -372,7 +412,6 @@ const styles = StyleSheet.create({
   loginButton: {
     height: 44,
     width: '88%',
-    backgroundColor: 'dodgerblue',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -381,7 +420,6 @@ const styles = StyleSheet.create({
   loginButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffffff',
   },
 });
 

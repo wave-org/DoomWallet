@@ -1,24 +1,39 @@
 import React from 'react';
-import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
-import * as AutoLock from '../../wallet/autolock';
+import {SafeAreaView, Text, View, StyleSheet, Appearance} from 'react-native';
 import PickerView from '../../components/PickerView';
 import {useTheme} from '../../util/theme';
+import {
+  getDarkMode,
+  setDarkMode,
+  DARK_MODE_OPTIONS,
+  DarkMode,
+} from '../../wallet/setting';
 
-const AutoLockPage = () => {
-  const options = AutoLock.AutoLockTimeText;
-  const selectedIndex: number = AutoLock.getAutoLockTime();
+const DarkModePage = () => {
+  const options = DARK_MODE_OPTIONS;
+  const selectedIndex: number = getDarkMode();
   const onSelect = (index: number) => {
-    AutoLock.setAutoLockTime(index);
+    setDarkMode(index)
+      .then(() => {
+        if (index === DarkMode.Dark) {
+          Appearance.setColorScheme('dark');
+        } else if (index === DarkMode.Light) {
+          Appearance.setColorScheme('light');
+        } else {
+          Appearance.setColorScheme(undefined);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
+
   const theme = useTheme();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={[styles.normalText, {color: theme.colors.text}]}>
-          Choose the amount of time before the application locks automatically.{' '}
-          {'\n'}
-          Doom wallet will lock after the specified amount of time has passed
-          when the app is in the background.
+          You can change the appearance of the app here.
         </Text>
         <PickerView
           options={options}
@@ -56,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AutoLockPage;
+export default DarkModePage;

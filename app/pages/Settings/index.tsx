@@ -21,6 +21,7 @@ import {
   getBuildNumber,
   getVersion,
 } from 'react-native-device-info';
+import {useTheme} from '../../util/theme';
 
 const AccountPage = ({navigation}: {navigation: any}) => {
   const [version, setVersion] = React.useState('');
@@ -70,6 +71,10 @@ const AccountPage = ({navigation}: {navigation: any}) => {
     navigation.navigate(Routes.TABS.LANGUAGE);
   };
 
+  const jumpToDarkMode = () => {
+    navigation.navigate(Routes.TABS.DARKMODE);
+  };
+
   const jumpToGithub = () => {
     Linking.openURL('https://github.com/wave-org/DoomWallet');
   };
@@ -97,83 +102,149 @@ const AccountPage = ({navigation}: {navigation: any}) => {
     loadVersion();
   }, []);
 
+  const theme = useTheme();
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>Account</Text>
+        <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
+          <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
+            Account
+          </Text>
           <TouchableOpacity style={styles.cell} onPress={jumpToConnectionQR}>
-            <Icon name="qr-code" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Connection QR Code</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <Icon name="qr-code" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Connection QR Code
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={jumpToAddressList}>
-            <MCIcon name="ethereum" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>EVM Derived Addresses</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <MCIcon name="ethereum" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                EVM Derived Addresses
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={jumpToBTCAddressList}>
-            <MCIcon name="bitcoin" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Bitcoin Derived Addresses</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <MCIcon name="bitcoin" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Bitcoin Derived Addresses
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={reset}>
-            <Icon name="ban" size={25} color="#ff0000" />
-            <View style={styles.line}>
-              <Text style={styles.redLable}>Reset Wallet</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <Icon name="ban" size={25} color={theme.colors.error} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.error}]}>
+                Reset Wallet
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
         </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>Setting</Text>
+        <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
+          <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
+            Setting
+          </Text>
           <TouchableOpacity style={styles.cell} onPress={jumpToSecuritySetting}>
-            <MCIcon name="security" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Security Setting</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <MCIcon name="security" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Security Setting
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={jumpToAutoLock}>
-            <Icon name="timer-outline" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Auto Lock</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <Icon name="timer-outline" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Auto Lock
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={jumpToLanuage}>
-            <Icon name="language" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Language</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <Icon name="language" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Language
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
-
-          {/*
-            // TODO: add dark mode
-          <TouchableOpacity style={styles.cell}>
-            <Icon name="contrast" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Dark Mode</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+          <TouchableOpacity style={styles.cell} onPress={jumpToDarkMode}>
+            <Icon name="contrast" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Dark Mode
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>About</Text>
+        <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
+          <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
+            About
+          </Text>
           <View style={styles.cell}>
-            <Icon name="build-outline" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Version</Text>
-              <Text style={styles.text}>{version}</Text>
+            <Icon name="build-outline" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Version
+              </Text>
+              <Text style={[styles.text, {color: theme.colors.title}]}>
+                {version}
+              </Text>
             </View>
           </View>
           {/*
@@ -186,10 +257,21 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             </View>
           </TouchableOpacity> */}
           <TouchableOpacity style={styles.cell} onPress={jumpToPrivacyPolicy}>
-            <Icon name="information-circle-outline" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Privacy Policy</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <Icon
+              name="information-circle-outline"
+              size={25}
+              color={theme.colors.primary}
+            />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Privacy Policy
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
           {/* <TouchableOpacity style={styles.cell}>
@@ -199,32 +281,46 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               <Icon name="chevron-forward" size={24} color="#AAAAAA" />
             </View>
           </TouchableOpacity> */}
-          {/* <TouchableOpacity style={styles.cell}>
-            <Icon name="trophy-outline" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>About Doom Wallet</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
-            </View>
-          </TouchableOpacity> */}
           <TouchableOpacity style={styles.cell} onPress={jumpToDocuments}>
-            <Icon name="book-outline" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Documentation</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <Icon name="book-outline" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Documentation
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={jumpToGithub}>
-            <Icon name="logo-github" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Github</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <Icon name="logo-github" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Github
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={jumpToIssues}>
-            <Icon name="bug-outline" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Report Bugs</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
+            <Icon name="bug-outline" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                Report Bugs
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
             </View>
           </TouchableOpacity>
         </View>
@@ -245,7 +341,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   section: {
-    backgroundColor: '#FaFaFa',
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
@@ -275,7 +370,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     borderBottomWidth: 1,
     height: '100%',
-    borderBottomColor: 'lightgray',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -283,13 +377,8 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 17,
   },
-  redLable: {
-    fontSize: 18,
-    color: '#ff0000',
-  },
   text: {
     fontSize: 17,
-    color: '#444444',
     marginRight: 16,
   },
 });

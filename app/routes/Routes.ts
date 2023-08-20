@@ -16,6 +16,7 @@ const Routes = {
     BTC_ADDRESS_LIST: 'BTCAddressList',
     AUTOLOCK: 'AutoLock',
     LANGUAGE: 'Language',
+    DARKMODE: 'DarkMode',
   },
 };
 

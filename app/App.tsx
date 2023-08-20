@@ -5,8 +5,6 @@ import {
   View,
   AppState,
   Image,
-  StyleSheet,
-  StatusBar,
   // Appearance,
 } from 'react-native';
 
@@ -20,6 +18,7 @@ import ConnectionQRCodePage from './pages/Settings/ConnectionQR';
 import AddressList from './pages/Settings/AddressList';
 import AutoLockPage from './pages/Settings/AutoLock';
 import LanguagePage from './pages/Settings/LanguagePage';
+import DarkModePage from './pages/Settings/DarkModePage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -32,6 +31,7 @@ import SecuritySettingPage from './pages/Setup/SecuritySetting';
 import BtcAddressListPage from './pages/Settings/BtcAddressList';
 import Toast from 'react-native-toast-message';
 import * as AutoLock from './wallet/autolock';
+import {useNavigationTheme} from './util/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -173,18 +173,11 @@ function App(): JSX.Element {
     };
   }, []);
 
+  const navigationTheme = useNavigationTheme();
+
   return (
     (route !== '' && (
-      <NavigationContainer ref={navigation}>
-        <StatusBar
-          animated={true}
-          barStyle="dark-content"
-          // barStyle={
-          //   Appearance.getColorScheme() === 'dark'
-          //     ? 'light-content'
-          //     : 'dark-content'
-          // }
-        />
+      <NavigationContainer theme={navigationTheme} ref={navigation}>
         <RootStack.Navigator initialRouteName={route}>
           <RootStack.Group
             screenOptions={{
@@ -255,6 +248,11 @@ function App(): JSX.Element {
               options={{title: 'Language Setting'}}
               component={LanguagePage}
             />
+            <RootStack.Screen
+              name={Routes.TABS.DARKMODE}
+              options={{title: 'Dark Mode'}}
+              component={DarkModePage}
+            />
           </RootStack.Group>
           <RootStack.Group
             screenOptions={{
@@ -270,8 +268,8 @@ function App(): JSX.Element {
         <Toast />
       </NavigationContainer>
     )) || (
-      <NavigationContainer>
-        <SafeAreaView style={styles.background}>
+      <NavigationContainer theme={navigationTheme}>
+        <SafeAreaView>
           <View>
             <Text>Loding</Text>
           </View>
@@ -280,11 +278,5 @@ function App(): JSX.Element {
     )
   );
 }
-
-const styles = StyleSheet.create({
-  background: {
-    backgroundColor: 'white',
-  },
-});
 
 export default App;
