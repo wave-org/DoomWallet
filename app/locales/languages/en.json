@@ -23,9 +23,9 @@
       "zh": "中文"
     },
     "find": {
-      "title": "Scan",
+      "title": "Sign",
       "beforeScan": "If you want to sign a transaction, you need to use MetaMask or BlueWallet to start a transaction and get a QR code. Then you can scan the QR code to sign the transaction.",
-      "scanButton": "Scan QR Code",
+      "scanButton": "Scan QR Code And Sign",
       "permessionText": "Doom Wallet need camera permission to scan a QR code to sign Transaction.",
       "getPermissionButton": "Grant Camera Permission",
       "cameraPermissionBlocked": "Please go to Settings and grant the Camera permission."

@@ -23,9 +23,9 @@
         "zh": "中文"
     },
     "find": {
-      "title": "扫描",
+      "title": "签名",
       "beforeScan": "如果你想要签名交易，你需要使用 MetaMask 或者 BlueWallet 发起一笔交易并获取二维码，然后你可以扫描二维码来签名交易。",
-      "scanButton": "扫描二维码",
+      "scanButton": "扫描二维码并签名",
       "permessionText": "末日钱包需要相机权限来扫描二维码。",
       "getPermissionButton": "获取相机权限",
       "cameraPermissionBlocked": "请到设置中开启相机权限。"
