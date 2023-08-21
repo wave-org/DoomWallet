@@ -306,6 +306,7 @@ export async function setupWallet(walletInfo: WalletSetupParam) {
     EVMWallet: new EVMWallet(key),
     BTCWallet: new BTCWallet(key),
   };
+  walletSecret.password = walletInfo.password;
 }
 
 export async function logout() {
