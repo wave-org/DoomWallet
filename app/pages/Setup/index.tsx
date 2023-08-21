@@ -95,6 +95,9 @@ const SetupPage = ({navigation}: {navigation: any}) => {
         Toast.show({
           type: 'error',
           text1: message,
+          position: 'bottom',
+          bottomOffset: 100,
+          visibilityTime: 2500,
         });
       }
     }

@@ -91,6 +91,9 @@ const SecuritySettingPage = ({
         Toast.show({
           type: 'error',
           text1: t('securitySetting.faceIDPermissionBlocked'),
+          position: 'bottom',
+          bottomOffset: 100,
+          visibilityTime: 2500,
         });
       } else if (permission === RESULTS.DENIED) {
         // request for permission
@@ -101,6 +104,9 @@ const SecuritySettingPage = ({
             Toast.show({
               type: 'error',
               text1: t('securitySetting.faceIDPermissionBlocked'),
+              position: 'bottom',
+              bottomOffset: 100,
+              visibilityTime: 2500,
             });
           }
         });
@@ -194,6 +200,9 @@ const SecuritySettingPage = ({
       Toast.show({
         type: 'error',
         text1: t('securitySetting.simplePasswordLengthError'),
+        position: 'bottom',
+        bottomOffset: 100,
+        visibilityTime: 2500,
       });
       return;
     }
@@ -201,6 +210,9 @@ const SecuritySettingPage = ({
       Toast.show({
         type: 'error',
         text1: t('securitySetting.noSecurityOptionError'),
+        position: 'bottom',
+        bottomOffset: 100,
+        visibilityTime: 2500,
       });
       return;
     }
@@ -233,6 +245,9 @@ const SecuritySettingPage = ({
         Toast.show({
           type: 'success',
           text1: t('securitySetting.savedToast'),
+          position: 'bottom',
+          bottomOffset: 100,
+          visibilityTime: 2500,
         });
       } catch (error) {
         setLoading(false);
@@ -241,6 +256,9 @@ const SecuritySettingPage = ({
           type: 'error',
           text1: t('securitySetting.saveFailedToast'),
           text2: message,
+          position: 'bottom',
+          bottomOffset: 100,
+          visibilityTime: 2500,
         });
       }
     }

@@ -138,6 +138,9 @@ function App(): JSX.Element {
             type: 'error',
             text1: 'Error happened, please try again later',
             text2: message,
+            position: 'bottom',
+            bottomOffset: 100,
+            visibilityTime: 2500,
           });
         }
       }

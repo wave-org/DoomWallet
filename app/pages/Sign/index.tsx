@@ -57,6 +57,9 @@ const EVMSignPage = ({route}: {route: any}) => {
           type: 'error',
           text1: t('signEVM.invalidQR'),
           text2: t('signEVM.noFoundAddressToast'),
+          position: 'bottom',
+          bottomOffset: 100,
+          visibilityTime: 2500,
         });
       }
       setRequest(req);
@@ -66,6 +69,9 @@ const EVMSignPage = ({route}: {route: any}) => {
         type: 'error',
         text1: t('signEVM.invalidQR'),
         text2: errorMessage,
+        position: 'bottom',
+        bottomOffset: 100,
+        visibilityTime: 2500,
       });
       setWrongUr(true);
       setRequest(null);

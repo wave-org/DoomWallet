@@ -37,6 +37,9 @@ const BTCSignPage = ({route}: {route: any}) => {
           type: 'error',
           text1: t('signBTC.invalidQR'),
           text2: t('signBTC.noFoundAddressToast'),
+          position: 'bottom',
+          bottomOffset: 100,
+          visibilityTime: 2500,
         });
       }
       setRequest(req);
@@ -46,6 +49,9 @@ const BTCSignPage = ({route}: {route: any}) => {
         type: 'error',
         text1: t('signBTC.invalidQR'),
         text2: errorMessage,
+        position: 'bottom',
+        bottomOffset: 100,
+        visibilityTime: 2500,
       });
       setWrongUr(true);
       setRequest(null);

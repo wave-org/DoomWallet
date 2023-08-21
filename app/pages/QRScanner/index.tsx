@@ -38,6 +38,9 @@ const QRScannerPage = ({route}: {route: any}) => {
             Toast.show({
               type: 'error',
               text1: t('scan.scanFailed'),
+              position: 'bottom',
+              bottomOffset: 100,
+              visibilityTime: 2500,
             });
             navigation.goBack();
           }
