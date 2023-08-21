@@ -16,6 +16,7 @@ import * as wallet from '../../wallet';
 import Toast from 'react-native-toast-message';
 import MnemonicView from '../../components/MnemonicView';
 import {useTheme} from '../../util/theme';
+import {useTranslation, Trans} from 'react-i18next';
 
 const SetupPage = ({navigation}: {navigation: any}) => {
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -28,7 +29,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
   const [passwordType, setPasswordType] =
     React.useState<wallet.PasswordType>('FullPassword');
   const [simplePassword, setSimplePassword] = React.useState<string>('');
-  // const navigation = useNavigation();
+  const {t} = useTranslation();
 
   const generateRandomMnemonic = () => {
     setText('');
@@ -111,18 +112,15 @@ const SetupPage = ({navigation}: {navigation: any}) => {
           style={styles.container}
           onPress={Keyboard.dismiss}
           accessible={false}>
-          <ScrollView
-            style={styles.container}
-            // contentContainerStyle={styles.contentContainer}
-          >
+          <ScrollView style={styles.container}>
             <View style={styles.textContainer}>
               <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                Mnemonic:
+                <Trans>setup.mnemonic</Trans>
               </Text>
               <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
               <View style={styles.line}>
                 <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  Password:
+                  <Trans>setup.password</Trans>
                 </Text>
                 <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {password}
@@ -130,16 +128,16 @@ const SetupPage = ({navigation}: {navigation: any}) => {
               </View>
               <View style={styles.line}>
                 <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  Biometrics:
+                  <Trans>setup.biometrics</Trans>
                 </Text>
                 <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {useBiometrics ? 'use' : 'not use'}
+                  {useBiometrics ? t('setup.use') : t('setup.notUse')}
                 </Text>
               </View>
               {simplePassword !== '' ? (
                 <View style={styles.line}>
                   <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                    PasswordType:
+                    <Trans>setup.passwordType</Trans>
                   </Text>
                   <Text style={[styles.lineText, {color: theme.colors.text}]}>
                     {passwordType}
@@ -149,7 +147,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
               {simplePassword !== '' ? (
                 <View style={styles.line}>
                   <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                    SimplePassword:
+                    <Trans>setup.simplePassword</Trans>
                   </Text>
                   <Text style={[styles.lineText, {color: theme.colors.text}]}>
                     {simplePassword}
@@ -158,16 +156,14 @@ const SetupPage = ({navigation}: {navigation: any}) => {
               ) : null}
 
               <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                You should backup your mnemonic and password in different
-                places.
+                <Trans>setup.differentPlaces</Trans>
               </Text>
               <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                If you forget your password, you will never recover your private
-                key.
+                <Trans>setup.neverRecover</Trans>
               </Text>
               {simplePassword !== '' ? (
                 <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                  You have to remember your simplePassword.
+                  <Trans>setup.rememberSimplePassword</Trans>
                 </Text>
               ) : null}
               <TouchableOpacity
@@ -181,7 +177,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
                 onPress={complete}>
                 <Text
                   style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                  Use Doom Wallet
+                  <Trans>setup.startButton</Trans>
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -198,7 +194,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
                     styles.resetButtonText,
                     {color: theme.colors.inverse},
                   ]}>
-                  Reset
+                  <Trans>setup.resetButton</Trans>
                 </Text>
               </TouchableOpacity>
             </View>
@@ -225,19 +221,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
         <ScrollView style={styles.container}>
           <View style={styles.textContainer}>
             <Text style={[styles.normalText, {color: theme.colors.text}]}>
-              In Doom Wallet, a private key is generated by a 24-words mnemonic
-              and a password.
-            </Text>
-            <Text style={[styles.normalText, {color: theme.colors.text}]}>
-              Password is different from other wallets.
-            </Text>
-            <Text style={[styles.normalText, {color: theme.colors.text}]}>
-              If you forget your password, you will never recover your private
-              key.
-            </Text>
-            <Text style={[styles.normalText, {color: theme.colors.text}]}>
-              You are going to generate a mnemonic. A mnemonic is a sequence of
-              words.
+              <Trans>setup.caption</Trans>
             </Text>
             <TouchableOpacity
               activeOpacity={0.6}
@@ -249,12 +233,12 @@ const SetupPage = ({navigation}: {navigation: any}) => {
               ]}
               onPress={generateRandomMnemonic}>
               <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                Random Mnemonic
+                <Trans>setup.randomButton</Trans>
               </Text>
             </TouchableOpacity>
 
             <Text style={[styles.textInputLabel, {color: theme.colors.text}]}>
-              You can also type some random text to generate a mnemonic:
+              <Trans>setup.hashCaption</Trans>
             </Text>
             <TextInput
               style={[
@@ -266,7 +250,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
                   color: theme.colors.text,
                 },
               ]}
-              placeholder="Type random text, at least 16 characters"
+              placeholder={t('setup.hashPlaceholder')}
               placeholderTextColor={theme.colors.placeholder}
               onChangeText={newText => setText(newText)}
               defaultValue={text}
@@ -275,7 +259,6 @@ const SetupPage = ({navigation}: {navigation: any}) => {
               numberOfLines={2}
               autoCorrect={false}
               returnKeyType="done"
-              // inputMode="search"
               clearButtonMode="while-editing"
               autoCapitalize="none"
               onFocus={() => {
@@ -298,7 +281,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
               ]}
               onPress={generateMnemonicByText}>
               <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                Hash Text
+                <Trans>setup.hashButton</Trans>
               </Text>
             </TouchableOpacity>
           </View>
@@ -317,7 +300,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
                     textAlign: 'center',
                   },
                 ]}>
-                Now, you can set password.
+                <Trans>setup.passwordCaption</Trans>
               </Text>
               <TouchableOpacity
                 activeOpacity={0.6}
@@ -330,7 +313,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
                 onPress={goToSetPassword}>
                 <Text
                   style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                  Set Password
+                  <Trans>setup.passwordButton</Trans>
                 </Text>
               </TouchableOpacity>
             </View>

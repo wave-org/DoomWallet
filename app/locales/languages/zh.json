@@ -1,0 +1,207 @@
+{
+    "date": {
+      "months": {
+        "0": "1 月",
+        "1": "2 月",
+        "2": "3 月",
+        "3": "4 月",
+        "4": "5 月",
+        "5": "6 月",
+        "6": "7 月",
+        "7": "8 月",
+        "8": "9 月",
+        "9": "10 月",
+        "10": "11 月",
+        "11": "12 月"
+      },
+      "connector": "于"
+    },
+    "language": {
+        "title": "语言",
+        "caption": "末日钱包将会支持更多语言选项。",
+        "en": "英文",
+        "zh": "中文"
+    },
+    "find": {
+      "title": "扫描",
+      "beforeScan": "如果你想要签名交易，你需要使用 MetaMask 或者 BlueWallet 发起一笔交易并获取二维码，然后你可以扫描二维码来签名交易。",
+      "scanButton": "扫描二维码",
+      "permessionText": "末日钱包需要相机权限来扫描二维码。",
+      "getPermissionButton": "获取相机权限",
+      "cameraPermissionBlocked": "请到设置中开启相机权限。"
+    },
+    "home": {
+      "title": "网络",
+      "offlineWarning": "在完全离线的设备上使用末日钱包会更安全！",
+      "networkLabel": "网络状态",
+      "connected": "在线",
+      "disconnected": "离线"
+    },
+    "login": {
+      "passwordIsWrong": "密码错误，请重新输入",
+      "alertTitle": "警告",
+      "alertMessage": "是否确认要重置钱包？ 请确保你已经备份了助记词和密码。",
+      "cancel": "取消",
+      "resetConfirm": "重置钱包",
+      "passwordLabel": "密码：",
+      "passwordPlaceholder": "请输入密码",
+      "simplePasswordLabel": "简单密码：",
+      "simplePasswordPlaceholder": "请输入简单密码",
+      "pinPasswordLabel": "数字密码：",
+      "pinPasswordPlaceholder": "输入数字密码",
+      "welcome": "欢迎回来！",
+      "unlock": "解锁",
+      "reset": "重置钱包！",
+      "resetWarning": "可以长按此按钮以删除当前钱包并设置新钱包"
+    },
+    "scan": {
+      "scanFailed": "扫描失败，请重试"
+    },
+    "addressList": {
+      "title": "EVM地址列表"
+    },
+    "account": {
+      "title": "账户",
+      "account": "账户",
+      "connection": "连接二维码",
+      "evmAddress": "EVM地址列表",
+      "btcAddress": "Bitcoin地址列表",
+      "reset": "重置钱包",
+      "alertTitle": "警告",
+      "alertMessage": "是否确认要重置密码？ 如果你没有备份助记词和密码，你将无法恢复你的钱包！",
+      "alertCancel": "取消",
+      "alertConfirm": "重置",
+      "setting": "设置",
+      "security": "安全设置",
+      "autoLock": "自动锁定",
+      "language": "语言",
+      "darkMode": "暗黑模式",
+      "about": "关于",
+      "version": "版本",
+      "privacy": "隐私协议",
+      "documentation": "文档",
+      "github": "Github",
+      "issue": "反馈问题"
+    },
+    "setup": {
+      "title": "创建钱包",
+      "mnemonic": "助记词：",
+      "password": "密码：",
+      "biometrics": "指纹或人脸：",
+      "use": "启用",
+      "notUse": "不启用",
+      "passwordType": "密码类型：",
+      "simplePassword": "简单密码：",
+      "differentPlaces": "你应该将助记词和密码备份在不同的地方。",
+      "neverRecover": "如果你忘记你的密码， 你将无法恢复你的私钥。",
+      "rememberSimplePassword": "你必须记住你的简单密码。",
+      "startButton": "使用钱包",
+      "resetButton": "重置",
+      "caption": "在末日钱包中， 一个私钥是由一个24位助记词和一个密码组成的。\n末日钱包里面的密码与其他钱包是不同的。\n如果你忘记了钱包的密码， 你将无法恢复你的私钥。\n在这个页面，你将生成一个助记词。",
+      "randomButton": "随机助记词",
+      "hashCaption": "你也可以通过输入一些随机内容，使用哈希算法来生成助记词",
+      "hashPlaceholder": "输入随机文字，至少16个字符",
+      "hashButton": "通过哈希生成助记词",
+      "passwordCaption": "现在， 你可以设置密码了。",
+      "passwordButton": "去设置密码"
+    },
+    "setPassword": {
+      "title": "设置密码",
+      "passwordStrengthByScore": {
+        "0": "非常弱: 风险非常大 (平均尝试次数 < 10^3)",
+        "1": "很弱: 可以做到防护 受限的在线攻击 (平均尝试次数 < 10^6)",
+        "2": "弱:  可以做到防护 不受限的在线攻击  (平均尝试次数 < 10^8)",
+        "3": "一般: 对离线攻击有中等程度的保护 (平均尝试次数 < 10^10)",
+        "4": "安全: 对离线攻击有很强程度的保护效果 (平均尝试次数 >= 10^10)"
+      },
+      "mnemonic": "助记词：",
+      "caption": " 如果你忘记了你的密码，你不可能再恢复你的私钥\n请输入一个非常复杂的密码：",
+      "placeholder": "密码长度至少8位",
+      "passwordStrengthLabel": "密码强度：",
+      "securityButton": "安全设置"
+    },
+    "securitySetting": {
+      "title": "安全设置",
+      "faceIDPermissionBlocked": "请去系统设置中为末日钱包开启Face ID权限",
+      "simplePasswordLengthError": "简单密码至少需要4个字符",
+      "noSecurityOptionError":"请至少选择一个安全选项！",
+      "savedToast": "保存成功",
+      "saveFailedToast": "保存失败，请重试或重启应用",
+      "biometricsCaption": "使用生物信息（指纹或人脸识别）存储你的密钥信息以及解锁钱包\n极大增加安全性。 你的生物信息将会被用来加密你的密钥信息。 没有你的生物信息， 没有人可以访问你的密钥信息。",
+      "withoutBiometrics": "你的设备可能不支持生物信息。 你可以使用支持人脸或者指纹的设备。\n或者， 你需要在你的设备中添加指纹或在人脸设定。",
+      "biometricsLabel": "生物信息：",
+      "passwordLabel": "密码：",
+      "passwordOption": "使用完整密码解锁：",
+      "simplePasswordLabel": "简单密码：",
+      "simplePasswordCaption": "简单密码用于简化解锁流程。 如果你信任这个设备， 你可以使用简单密码来解锁。",
+      "simplePasswordOption": "使用简单密码解锁：",
+      "twoOptionsNow": "简单密码目前有两个选项：",
+      "simplePasswordOption1": "1. 普通简单密码：",
+      "simplePasswordPlaceholder": "输入简单密码",
+      "simplePasswordOption2": "2. 使用数字密码：",
+      "pinPasswordPlaceholder": "输入数字密码",
+      "complete": "完成",
+      "save": "保存"
+    },
+    "signEVM": {
+      "title": "签名EVM交易",
+      "transactionType": {
+        "transaction": "交易",
+        "message": "消息",
+        "typedData": "格式化数据",
+        "unknown": "未知类型"
+      },
+      "invalidQR": "错误的二维码",
+      "noFoundAddressToast": "该钱包无法派生得到这个交易的地址， 即输入地址不在这个钱包内，无法处理。",
+      "invalidQRText": "二维码有问题， 无法签名，请检查该二维码。",
+      "sign": "签名",
+      "result": "签名结果 ：",
+      "toAddress": "接收方地址：",
+      "value": "价值：",
+      "data": "数据输入：",
+      "gasPrice": "燃料价格：",
+      "message": "消息：",
+      "typedData": "格式化数据：",
+      "type": "类型:",
+      "fromAddress": "发送方地址："
+    },
+    "signBTC": {
+      "title": "签名BTC交易",
+      "invalidQR": "错误的二维码",
+      "noFoundAddressToast": "该钱包无法派生得到这个交易的地址， 即输入地址不在这个钱包内，无法处理。",
+      "noFoundAddressText": "二维码有问题。该钱包无法派生得到这个交易的地址， 即输入地址不在这个钱包内，无法处理。",
+      "invalidQRText": "二维码有问题， 无法签名，请检查该二维码。",
+      "fromAddress": "发起方地址：",
+      "unsignedInputAddresses": "未签名的输入地址列表：",
+      "fee": "预估交易费用：",
+      "version": "版本号：",
+      "sign": "签名",
+      "result": "签名结果 ："
+    },
+    "connection": {
+      "evmText": "使用你的MetaMask钱包扫描这个二维码以导入钱包。\n(在MetaMask中 添加账户 -- 硬件钱包 -- 二维码硬件钱包 )",
+      "btcText": "使用你的热钱包扫描这个二维码以导入钱包。\n 我们推荐使用 BlueWallet!",
+      "title": "链接二维码"
+    },
+    "btcAddressList": {
+      "external":"外部(接收)地址",
+      "internal":"内部(交换)地址",
+      "previousPage": "上一页",
+      "nextPage": "下一页",
+      "title": "BTC地址列表"
+    },
+    "autoLock": {
+      "caption": "选择自动锁定时间。\n 末日钱包会在进入后台后自动锁定。",
+      "title": "自动锁定"
+    },
+    "languageSetting": {
+      "title": "语言设置"
+    },
+    "darkMode": {
+      "title": "暗黑模式",
+      "caption": "选择暗黑模式。",
+      "useSystem": "系统默认",
+      "light": "白",
+      "dark": "黑"
+    }
+}

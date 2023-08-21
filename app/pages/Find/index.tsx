@@ -12,6 +12,7 @@ import Routes from '../../routes/Routes';
 import {UR} from '@ngraveio/bc-ur';
 import * as wallet from '../../wallet';
 import {useTheme, Theme} from '../../util/theme';
+import {Trans} from 'react-i18next';
 
 function QRCodeButton({
   cameraPermission,
@@ -26,16 +27,14 @@ function QRCodeButton({
     return (
       <View style={styles.beforeScanContainer}>
         <Text style={[styles.normalText, {color: theme.colors.text}]}>
-          If you want to sign a transaction, you need to use MetaMask or
-          BlueWallet to start a transaction and get a QR code. Then you can scan
-          the QR code to sign the transaction.
+          <Trans>find.beforeScan</Trans>
         </Text>
         <TouchableOpacity
           activeOpacity={0.6}
           style={[styles.button, {backgroundColor: theme.colors.primary}]}
           onPress={onPress}>
           <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-            Scan QR Code
+            <Trans>find.scanButton</Trans>
           </Text>
         </TouchableOpacity>
       </View>
@@ -43,12 +42,15 @@ function QRCodeButton({
   } else if (cameraPermission === RESULTS.DENIED) {
     return (
       <View style={styles.beforeScanContainer}>
+        <Text style={[styles.normalText, {color: theme.colors.text}]}>
+          <Trans>find.permessionText</Trans>
+        </Text>
         <TouchableOpacity
           activeOpacity={0.6}
           style={[styles.button, {backgroundColor: theme.colors.primary}]}
           onPress={onPress}>
           <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-            Grant Camera Permission And Scan
+            <Trans>find.getPermissionButton</Trans>
           </Text>
         </TouchableOpacity>
       </View>
@@ -57,11 +59,10 @@ function QRCodeButton({
     return (
       <View style={styles.beforeScanContainer}>
         <Text style={[styles.normalText, {color: theme.colors.text}]}>
-          Doom Wallet need camera permission to scan a QR code to sign
-          Transaction.
+          <Trans>find.permessionText</Trans>
         </Text>
         <Text style={[styles.normalText, {color: theme.colors.text}]}>
-          Please go to Settings and grant the Camera permission.
+          <Trans>find.cameraPermissionBlocked</Trans>
         </Text>
       </View>
     );
@@ -69,11 +70,10 @@ function QRCodeButton({
     return (
       <View style={styles.beforeScanContainer}>
         <Text style={[styles.normalText, {color: theme.colors.text}]}>
-          Doom Wallet need camera permission to scan a QR code to sign
-          Transaction.
+          <Trans>find.permessionText</Trans>
         </Text>
         <Text style={[styles.normalText, {color: theme.colors.title}]}>
-          Please go to Settings and grant the Camera permission.
+          <Trans>find.cameraPermissionBlocked</Trans>
         </Text>
       </View>
     );
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   normalText: {
     fontSize: 16,
     marginBottom: 25,
-    textAlign: 'left',
+    textAlign: 'center',
     width: '100%',
   },
   textContainer: {

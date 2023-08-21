@@ -23,6 +23,7 @@ import * as Keychain from 'react-native-keychain';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {useTheme} from '../../util/theme';
+import {useTranslation, Trans} from 'react-i18next';
 
 const SecuritySettingPage = ({
   route,
@@ -35,6 +36,7 @@ const SecuritySettingPage = ({
     route.params !== undefined ? route.params.setupComplete : undefined;
   const {mnemonic, password}: {mnemonic: string; password: string} =
     setupComplete !== undefined ? route.params : getWalletSecuritySetting();
+  const {t} = useTranslation();
 
   const defaultSetting =
     setupComplete !== undefined
@@ -88,7 +90,7 @@ const SecuritySettingPage = ({
         // toast ask for permission
         Toast.show({
           type: 'error',
-          text1: 'Please go to setting page to enable Face ID for Doom Wallet',
+          text1: t('securitySetting.faceIDPermissionBlocked'),
         });
       } else if (permission === RESULTS.DENIED) {
         // request for permission
@@ -98,8 +100,7 @@ const SecuritySettingPage = ({
           } else {
             Toast.show({
               type: 'error',
-              text1:
-                'Please go to setting page to enable Face ID for Doom Wallet',
+              text1: t('securitySetting.faceIDPermissionBlocked'),
             });
           }
         });
@@ -192,14 +193,14 @@ const SecuritySettingPage = ({
     if (useSimplePassword && simplePassword.length < 4) {
       Toast.show({
         type: 'error',
-        text1: 'Simple password must be at least 4 characters',
+        text1: t('securitySetting.simplePasswordLengthError'),
       });
       return;
     }
     if (!usePassword && !useSimplePassword && !usebiometrics) {
       Toast.show({
         type: 'error',
-        text1: 'Please select at least one security option',
+        text1: t('securitySetting.noSecurityOptionError'),
       });
       return;
     }
@@ -231,14 +232,14 @@ const SecuritySettingPage = ({
         setLoading(false);
         Toast.show({
           type: 'success',
-          text1: 'Security setting saved',
+          text1: t('securitySetting.savedToast'),
         });
       } catch (error) {
         setLoading(false);
         const message = (error as Error).message;
         Toast.show({
           type: 'error',
-          text1: 'Failed to save security setting',
+          text1: t('securitySetting.saveFailedToast'),
           text2: message,
         });
       }
@@ -259,25 +260,18 @@ const SecuritySettingPage = ({
           >
             <View style={styles.textContainer}>
               <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                With biometrics, you can use your face or fingerprint to store
-                your secret and unlock your wallet.
-              </Text>
-              <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                It's much safer. The data will be encrypted by your biometrics.
-                Without your biometrics, no one can access your secret.
+                <Trans>securitySetting.biometricsCaption</Trans>
               </Text>
               {supportBiometrics === false ? (
                 <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                  Sorry, your device don't support biometrics. It's better to
-                  use another device which support biometrics.{'\n'}
-                  Or, you need to enroll your biometrics in your device.
+                  <Trans>securitySetting.withoutBiometrics</Trans>
                 </Text>
               ) : (
                 <View style={styles.subArea}>
                   <View style={styles.line}>
                     <Text
                       style={[styles.lineLabel, {color: theme.colors.title}]}>
-                      Biometrics:
+                      <Trans>securitySetting.biometricsLabel</Trans>
                     </Text>
                     <Switch
                       trackColor={{
@@ -299,7 +293,7 @@ const SecuritySettingPage = ({
               <View style={styles.subArea}>
                 <View style={styles.line}>
                   <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                    Password:
+                    <Trans>securitySetting.passwordLabel</Trans>
                   </Text>
                   <Text style={[styles.lineText, {color: theme.colors.text}]}>
                     {password}
@@ -307,7 +301,7 @@ const SecuritySettingPage = ({
                 </View>
                 <View style={styles.line}>
                   <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                    Login by full password:
+                    <Trans>securitySetting.passwordOption</Trans>
                   </Text>
                   <Switch
                     trackColor={{
@@ -326,19 +320,18 @@ const SecuritySettingPage = ({
 
               <View style={styles.line}>
                 <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  Simple Password:
+                  <Trans>securitySetting.simplePasswordLabel</Trans>
                 </Text>
                 <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {simplePassword}
                 </Text>
               </View>
               <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                Simple password is a password which is easy to remember. If you
-                trust this device, you can use simple password to login.
+                <Trans>securitySetting.simplePasswordCaption</Trans>
               </Text>
               <View style={styles.line}>
                 <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  Login by simple password:
+                  <Trans>securitySetting.simplePasswordOption</Trans>
                 </Text>
                 <Switch
                   trackColor={{
@@ -360,12 +353,12 @@ const SecuritySettingPage = ({
                   <View style={styles.subArea}>
                     <Text
                       style={[styles.normalText, {color: theme.colors.text}]}>
-                      We have 2 options for Simple password now:
+                      <Trans>securitySetting.twoOptionsNow</Trans>
                     </Text>
                     <View style={styles.line}>
                       <Text
                         style={[styles.lineText, {color: theme.colors.text}]}>
-                        1. Normal simple password:
+                        <Trans>securitySetting.simplePasswordOption1</Trans>
                       </Text>
                       <Switch
                         trackColor={{
@@ -391,7 +384,9 @@ const SecuritySettingPage = ({
                             color: theme.colors.text,
                           },
                         ]}
-                        placeholder="Type a simple password"
+                        placeholder={t(
+                          'securitySetting.simplePasswordPlaceholder',
+                        )}
                         placeholderTextColor={theme.colors.placeholder}
                         onChangeText={newText => setSimplePassword(newText)}
                         defaultValue={simplePassword}
@@ -412,7 +407,7 @@ const SecuritySettingPage = ({
                     <View style={styles.line}>
                       <Text
                         style={[styles.lineText, {color: theme.colors.text}]}>
-                        2. Use PIN:
+                        <Trans>securitySetting.simplePasswordOption2</Trans>
                       </Text>
                       <Switch
                         trackColor={{
@@ -438,7 +433,9 @@ const SecuritySettingPage = ({
                             color: theme.colors.text,
                           },
                         ]}
-                        placeholder="Type a PIN"
+                        placeholder={t(
+                          'securitySetting.pinPasswordPlaceholder',
+                        )}
                         placeholderTextColor={theme.colors.placeholder}
                         onChangeText={newText => setSimplePassword(newText)}
                         defaultValue={simplePassword}
@@ -491,7 +488,9 @@ const SecuritySettingPage = ({
               ]}
               onPress={complete}>
               <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                {setupComplete !== undefined ? 'Complete' : 'Save'}
+                {setupComplete !== undefined
+                  ? t('securitySetting.complete')
+                  : t('securitySetting.save')}
               </Text>
             </TouchableOpacity>
           </ScrollView>

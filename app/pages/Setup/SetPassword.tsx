@@ -15,6 +15,7 @@ import {zxcvbn, zxcvbnOptions} from '@zxcvbn-ts/core';
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 import * as zxcvbnEnPackage from '@zxcvbn-ts/language-en';
 import {useTheme} from '../../util/theme';
+import {useTranslation, Trans} from 'react-i18next';
 
 const SetPasswordPage = ({
   route,
@@ -46,12 +47,14 @@ const SetPasswordPage = ({
 
   zxcvbnOptions.setOptions(options);
 
+  const {t} = useTranslation();
+
   const passwordStrengthByScore = {
-    0: 'Too weak: risky password. (guesses < 10^3)',
-    1: 'Very weak: protection from throttled online attacks. (guesses < 10^6)',
-    2: 'Weak: protection from unthrottled online attacks. (guesses < 10^8)',
-    3: 'Okay: moderate protection from offline slow-hash scenario. (guesses < 10^10)',
-    4: 'Safe: strong protection from offline slow-hash scenario. (guesses >= 10^10)',
+    0: t('setPassword.passwordStrengthByScore.0'),
+    1: t('setPassword.passwordStrengthByScore.1'),
+    2: t('setPassword.passwordStrengthByScore.2'),
+    3: t('setPassword.passwordStrengthByScore.3'),
+    4: t('setPassword.passwordStrengthByScore.4'),
   };
 
   const passwordStrength = () => {
@@ -69,15 +72,11 @@ const SetPasswordPage = ({
         <View style={styles.container}>
           <View style={styles.textContainer}>
             <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-              Mnemonic:
+              <Trans>setPassword.mnemonic</Trans>
             </Text>
             <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
             <Text style={[styles.normalText, {color: theme.colors.text}]}>
-              If you forget your password, you can never recover your private
-              key.
-            </Text>
-            <Text style={[styles.normalText, {color: theme.colors.text}]}>
-              Input your password(It should be very complex):
+              <Trans>setPassword.caption</Trans>
             </Text>
             <TextInput
               style={[
@@ -89,7 +88,7 @@ const SetPasswordPage = ({
                   color: theme.colors.text,
                 },
               ]}
-              placeholder="Password: at least 8 characters"
+              placeholder={t('setPassword.placeholder')}
               placeholderTextColor={theme.colors.placeholder}
               onChangeText={newText => setPassword(newText)}
               defaultValue={password}
@@ -112,7 +111,7 @@ const SetPasswordPage = ({
               <View style={styles.passwordStrengthContainer}>
                 <Text
                   style={[styles.highlightText, {color: theme.colors.title}]}>
-                  Password Strength:
+                  <Trans>setPassword.passwordStrengthLabel</Trans>
                 </Text>
                 <Text style={[styles.normalText, {color: theme.colors.text}]}>
                   {passwordStrength()}
@@ -133,7 +132,7 @@ const SetPasswordPage = ({
                 onPress={goSecurityPage}>
                 <Text
                   style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                  Security Setting
+                  <Trans>setPassword.securityButton</Trans>
                 </Text>
               </TouchableOpacity>
             ) : null}

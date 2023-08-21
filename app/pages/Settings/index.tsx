@@ -9,6 +9,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
+import {useTranslation, Trans} from 'react-i18next';
 
 import * as wallet from '../../wallet';
 import Routes from '../../routes/Routes';
@@ -25,26 +26,23 @@ import {useTheme} from '../../util/theme';
 
 const AccountPage = ({navigation}: {navigation: any}) => {
   const [version, setVersion] = React.useState('');
+  const {t} = useTranslation();
   const reset = () => {
-    Alert.alert(
-      'Warning',
-      'Are you sure to reset wallet? If you have not backup your mnemonic and password, you will never access your account again!',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => {},
-          style: 'cancel',
+    Alert.alert(t('account.alertTitle'), t('account.alertMessage'), [
+      {
+        text: t('account.alertCancel'),
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: t('account.alertConfirm'),
+        style: 'destructive',
+        onPress: () => {
+          wallet.resetWallet();
+          navigation.replace(Routes.ROOT.SETUP);
         },
-        {
-          text: 'Reset Wallet',
-          style: 'destructive',
-          onPress: () => {
-            wallet.resetWallet();
-            navigation.replace(Routes.ROOT.SETUP);
-          },
-        },
-      ],
-    );
+      },
+    ]);
   };
 
   const jumpToConnectionQR = () => {
@@ -111,14 +109,14 @@ const AccountPage = ({navigation}: {navigation: any}) => {
         contentContainerStyle={styles.contentContainer}>
         <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
           <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
-            Account
+            <Trans>account.account</Trans>
           </Text>
           <TouchableOpacity style={styles.cell} onPress={jumpToConnectionQR}>
             <Icon name="qr-code" size={25} color={theme.colors.primary} />
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Connection QR Code
+                <Trans>account.connection</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -132,7 +130,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                EVM Derived Addresses
+                <Trans>account.evmAddress</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -146,7 +144,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Bitcoin Derived Addresses
+                <Trans>account.btcAddress</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -160,7 +158,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.error}]}>
-                Reset Wallet
+                <Trans>account.reset</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -172,14 +170,14 @@ const AccountPage = ({navigation}: {navigation: any}) => {
         </View>
         <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
           <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
-            Setting
+            <Trans>account.setting</Trans>
           </Text>
           <TouchableOpacity style={styles.cell} onPress={jumpToSecuritySetting}>
             <MCIcon name="security" size={25} color={theme.colors.primary} />
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Security Setting
+                <Trans>account.security</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -193,7 +191,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Auto Lock
+                <Trans>account.autoLock</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -207,7 +205,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Language
+                <Trans>account.language</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -221,7 +219,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Dark Mode
+                <Trans>account.darkMode</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -233,14 +231,14 @@ const AccountPage = ({navigation}: {navigation: any}) => {
         </View>
         <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
           <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
-            About
+            <Trans>account.about</Trans>
           </Text>
           <View style={styles.cell}>
             <Icon name="build-outline" size={25} color={theme.colors.primary} />
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Version
+                <Trans>account.version</Trans>
               </Text>
               <Text style={[styles.text, {color: theme.colors.title}]}>
                 {version}
@@ -265,7 +263,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Privacy Policy
+                <Trans>account.privacy</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -286,7 +284,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Documentation
+                <Trans>account.documentation</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -300,7 +298,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Github
+                <Trans>account.github</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -314,7 +312,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                Report Bugs
+                <Trans>account.issue</Trans>
               </Text>
               <Icon
                 name="chevron-forward"

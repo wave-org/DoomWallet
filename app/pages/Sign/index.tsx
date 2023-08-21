@@ -22,19 +22,7 @@ import {
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {UR} from '@ngraveio/bc-ur';
 import {useTheme} from '../../util/theme';
-
-const typeText = (type: RequestType) => {
-  switch (type) {
-    case RequestType.transaction:
-      return 'Transaction';
-    case RequestType.personalMessage:
-      return 'Message';
-    case RequestType.typedData:
-      return 'Typed Data';
-    default:
-      return 'Unknown';
-  }
-};
+import {useTranslation, Trans} from 'react-i18next';
 
 const EVMSignPage = ({route}: {route: any}) => {
   const ur = route.params.ur as UR;
@@ -44,6 +32,19 @@ const EVMSignPage = ({route}: {route: any}) => {
   const [request, setRequest] = React.useState<SignRequest | undefined | null>(
     undefined,
   );
+  const {t} = useTranslation();
+  const typeText = (type: RequestType) => {
+    switch (type) {
+      case RequestType.transaction:
+        return t('signEVM.transactionType.transaction');
+      case RequestType.personalMessage:
+        return t('signEVM.transactionType.message');
+      case RequestType.typedData:
+        return t('signEVM.transactionType.typedData');
+      default:
+        return t('signEVM.transactionType.unknown');
+    }
+  };
   React.useEffect(() => {
     try {
       const req = wallet.parseEVMRequest(ur);
@@ -54,9 +55,8 @@ const EVMSignPage = ({route}: {route: any}) => {
         // console.log('address can not be derived');
         Toast.show({
           type: 'error',
-          text1: 'Invalid UR',
-          text2:
-            'Address can not be derived : The address is not in the wallet',
+          text1: t('signEVM.invalidQR'),
+          text2: t('signEVM.noFoundAddressToast'),
         });
       }
       setRequest(req);
@@ -64,14 +64,14 @@ const EVMSignPage = ({route}: {route: any}) => {
       let errorMessage = (error as Error).message;
       Toast.show({
         type: 'error',
-        text1: 'Invalid UR',
+        text1: t('signEVM.invalidQR'),
         text2: errorMessage,
       });
       setWrongUr(true);
       setRequest(null);
       // console.log(error);
     }
-  }, [ur]);
+  }, [ur, t]);
   const theme = useTheme();
   const [signedUrText, setSignedUrText] = React.useState<string>('');
   const {width} = useWindowDimensions();
@@ -88,7 +88,7 @@ const EVMSignPage = ({route}: {route: any}) => {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={[styles.errorText, {color: theme.colors.error}]}>
-          Invalid UR, Please check the QR code
+          <Trans>signEVM.invalidQRText</Trans>
         </Text>
       </SafeAreaView>
     );
@@ -121,14 +121,14 @@ const EVMSignPage = ({route}: {route: any}) => {
                 </Text>
               </View>
               <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                To:
+                <Trans>signEVM.toAddress</Trans>
               </Text>
               <Text style={[styles.addressText, {color: theme.colors.text}]}>
                 {payload.to}
               </Text>
               <View style={styles.line}>
                 <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  Value:
+                  <Trans>signEVM.value</Trans>
                 </Text>
                 <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {payload.value.toString()}
@@ -159,7 +159,7 @@ const EVMSignPage = ({route}: {route: any}) => {
                 </Text>
               </View>
               <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                Data:
+                <Trans>signEVM.data</Trans>
               </Text>
               <Text
                 style={[
@@ -187,14 +187,14 @@ const EVMSignPage = ({route}: {route: any}) => {
                 </Text>
               </View>
               <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                To:
+                <Trans>signEVM.toAddress</Trans>
               </Text>
               <Text style={[styles.addressText, {color: theme.colors.text}]}>
                 {payload.to}
               </Text>
               <View style={styles.line}>
                 <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  Value:
+                  <Trans>signEVM.value</Trans>
                 </Text>
                 <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {payload.value.toString()}
@@ -202,7 +202,7 @@ const EVMSignPage = ({route}: {route: any}) => {
               </View>
               <View style={styles.line}>
                 <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  gasPrice:
+                  <Trans>signEVM.gasPrice</Trans>
                 </Text>
                 <Text style={[styles.lineText, {color: theme.colors.text}]}>
                   {payload.gasPrice.toString()}
@@ -217,7 +217,7 @@ const EVMSignPage = ({route}: {route: any}) => {
                 </Text>
               </View>
               <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                Data:
+                <Trans>signEVM.data</Trans>
               </Text>
               <Text
                 style={[
@@ -241,7 +241,7 @@ const EVMSignPage = ({route}: {route: any}) => {
         return (
           <View style={styles.payloadView}>
             <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-              Message:
+              <Trans>signEVM.message</Trans>
             </Text>
             <Text
               style={[
@@ -271,7 +271,7 @@ const EVMSignPage = ({route}: {route: any}) => {
         return (
           <View style={styles.payloadView}>
             <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-              Message:
+              <Trans>signEVM.typedData</Trans>
             </Text>
             <Text
               style={[
@@ -296,19 +296,19 @@ const EVMSignPage = ({route}: {route: any}) => {
         <View style={styles.textContainer}>
           {wrongUr ? (
             <Text style={[styles.highlightText, {color: theme.colors.error}]}>
-              Invalid UR, Can't Sign!
+              <Trans>signEVM.invalidQRText</Trans>
             </Text>
           ) : null}
           <View style={styles.line}>
             <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-              Type:
+              <Trans>signEVM.type</Trans>
             </Text>
             <Text style={[styles.lineText, {color: theme.colors.text}]}>
               {typeText(request.type)}
             </Text>
           </View>
           <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-            Address:
+            <Trans>signEVM.fromAddress</Trans>
           </Text>
           <Text style={[styles.addressText, {color: theme.colors.text}]}>
             {request.address}
@@ -336,14 +336,14 @@ const EVMSignPage = ({route}: {route: any}) => {
               ]}
               onPress={sign}>
               <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                SIGN
+                <Trans>signEVM.sign</Trans>
               </Text>
             </TouchableOpacity>
           ) : null}
 
           {!wrongUr && signedUrText !== '' ? (
             <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-              Result :
+              <Trans>signEVM.result</Trans>
             </Text>
           ) : null}
         </View>

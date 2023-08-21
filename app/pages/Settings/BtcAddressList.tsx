@@ -14,6 +14,7 @@ import * as wallet from '../../wallet';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme, Theme} from '../../util/theme';
+import {useTranslation, Trans} from 'react-i18next';
 
 type ItemProps = {
   address: string;
@@ -47,15 +48,13 @@ const Item = ({
 );
 
 const BtcAddressListPage = () => {
-  //   const [evmUR, setEvmUR] = React.useState<string | undefined>(undefined);
-  //   const [btcUR, setBtcUR] = React.useState<string | undefined>(undefined);
-
   const [externalList, setExternalList] = React.useState<ItemProps[]>([]);
   const [internalList, setInternalList] = React.useState<ItemProps[]>([]);
   const [pageNumber, setPageNumber] = React.useState<number>(1);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const [tabIndex, setTabIndex] = React.useState(0);
+  const {t} = useTranslation();
 
   const loadAddresses = useCallback(() => {
     setLoading(true);
@@ -79,7 +78,6 @@ const BtcAddressListPage = () => {
       setLoading(false);
     }, 20);
   }, [pageNumber]);
-  //   const {width} = useWindowDimensions();
   React.useEffect(() => {
     loadAddresses();
   }, [loadAddresses]);
@@ -98,7 +96,7 @@ const BtcAddressListPage = () => {
         disableIndicator={true}
         variant="primary">
         <Tab.Item
-          title="External(Receive)"
+          title={t('btcAddressList.external')}
           titleStyle={active => ({
             fontSize: active ? 15 : 14,
             fontWeight: active ? 'bold' : 'normal',
@@ -111,7 +109,7 @@ const BtcAddressListPage = () => {
           })}
         />
         <Tab.Item
-          title="Internal(Change)"
+          title={t('btcAddressList.internal')}
           titleStyle={active => ({
             fontSize: active ? 15 : 14,
             fontWeight: active ? 'bold' : 'normal',
@@ -178,7 +176,7 @@ const BtcAddressListPage = () => {
             ]}
             onPress={() => setPageNumber(pageNumber - 1)}>
             <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-              Preview Page
+              <Trans>btcAddressList.previousPage</Trans>
             </Text>
           </TouchableOpacity>
           <Text
@@ -200,7 +198,7 @@ const BtcAddressListPage = () => {
             ]}
             onPress={() => setPageNumber(pageNumber + 1)}>
             <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-              Next Page
+              <Trans>btcAddressList.nextPage</Trans>
             </Text>
           </TouchableOpacity>
         </View>

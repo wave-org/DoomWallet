@@ -14,6 +14,7 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {UR} from '@ngraveio/bc-ur';
 import AnimatedQRCode from '../../components/AnimatedQRCode';
 import {useTheme} from '../../util/theme';
+import {useTranslation, Trans} from 'react-i18next';
 
 const BTCSignPage = ({route}: {route: any}) => {
   const ur = route.params.ur as UR;
@@ -25,6 +26,7 @@ const BTCSignPage = ({route}: {route: any}) => {
     BTCSignRequest | undefined | null
   >(undefined);
   const theme = useTheme();
+  const {t} = useTranslation();
   React.useEffect(() => {
     try {
       const req = wallet.parseBTCRequest(ur);
@@ -33,9 +35,8 @@ const BTCSignPage = ({route}: {route: any}) => {
         // console.log('address can not be derived');
         Toast.show({
           type: 'error',
-          text1: 'Invalid UR',
-          text2:
-            'Addresses can not be derived : The input addresses are not in the wallet',
+          text1: t('signBTC.invalidQR'),
+          text2: t('signBTC.noFoundAddressToast'),
         });
       }
       setRequest(req);
@@ -43,14 +44,14 @@ const BTCSignPage = ({route}: {route: any}) => {
       let errorMessage = (error as Error).message;
       Toast.show({
         type: 'error',
-        text1: 'Invalid UR',
+        text1: t('signBTC.invalidQR'),
         text2: errorMessage,
       });
       setWrongUr(true);
       setRequest(null);
       // console.log(error);
     }
-  }, [ur]);
+  }, [ur, t]);
 
   const [urList, setUrList] = React.useState<string[]>([]);
 
@@ -66,7 +67,7 @@ const BTCSignPage = ({route}: {route: any}) => {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={[styles.errorText, {color: theme.colors.error}]}>
-          Invalid UR, Please check the QR code
+          <Trans>signBTC.invalidQRText</Trans>
         </Text>
       </SafeAreaView>
     );
@@ -89,7 +90,7 @@ const BTCSignPage = ({route}: {route: any}) => {
       return (
         <>
           <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-            From Address:
+            <Trans>signBTC.fromAddress</Trans>
           </Text>
           <Text style={[styles.addressText, {color: theme.colors.text}]}>
             {request.unsignedInputAddresses[0].address}
@@ -103,7 +104,7 @@ const BTCSignPage = ({route}: {route: any}) => {
       return (
         <>
           <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-            Unsigned address list:
+            <Trans>signBTC.unsignedInputAddresses</Trans>
           </Text>
           <Text
             style={[
@@ -127,18 +128,18 @@ const BTCSignPage = ({route}: {route: any}) => {
         <View style={styles.textContainer}>
           {wrongUr ? (
             <Text style={[styles.highlightText, {color: theme.colors.error}]}>
-              Invalid UR, Can't Sign!
+              <Trans>signBTC.invalidQRText</Trans>
             </Text>
           ) : null}
           {notThisWallet ? (
             <Text style={[styles.highlightText, {color: theme.colors.error}]}>
-              Invalid UR, the input addresses are not in this wallet!
+              <Trans>signBTC.noFoundAddressText</Trans>
             </Text>
           ) : null}
           {addressesView()}
           <View style={styles.line}>
             <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-              Fee:
+              <Trans>signBTC.fee</Trans>
             </Text>
             <Text style={[styles.lineText, {color: theme.colors.text}]}>
               {request.fee}
@@ -216,7 +217,7 @@ const BTCSignPage = ({route}: {route: any}) => {
           </Text>
           <View style={styles.line}>
             <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-              Version:
+              <Trans>signBTC.version</Trans>
             </Text>
             <Text style={[styles.lineText, {color: theme.colors.text}]}>
               {request.version}
@@ -241,7 +242,7 @@ const BTCSignPage = ({route}: {route: any}) => {
               ]}
               onPress={sign}>
               <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                SIGN
+                <Trans>signBTC.sign</Trans>
               </Text>
             </TouchableOpacity>
           ) : null}
@@ -256,7 +257,7 @@ const BTCSignPage = ({route}: {route: any}) => {
                   color: theme.colors.title,
                 },
               ]}>
-              Result :
+              <Trans>signBTC.result</Trans>
             </Text>
           ) : null}
         </View>

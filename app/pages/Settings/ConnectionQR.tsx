@@ -12,6 +12,7 @@ import QRCode from 'react-native-qrcode-svg';
 import {Tab, Text, TabView, Button} from '@rneui/themed';
 import * as wallet from '../../wallet';
 import {useTheme} from '../../util/theme';
+import {Trans} from 'react-i18next';
 
 const ConnectionQRCodePage = () => {
   const [evmUR, setEvmUR] = React.useState<string | undefined>(undefined);
@@ -108,12 +109,10 @@ const ConnectionQRCodePage = () => {
                   <QRCode size={width - 40} value={evmUR} />
                 </View>
                 <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                  Use your MetaMask Wallet to scan this QRCode to connect.{'\n'}{' '}
-                  (Add account or hardware wallet -- Connect a hardware wallet
-                  -- QR-Based )
+                  <Trans>connection.evmText</Trans>
                 </Text>
                 <Button
-                  title="get MetaMask"
+                  title="MetaMask"
                   type="clear"
                   onPress={getMetaMask}
                   style={{marginTop: 25}}
@@ -132,11 +131,10 @@ const ConnectionQRCodePage = () => {
                   <QRCode size={width - 40} value={btcUR} />
                 </View>
                 <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                  Use your hot wallet to scan this QRCode to connect.{'\n'} We
-                  recommend Blue Wallet!
+                  <Trans>connection.btcText</Trans>
                 </Text>
                 <Button
-                  title="get BlueWallet"
+                  title="BlueWallet"
                   type="clear"
                   onPress={getBlueWallet}
                   style={{marginTop: 25}}

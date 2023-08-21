@@ -11,7 +11,8 @@ import {AppRegistry, Appearance} from 'react-native';
 
 import App from './app/App';
 import {name as appName} from './app.json';
-import {loadDarkMode, DarkMode} from './app/wallet/setting';
+import {loadDarkMode, DarkMode, loadLanguage} from './app/wallet/setting';
+import './app/locales/i18n';
 
 loadDarkMode().then(darkMode => {
   if (darkMode === DarkMode.Dark) {
@@ -22,4 +23,5 @@ loadDarkMode().then(darkMode => {
     Appearance.setColorScheme(undefined);
   }
 });
+loadLanguage();
 AppRegistry.registerComponent(appName, () => App);

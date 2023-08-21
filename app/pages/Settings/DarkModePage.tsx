@@ -5,12 +5,13 @@ import {useTheme} from '../../util/theme';
 import {
   getDarkMode,
   setDarkMode,
-  DARK_MODE_OPTIONS,
+  useDarkModeOptions,
   DarkMode,
 } from '../../wallet/setting';
+import {Trans} from 'react-i18next';
 
 const DarkModePage = () => {
-  const options = DARK_MODE_OPTIONS;
+  const options = useDarkModeOptions();
   const selectedIndex: number = getDarkMode();
   const onSelect = (index: number) => {
     setDarkMode(index)
@@ -33,7 +34,7 @@ const DarkModePage = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={[styles.normalText, {color: theme.colors.text}]}>
-          You can change the appearance of the app here.
+          <Trans>darkMode.caption</Trans>
         </Text>
         <PickerView
           options={options}

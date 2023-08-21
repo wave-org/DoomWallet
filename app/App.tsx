@@ -32,10 +32,12 @@ import BtcAddressListPage from './pages/Settings/BtcAddressList';
 import Toast from 'react-native-toast-message';
 import * as AutoLock from './wallet/autolock';
 import {useNavigationTheme} from './util/theme';
+import {useTranslation} from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 
 const TabHome = () => {
+  const {t} = useTranslation();
   const networkTabIcon = ({
     color,
     // focused,
@@ -87,21 +89,21 @@ const TabHome = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Network"
+        name={t('home.title')}
         component={HomePage}
         options={{
           tabBarIcon: networkTabIcon,
         }}
       />
       <Tab.Screen
-        name="Scan"
+        name={t('find.title')}
         component={FindPage}
         options={{
           tabBarIcon: scanTabIcon,
         }}
       />
       <Tab.Screen
-        name="Account"
+        name={t('account.title')}
         component={AccountPage}
         options={{
           tabBarIcon: accountTabIcon,
@@ -174,6 +176,7 @@ function App(): JSX.Element {
   }, []);
 
   const navigationTheme = useNavigationTheme();
+  const {t} = useTranslation();
 
   return (
     (route !== '' && (
@@ -192,7 +195,7 @@ function App(): JSX.Element {
             <RootStack.Screen
               name={Routes.ROOT.SETUP}
               component={SetupPage}
-              options={{headerShown: true, title: 'Create Wallet'}}
+              options={{headerShown: true, title: t('setup.title')}}
             />
             <RootStack.Screen
               name={Routes.ROOT.TABS}
@@ -204,53 +207,53 @@ function App(): JSX.Element {
             <RootStack.Screen
               name={Routes.ROOT.SETPASSWORD}
               component={SetPasswordPage}
-              options={{title: 'Set Password'}}
+              options={{title: t('setPassword.title')}}
             />
             <RootStack.Screen
               name={Routes.ROOT.SECURITY_SETTING}
               component={SecuritySettingPage}
-              options={{title: 'Security Setting'}}
+              options={{title: t('securitySetting.title')}}
             />
           </RootStack.Group>
           <RootStack.Group>
             <RootStack.Screen
               name={Routes.TABS.SIGN}
-              options={{title: 'Sign EVM Transaction'}}
+              options={{title: t('signEVM.title')}}
               component={SignPage}
             />
             <RootStack.Screen
               name={Routes.TABS.BTCSIGN}
-              options={{title: 'Sign BTC Transaction'}}
+              options={{title: t('signBTC.title')}}
               component={BTCSignPage}
             />
             <RootStack.Screen
               name={Routes.TABS.CONNECTION}
-              options={{title: 'Connection QR Code'}}
+              options={{title: t('connection.title')}}
               component={ConnectionQRCodePage}
             />
             <RootStack.Screen
               name={Routes.TABS.ADDRESS_LIST}
-              options={{title: 'EVM Address List'}}
+              options={{title: t('addressList.title')}}
               component={AddressList}
             />
             <RootStack.Screen
               name={Routes.TABS.BTC_ADDRESS_LIST}
-              options={{title: 'BTC Address List'}}
+              options={{title: t('btcAddressList.title')}}
               component={BtcAddressListPage}
             />
             <RootStack.Screen
               name={Routes.TABS.AUTOLOCK}
-              options={{title: 'Auto Lock Setting'}}
+              options={{title: t('autoLock.title')}}
               component={AutoLockPage}
             />
             <RootStack.Screen
               name={Routes.TABS.LANGUAGE}
-              options={{title: 'Language Setting'}}
+              options={{title: t('languageSetting.title')}}
               component={LanguagePage}
             />
             <RootStack.Screen
               name={Routes.TABS.DARKMODE}
-              options={{title: 'Dark Mode'}}
+              options={{title: t('darkMode.title')}}
               component={DarkModePage}
             />
           </RootStack.Group>

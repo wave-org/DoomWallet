@@ -18,6 +18,7 @@ import * as wallet from '../../wallet';
 import Routes from '../../routes/Routes';
 import Toast from 'react-native-toast-message';
 import {useTheme} from '../../util/theme';
+import {Trans, useTranslation} from 'react-i18next';
 
 const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
   const walletHeader = wallet.getWalletHeader();
@@ -37,6 +38,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
       return false;
     }
   };
+  const {t} = useTranslation();
 
   const login = () => {
     Keyboard.dismiss();
@@ -68,7 +70,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
           // TODO max try times
           Toast.show({
             type: 'error',
-            text1: 'Password is wrong',
+            text1: t('login.passwordIsWrong'),
             position: 'bottom',
             bottomOffset: 100,
             visibilityTime: 2500,
@@ -93,14 +95,15 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
   };
   const reset = () => {
     Keyboard.dismiss();
-    Alert.alert('Alert Title', 'Are you sure to reset wallet', [
+    Alert.alert(t('login.alertTitle'), t('login.alertMessage'), [
       {
-        text: 'Cancel',
+        text: t('login.cancel'),
         onPress: () => {},
         style: 'cancel',
       },
       {
-        text: 'Reset Wallet',
+        text: t('login.resetConfirm'),
+        style: 'destructive',
         onPress: () => {
           wallet.resetWallet();
           navigation.replace(Routes.ROOT.SETUP);
@@ -130,7 +133,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
       return (
         <View style={styles.inputView}>
           <Text style={[styles.passwordText, {color: theme.colors.title}]}>
-            Password:
+            <Trans>login.passwordLabel</Trans>
           </Text>
           <TextInput
             style={[
@@ -142,7 +145,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
                 color: theme.colors.text,
               },
             ]}
-            placeholder="Type your password"
+            placeholder={t('login.passwordPlaceholder')}
             placeholderTextColor={theme.colors.placeholder}
             onChangeText={newText => setPassword(newText)}
             defaultValue={password}
@@ -167,7 +170,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
       return (
         <View style={styles.inputView}>
           <Text style={[styles.passwordText, {color: theme.colors.title}]}>
-            Simple Password:
+            <Trans>login.simplePasswordLabel</Trans>
           </Text>
           <TextInput
             style={[
@@ -179,7 +182,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
                 color: theme.colors.text,
               },
             ]}
-            placeholder="Type simple password"
+            placeholder={t('login.simplePasswordPlaceholder')}
             placeholderTextColor={theme.colors.placeholder}
             onChangeText={newText => setSimplePassword(newText)}
             defaultValue={simplePassword}
@@ -204,7 +207,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
       return (
         <View style={styles.inputView}>
           <Text style={[styles.passwordText, {color: theme.colors.title}]}>
-            PIN Password:
+            <Trans>login.pinPasswordLabel</Trans>
           </Text>
           <TextInput
             style={[
@@ -216,7 +219,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
                 color: theme.colors.text,
               },
             ]}
-            placeholder="Type your PIN"
+            placeholder={t('login.pinPasswordPlaceholder')}
             placeholderTextColor={theme.colors.placeholder}
             onChangeText={newText => setSimplePassword(newText)}
             defaultValue={simplePassword}
@@ -261,7 +264,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
             <View style={styles.container}>
               <View style={styles.welcome}>
                 <Text style={[styles.welcomeText, {color: theme.colors.title}]}>
-                  Welcome back !
+                  <Trans>login.welcome</Trans>
                 </Text>
               </View>
 
@@ -290,7 +293,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
                       styles.loginButtonText,
                       {color: theme.colors.inverse},
                     ]}>
-                    UNLOCK
+                    <Trans>login.unlock</Trans>
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -307,12 +310,11 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
                     styles.resetButtonText,
                     {color: theme.colors.inverse},
                   ]}>
-                  Reset wallet!
+                  <Trans>login.reset</Trans>
                 </Text>
               </TouchableOpacity>
               <Text style={{color: theme.colors.placeholder}}>
-                You can long press this button to ERASE your wallet and setup a
-                new one
+                <Trans>login.resetWarning</Trans>
               </Text>
             </View>
           </TouchableWithoutFeedback>

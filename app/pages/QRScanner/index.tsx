@@ -13,6 +13,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera, BarCodeReadEvent} from 'react-native-camera';
 import {URRegistryDecoder} from '@doomjs/keystonehq-ur-decoder';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import {useTranslation} from 'react-i18next';
 
 const QRScannerPage = ({route}: {route: any}) => {
   const {onSuccess} = route.params;
@@ -22,6 +23,7 @@ const QRScannerPage = ({route}: {route: any}) => {
 
   const decoder = React.useRef(new URRegistryDecoder());
   const theme = useTheme();
+  const {t} = useTranslation();
 
   const onScanSuccess = React.useCallback(
     (e: BarCodeReadEvent) => {
@@ -35,7 +37,7 @@ const QRScannerPage = ({route}: {route: any}) => {
           } else {
             Toast.show({
               type: 'error',
-              text1: 'Scan failed, please try again',
+              text1: t('scan.scanFailed'),
             });
             navigation.goBack();
           }
@@ -46,7 +48,7 @@ const QRScannerPage = ({route}: {route: any}) => {
         }
       }
     },
-    [navigation, onSuccess],
+    [navigation, onSuccess, t],
   );
 
   const close = () => {
