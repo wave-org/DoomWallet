@@ -23,8 +23,10 @@ import {
   getVersion,
 } from 'react-native-device-info';
 import {useTheme} from '../../util/theme';
+import InAppReview from 'react-native-in-app-review';
 
 const AccountPage = ({navigation}: {navigation: any}) => {
+  const canRating = InAppReview.isAvailable();
   const [version, setVersion] = React.useState('');
   const {t} = useTranslation();
   const reset = () => {
@@ -89,6 +91,12 @@ const AccountPage = ({navigation}: {navigation: any}) => {
 
   const jumpToPrivacyPolicy = () => {
     Linking.openURL('https://prosurfer.net/privacy-policy.html');
+  };
+
+  const promteRating = () => {
+    InAppReview.RequestInAppReview().catch(error => {
+      console.log(error);
+    });
   };
 
   useEffect(() => {
@@ -245,15 +253,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               </Text>
             </View>
           </View>
-          {/*
-            // TODO add rate link for ios and android
-          <TouchableOpacity style={styles.cell}>
-            <Icon name="thumbs-up-outline" size={25} color="#333333" />
-            <View style={styles.line}>
-              <Text style={styles.label}>Rate us</Text>
-              <Icon name="chevron-forward" size={24} color="#AAAAAA" />
-            </View>
-          </TouchableOpacity> */}
+
           <TouchableOpacity style={styles.cell} onPress={jumpToPrivacyPolicy}>
             <Icon
               name="information-circle-outline"
@@ -307,6 +307,22 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               />
             </View>
           </TouchableOpacity>
+          {canRating && (
+            <TouchableOpacity style={styles.cell} onPress={promteRating}>
+              <Icon name="thumbs-up" size={25} color={theme.colors.primary} />
+              <View
+                style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+                <Text style={[styles.label, {color: theme.colors.text}]}>
+                  <Trans>account.rating</Trans>
+                </Text>
+                <Icon
+                  name="chevron-forward"
+                  size={24}
+                  color={theme.colors.placeholder}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity style={styles.cell} onPress={jumpToIssues}>
             <Icon name="bug-outline" size={25} color={theme.colors.primary} />
             <View
