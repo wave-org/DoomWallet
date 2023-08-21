@@ -5,7 +5,6 @@ import {
   View,
   StyleSheet,
   TouchableWithoutFeedback,
-  Image,
 } from 'react-native';
 import {useTheme} from '../../util/theme';
 
@@ -14,6 +13,8 @@ import {RNCamera, BarCodeReadEvent} from 'react-native-camera';
 import {URRegistryDecoder} from '@doomjs/keystonehq-ur-decoder';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {useTranslation} from 'react-i18next';
+// @ts-ignore
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const QRScannerPage = ({route}: {route: any}) => {
   const {onSuccess} = route.params;
@@ -73,10 +74,11 @@ const QRScannerPage = ({route}: {route: any}) => {
             <TouchableWithoutFeedback
               onPress={close}
               style={styles.closeButton}>
-              <Image
+              <MCIcon
                 style={styles.closeImage}
-                source={require('../../images/close.png')}
-                tintColor={theme.colors.primary}
+                name="close-thick"
+                color={theme.colors.primary}
+                size={50}
               />
             </TouchableWithoutFeedback>
             {progress !== 0 ? (
@@ -140,9 +142,9 @@ const styles = StyleSheet.create({
   closeImage: {
     position: 'absolute',
     top: 20,
-    right: 20,
-    width: 40,
-    height: 40,
+    right: 30,
+    width: 50,
+    height: 50,
     tintColor: 'white',
   },
   markView: {

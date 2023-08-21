@@ -13,11 +13,14 @@ import {
   ActivityIndicator,
   Image,
   BackHandler,
+  Platform,
 } from 'react-native';
 import * as wallet from '../../wallet';
 import Routes from '../../routes/Routes';
 import {useTheme} from '../../util/theme';
 import {Trans, useTranslation} from 'react-i18next';
+// @ts-ignore
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
   const walletHeader = React.useMemo(() => wallet.getWalletHeader(), []);
@@ -296,11 +299,19 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
               </View>
 
               <View style={styles.login}>
-                {walletHeader.useBiometrics ? (
+                {walletHeader.useBiometrics && Platform.OS === 'ios' ? (
                   <Image
                     source={require('../../images/face-id.png')}
                     style={styles.faceIdIcon}
                     tintColor={theme.colors.placeholder}
+                  />
+                ) : null}
+                {walletHeader.useBiometrics && Platform.OS === 'android' ? (
+                  <MCIcon
+                    style={styles.faceIdIcon}
+                    name="fingerprint"
+                    color={theme.colors.placeholder}
+                    size={100}
                   />
                 ) : null}
                 <TouchableOpacity

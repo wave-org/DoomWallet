@@ -4,7 +4,6 @@ import {
   Text,
   View,
   AppState,
-  Image,
   // Appearance,
 } from 'react-native';
 
@@ -33,6 +32,8 @@ import Toast from 'react-native-toast-message';
 import * as AutoLock from './wallet/autolock';
 import {useNavigationTheme} from './util/theme';
 import {useTranslation} from 'react-i18next';
+// @ts-ignore
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,14 +47,7 @@ const TabHome = () => {
     focused: boolean;
     color: string;
     size: number;
-  }) => (
-    <Image
-      source={require('./images/network.png')}
-      tintColor={color}
-      width={size}
-      height={size}
-    />
-  );
+  }) => <MCIcon name="wifi" color={color} size={size} />;
   const scanTabIcon = ({
     color,
     // focused,
@@ -62,14 +56,7 @@ const TabHome = () => {
     focused: boolean;
     color: string;
     size: number;
-  }) => (
-    <Image
-      source={require('./images/scan.png')}
-      tintColor={color}
-      width={size}
-      height={size}
-    />
-  );
+  }) => <MCIcon name="qrcode-scan" color={color} size={size} />;
   const accountTabIcon = ({
     color,
     // focused,
@@ -78,28 +65,21 @@ const TabHome = () => {
     focused: boolean;
     color: string;
     size: number;
-  }) => (
-    <Image
-      source={require('./images/account.png')}
-      tintColor={color}
-      width={size}
-      height={size}
-    />
-  );
+  }) => <MCIcon name="cog" color={color} size={size} />;
   return (
     <Tab.Navigator>
-      <Tab.Screen
-        name={t('home.title')}
-        component={HomePage}
-        options={{
-          tabBarIcon: networkTabIcon,
-        }}
-      />
       <Tab.Screen
         name={t('find.title')}
         component={FindPage}
         options={{
           tabBarIcon: scanTabIcon,
+        }}
+      />
+      <Tab.Screen
+        name={t('home.title')}
+        component={HomePage}
+        options={{
+          tabBarIcon: networkTabIcon,
         }}
       />
       <Tab.Screen
