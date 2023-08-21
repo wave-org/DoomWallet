@@ -39,6 +39,8 @@
     },
     "login": {
       "passwordIsWrong": "Password is wrong",
+      "remainingTryTimes": "You only have {{times}} tries to figure out the password. If you fail, the wallet will be reset.",
+      "overMaxTryTimes": "You have tried too many times. The wallet has been reset. You can try to recover your wallet by mnemonic and password.",
       "alertTitle": "Warning",
       "alertMessage": "Are you sure to reset wallet? Please make sure you have backup your mnemonic phrase and password.",
       "cancel": "Cancel",

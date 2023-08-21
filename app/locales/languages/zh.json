@@ -39,6 +39,8 @@
     },
     "login": {
       "passwordIsWrong": "密码错误，请重新输入",
+      "remainingTryTimes": "你还有 {{times}} 次机会输入密码，否则钱包将会被重置。",
+      "overMaxTryTimes": "你已经尝试了太多次。钱包已经被重置。你可以通过助记词和密码来恢复钱包。", 
       "alertTitle": "警告",
       "alertMessage": "是否确认要重置钱包？ 请确保你已经备份了助记词和密码。",
       "cancel": "取消",

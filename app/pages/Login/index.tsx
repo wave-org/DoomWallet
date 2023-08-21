@@ -16,16 +16,17 @@ import {
 } from 'react-native';
 import * as wallet from '../../wallet';
 import Routes from '../../routes/Routes';
-import Toast from 'react-native-toast-message';
 import {useTheme} from '../../util/theme';
 import {Trans, useTranslation} from 'react-i18next';
 
 const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
-  const walletHeader = wallet.getWalletHeader();
+  const walletHeader = React.useMemo(() => wallet.getWalletHeader(), []);
+  const [pageDisabled, setPageDisabled] = React.useState<boolean>(false);
   const [password, setPassword] = React.useState<string>('');
   const [simplePassword, setSimplePassword] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editingPassword, setEditingPassword] = React.useState<boolean>(false);
+  const [errorText, setErrorText] = React.useState<string>('');
   const onLogin = route.params?.onLogin;
   const loginButtonIsDisable = () => {
     if (walletHeader.passwordType === 'FullPassword') {
@@ -40,23 +41,34 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
   };
   const {t} = useTranslation();
 
+  React.useEffect(() => {
+    if (walletHeader.triedTimes > 0) {
+      setErrorText(
+        t('login.remainingTryTimes', {
+          times: wallet.maxTryTimes - walletHeader.triedTimes,
+        }),
+      );
+    }
+  }, [walletHeader, t]);
+
   const login = () => {
     Keyboard.dismiss();
     setLoading(true);
 
     async function loadWallet() {
       // console.log('walletHeader', new Date());
-      let success = false;
+      setErrorText('');
+      let result: wallet.PasswordCheckResult = wallet.PasswordCheckResult.Wrong;
       try {
         if (walletHeader.passwordType === 'FullPassword') {
-          success = await wallet.loadWallet(password, undefined);
+          result = await wallet.loadWallet(password, undefined);
         } else if (walletHeader.passwordType === 'NoPassword') {
-          success = await wallet.loadWallet(undefined, undefined);
+          result = await wallet.loadWallet(undefined, undefined);
         } else {
-          success = await wallet.loadWallet(undefined, simplePassword);
+          result = await wallet.loadWallet(undefined, simplePassword);
         }
         setLoading(false);
-        if (success) {
+        if (result === wallet.PasswordCheckResult.Correct) {
           // about 4000ms...
           if (onLogin !== undefined) {
             onLogin();
@@ -66,26 +78,26 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
               navigation.replace(Routes.ROOT.TABS);
             }, 300);
           }
+        } else if (result === wallet.PasswordCheckResult.OverMaxTryTimes) {
+          // over max try times
+          setErrorText(t('login.overMaxTryTimes'));
+          setPageDisabled(true);
+          setTimeout(() => {
+            navigation.replace(Routes.ROOT.SETUP);
+          }, 3500);
         } else {
-          // TODO max try times
-          Toast.show({
-            type: 'error',
-            text1: t('login.passwordIsWrong'),
-            position: 'bottom',
-            bottomOffset: 100,
-            visibilityTime: 2500,
-          });
+          setErrorText(
+            t('login.passwordIsWrong') +
+              '\n' +
+              t('login.remainingTryTimes', {
+                times: wallet.maxTryTimes - walletHeader.triedTimes,
+              }),
+          );
         }
       } catch (error) {
         setLoading(false);
         let message = (error as Error).message;
-        Toast.show({
-          type: 'error',
-          text1: message,
-          position: 'bottom',
-          bottomOffset: 100,
-          visibilityTime: 2500,
-        });
+        setErrorText(message);
       }
     }
 
@@ -269,6 +281,20 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
               </View>
 
               {inputView()}
+              <View style={{width: '100%', height: 70}}>
+                {errorText.length > 0 ? (
+                  <Text
+                    style={{
+                      color: theme.colors.error,
+                      fontSize: 14,
+                      width: '100%',
+                      textAlign: 'center',
+                    }}>
+                    {errorText}
+                  </Text>
+                ) : null}
+              </View>
+
               <View style={styles.login}>
                 {walletHeader.useBiometrics ? (
                   <Image
@@ -324,6 +350,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
             <ActivityIndicator size="large" color={theme.colors.primary} />
           </View>
         ) : null}
+        {pageDisabled ? <View style={styles.indicatorView} /> : null}
       </View>
     );
   }

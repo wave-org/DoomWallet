@@ -39,6 +39,7 @@ type WalletSecret = {
   password?: string;
 };
 let walletHeader: WalletHeader | null = null;
+export const maxTryTimes = 5;
 /// stored in EncryptedStorage
 export type WalletHeader = {
   passwordType: PasswordType;
@@ -46,6 +47,7 @@ export type WalletHeader = {
   encryptedPassword: string | undefined;
   /// use hash to check password is correct
   passwordHash: string;
+  triedTimes: number;
 };
 const KEY_WALLET_HEADER = 'wallet_header';
 
@@ -122,12 +124,17 @@ export async function checkBiometrics() {
   }
 }
 
+export enum PasswordCheckResult {
+  Correct,
+  Wrong,
+  OverMaxTryTimes,
+}
 /// if password is correct and pass the Biometrics check, return true
 /// if password is wrong, it will return false
 export async function loadWallet(
   password: string | undefined,
   simplePassword: string | undefined,
-) {
+): Promise<PasswordCheckResult> {
   if (walletHeader === null) {
     throw new Error('walletHeader is null');
   }
@@ -137,7 +144,24 @@ export async function loadWallet(
       throw new Error('password is undefined');
     }
     if (Key.hashPassword(password) !== walletHeader.passwordHash) {
-      return false;
+      walletHeader.triedTimes += 1;
+      if (walletHeader.triedTimes >= maxTryTimes) {
+        await resetWallet();
+        // throw new Error('Over max try times, wallet is reset!');
+        return PasswordCheckResult.OverMaxTryTimes;
+      } else {
+        await EncryptedStorage.setItem(
+          KEY_WALLET_HEADER,
+          JSON.stringify(walletHeader),
+        );
+      }
+      return PasswordCheckResult.Wrong;
+    } else if (walletHeader.triedTimes !== 0) {
+      walletHeader.triedTimes = 0;
+      await EncryptedStorage.setItem(
+        KEY_WALLET_HEADER,
+        JSON.stringify(walletHeader),
+      );
     }
   } else if (
     walletHeader.passwordType === 'SimplePassword' ||
@@ -155,7 +179,24 @@ export async function loadWallet(
       simplePassword,
     );
     if (Key.hashPassword(fullPassword) !== walletHeader.passwordHash) {
-      return false;
+      walletHeader.triedTimes += 1;
+      if (walletHeader.triedTimes >= maxTryTimes) {
+        await resetWallet();
+        // throw new Error('Over max try times, wallet is reset!');
+        return PasswordCheckResult.OverMaxTryTimes;
+      } else {
+        await EncryptedStorage.setItem(
+          KEY_WALLET_HEADER,
+          JSON.stringify(walletHeader),
+        );
+      }
+      return PasswordCheckResult.Wrong;
+    } else if (walletHeader.triedTimes !== 0) {
+      walletHeader.triedTimes = 0;
+      await EncryptedStorage.setItem(
+        KEY_WALLET_HEADER,
+        JSON.stringify(walletHeader),
+      );
     }
     correctPassword = fullPassword;
   } else {
@@ -194,7 +235,7 @@ export async function loadWallet(
     EVMWallet: new EVMWallet(key),
     BTCWallet: new BTCWallet(key),
   };
-  return true;
+  return PasswordCheckResult.Correct;
 }
 
 export async function setupWallet(walletInfo: WalletSetupParam) {
@@ -205,6 +246,7 @@ export async function setupWallet(walletInfo: WalletSetupParam) {
     useBiometrics: walletInfo.useBiometrics,
     passwordHash: passwordHash,
     encryptedPassword: undefined,
+    triedTimes: 0,
   };
   if (walletInfo.passwordType === 'FullPassword') {
     walletSecret = {
