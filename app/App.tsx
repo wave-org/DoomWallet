@@ -113,7 +113,6 @@ function App(): JSX.Element {
       } else {
         try {
           const walletHeader = await checkWalletExists();
-          AutoLock.loadAutoLockTime();
           if (walletHeader !== null) {
             setRoute(Routes.ROOT.LOGIN);
           } else {

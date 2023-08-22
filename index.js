@@ -18,6 +18,7 @@ import {
   loadLanguage,
 } from './app/wallet/setting';
 import {loadAirgapMode} from './app/wallet/airgap';
+import * as AutoLock from './wallet/autolock';
 import './app/locales/i18n';
 
 async function load() {
@@ -25,7 +26,8 @@ async function load() {
   const load1 = loadDarkMode();
   const load2 = loadLanguage();
   const load3 = loadAirgapMode();
-  await Promise.all([load1, load2, load3]);
+  const load4 = AutoLock.loadAutoLockTime();
+  await Promise.all([load1, load2, load3, load4]);
 
   const darkMode = getDarkMode();
   if (darkMode === DarkMode.Dark) {
