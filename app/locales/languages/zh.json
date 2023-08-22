@@ -37,6 +37,9 @@
       "connected": "在线",
       "disconnected": "离线"
     },
+    "airgap": {
+      "caption": "请关闭网络或者打开飞行模式 以确保当前设备处于离线状态。\n 你可以在设置中关闭严格离线模式。"
+    },
     "login": {
       "passwordIsWrong": "密码错误，请重新输入",
       "remainingTryTimes": "你还有 {{times}} 次机会输入密码，否则钱包将会被重置。",
@@ -78,6 +81,7 @@
       "autoLock": "自动锁定",
       "language": "语言",
       "darkMode": "暗黑模式",
+      "airgapMode": "严格离线模式",
       "about": "关于",
       "version": "版本",
       "privacy": "隐私协议",

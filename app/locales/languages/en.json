@@ -56,6 +56,9 @@
       "reset": "Reset wallet !",
       "resetWarning": "You can long press this button to ERASE your wallet and setup a new one"
     },
+    "airgap": {
+      "caption": "Please enable Airplane Mode to make sure your device is in a offline status. \n You can close strict airgap mode in setting."
+    },
     "scan": {
       "scanFailed": "Scan failed, please try again"
     },
@@ -78,6 +81,7 @@
       "autoLock": "Auto Lock",
       "language": "Language",
       "darkMode": "Dark Mode",
+      "airgapMode": "Strict Airgap Mode",
       "about": "About",
       "version": "Version",
       "privacy": "Privacy Policy",

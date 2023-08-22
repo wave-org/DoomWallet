@@ -7,6 +7,7 @@ import {
   // Appearance,
 } from 'react-native';
 
+import {useAirgapMode, AirgapProvider} from './wallet/airgap';
 import HomePage from './pages/Home';
 import FindPage from './pages/Find';
 import AccountPage from './pages/Settings';
@@ -22,7 +23,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Routes from './routes/Routes';
-import {checkWalletExists, getWallet} from './wallet';
+import {checkWalletExists, getWallet, logout} from './wallet';
 import LoginPage from './pages/Login';
 import SetupPage from './pages/Setup';
 import SetPasswordPage from './pages/Setup/SetPassword';
@@ -30,8 +31,9 @@ import SecuritySettingPage from './pages/Setup/SecuritySetting';
 import BtcAddressListPage from './pages/Settings/BtcAddressList';
 import Toast from 'react-native-toast-message';
 import * as AutoLock from './wallet/autolock';
-import {useNavigationTheme} from './util/theme';
-import {useTranslation} from 'react-i18next';
+import {useNavigationTheme, useTheme} from './util/theme';
+import {useTranslation, Trans} from 'react-i18next';
+import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
 // @ts-ignore
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -97,6 +99,11 @@ const RootStack = createNativeStackNavigator();
 function App(): JSX.Element {
   const [route, setRoute] = useState('');
   const navigation = React.useRef(null);
+  const {airgapMode} = useAirgapMode();
+  // console.log('airgapMode: ', airgapMode);
+  const [networkState, setNetworkState] = React.useState<NetInfoState | null>(
+    null,
+  );
 
   useEffect(() => {
     async function checkExisting() {
@@ -150,16 +157,77 @@ function App(): JSX.Element {
         }
       } else if (nextAppState === 'background') {
         AutoLock.enterBackground();
+        // airgap mode will logout when enter background.
+        if (airgapMode) {
+          logout();
+          if (!showingLoginpage) {
+            showingLoginpage = true;
+            // @ts-ignore
+            navigation.current!.navigate(Routes.ROOT.LOGIN, {onLogin});
+          }
+        }
       }
     });
 
+    let unsubscribe: () => void;
+    if (airgapMode) {
+      unsubscribe = NetInfo.addEventListener(state => {
+        setNetworkState(prev => {
+          if (prev !== null && !prev.isConnected && state.isConnected) {
+            // clean login info.
+            logout();
+            // @ts-ignore
+            if (!showingLoginpage) {
+              showingLoginpage = true;
+              // @ts-ignore
+              navigation.current!.navigate(Routes.ROOT.LOGIN, {onLogin});
+            }
+          }
+          return state;
+        });
+      });
+    }
+
     return () => {
       subscription.remove();
+      if (unsubscribe) {
+        unsubscribe();
+      }
     };
-  }, []);
+  }, [airgapMode]);
 
   const navigationTheme = useNavigationTheme();
   const {t} = useTranslation();
+  const theme = useTheme();
+
+  if (
+    airgapMode === true &&
+    networkState !== null &&
+    networkState.isConnected
+  ) {
+    return (
+      <SafeAreaView
+        style={{
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          backgroundColor: theme.colors.background,
+        }}>
+        <Text
+          style={{
+            color: theme.colors.text,
+            fontSize: 16,
+            width: '100%',
+            textAlign: 'center',
+            padding: 30,
+          }}>
+          <Trans>airgap.caption</Trans>
+        </Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     (route !== '' && (
@@ -265,4 +333,12 @@ function App(): JSX.Element {
   );
 }
 
-export default App;
+const withProviders = () => {
+  return (
+    <AirgapProvider>
+      <App />
+    </AirgapProvider>
+  );
+};
+
+export default withProviders;

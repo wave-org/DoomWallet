@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Switch,
 } from 'react-native';
 import {useTranslation, Trans} from 'react-i18next';
 
@@ -24,6 +25,7 @@ import {
 } from 'react-native-device-info';
 import {useTheme} from '../../util/theme';
 import InAppReview from 'react-native-in-app-review';
+import {useAirgapMode} from '../../wallet/airgap';
 
 const AccountPage = ({navigation}: {navigation: any}) => {
   const canRating = InAppReview.isAvailable();
@@ -98,6 +100,8 @@ const AccountPage = ({navigation}: {navigation: any}) => {
       console.log(error);
     });
   };
+
+  const {airgapMode, toggleAirgapMode} = useAirgapMode();
 
   useEffect(() => {
     async function loadVersion() {
@@ -236,6 +240,28 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               />
             </View>
           </TouchableOpacity>
+          <View style={styles.cell}>
+            <Icon name="airplane" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>account.airgapMode</Trans>
+              </Text>
+              <Switch
+                style={{marginRight: 12, marginBottom: 8}}
+                trackColor={{
+                  false: theme.colors.surface,
+                  true: theme.colors.primary,
+                }}
+                thumbColor={
+                  airgapMode ? theme.colors.secondary : theme.colors.text
+                }
+                ios_backgroundColor={theme.colors.border}
+                onValueChange={toggleAirgapMode}
+                value={airgapMode}
+              />
+            </View>
+          </View>
         </View>
         <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
           <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
