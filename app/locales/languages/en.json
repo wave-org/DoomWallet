@@ -19,6 +19,7 @@
     "language": {
       "title": "Language",
       "caption": "Doom Wallet will support more language in the future.",
+      "system": "System Language",
       "en": "English",
       "zh": "中文"
     },

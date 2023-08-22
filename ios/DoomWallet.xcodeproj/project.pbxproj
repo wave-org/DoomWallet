@@ -16,6 +16,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		D9E68A2A2A9408C2000E897A /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9E68A282A9408C2000E897A /* Ionicons.ttf */; };
 		D9E68A2B2A9408C2000E897A /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9E68A292A9408C2000E897A /* MaterialCommunityIcons.ttf */; };
+		D9E68A312A951664000E897A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D9E68A332A951664000E897A /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,8 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-DoomWallet-DoomWalletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DoomWallet-DoomWalletTests.release.xcconfig"; path = "Target Support Files/Pods-DoomWallet-DoomWalletTests/Pods-DoomWallet-DoomWalletTests.release.xcconfig"; sourceTree = "<group>"; };
 		D9E68A282A9408C2000E897A /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		D9E68A292A9408C2000E897A /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		D9E68A322A951664000E897A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D9E68A342A9516D2000E897A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -97,6 +100,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				D9E68A332A951664000E897A /* InfoPlist.strings */,
 			);
 			name = DoomWallet;
 			sourceTree = "<group>";
@@ -232,6 +236,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -260,6 +265,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				D9E68A2B2A9408C2000E897A /* MaterialCommunityIcons.ttf in Resources */,
 				D9E68A2A2A9408C2000E897A /* Ionicons.ttf in Resources */,
+				D9E68A312A951664000E897A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +449,18 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		D9E68A332A951664000E897A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D9E68A322A951664000E897A /* en */,
+				D9E68A342A9516D2000E897A /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -502,17 +520,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = Q9VQ3N64V6;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = DoomWallet/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Doom Wallet";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -537,16 +555,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = Q9VQ3N64V6;
 				INFOPLIST_FILE = DoomWallet/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Doom Wallet";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

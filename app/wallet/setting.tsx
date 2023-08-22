@@ -1,6 +1,7 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 import i18n from 'i18next';
 import {useTranslation} from 'react-i18next';
+import {getSystemLanguage} from '../locales/i18n';
 
 export enum DarkMode {
   UseSystemConfig,
@@ -47,11 +48,13 @@ export const setDarkMode = async (value: DarkMode) => {
 };
 
 export enum Language {
+  System,
   EN,
   ZH,
 }
 
 export const LanguageStringMap = {
+  [Language.System]: 'en',
   [Language.EN]: 'en',
   [Language.ZH]: 'zh',
 };
@@ -65,18 +68,18 @@ export const loadLanguage = async () => {
   const storedValue = await EncryptedStorage.getItem(LANGUAGE_VALUE);
   if (storedValue !== null && storedValue !== undefined) {
     const value = parseInt(storedValue, 10);
-    switch (value) {
-      case Language.EN:
-        language = Language.EN;
-        return Language.EN;
-      case Language.ZH:
-        language = Language.ZH;
-        i18n.changeLanguage(LanguageStringMap[language]);
-        return Language.ZH;
+    language = value;
+    if (language === Language.System) {
+      return Language.System;
     }
+
+    if (i18n.language !== LanguageStringMap[language!]) {
+      i18n.changeLanguage(LanguageStringMap[language!]);
+    }
+    return language;
   }
-  language = Language.EN;
-  return Language.EN;
+  language = Language.System;
+  return language;
 };
 // call this function after loadDarkMode
 export const getLanguage = () => {
@@ -88,12 +91,17 @@ export const getLanguage = () => {
 
 export const useLanguageOptions = () => {
   const {t} = useTranslation();
-  return [t('language.en'), t('language.zh')];
+  return [t('language.system'), t('language.en'), t('language.zh')];
 };
 
 export const setLanguage = async (value: Language) => {
   try {
-    await i18n.changeLanguage(LanguageStringMap[value]);
+    if (value === Language.System) {
+      const systemLanguage = getSystemLanguage();
+      await i18n.changeLanguage(systemLanguage);
+    } else {
+      await i18n.changeLanguage(LanguageStringMap[value]);
+    }
     await EncryptedStorage.setItem(LANGUAGE_VALUE, value.toString());
     language = value;
   } catch (error) {

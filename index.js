@@ -18,7 +18,7 @@ import {
   loadLanguage,
 } from './app/wallet/setting';
 import {loadAirgapMode} from './app/wallet/airgap';
-import * as AutoLock from './wallet/autolock';
+import * as AutoLock from './app/wallet/autolock';
 import './app/locales/i18n';
 
 async function load() {
