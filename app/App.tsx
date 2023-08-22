@@ -157,15 +157,6 @@ function App(): JSX.Element {
         }
       } else if (nextAppState === 'background') {
         AutoLock.enterBackground();
-        // airgap mode will logout when enter background.
-        if (airgapMode) {
-          logout();
-          if (!showingLoginpage) {
-            showingLoginpage = true;
-            // @ts-ignore
-            navigation.current!.navigate(Routes.ROOT.LOGIN, {onLogin});
-          }
-        }
       }
     });
 
