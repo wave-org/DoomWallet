@@ -69,6 +69,7 @@ export function enterForeground(): boolean {
   const diff = currentTime - lastTime;
   if (diff > AutoLockTimeValueMap[autoLockTime] * 1000) {
     wallet.logout();
+    lastTime = new Date().getTime();
     return false;
   } else {
     return true;
