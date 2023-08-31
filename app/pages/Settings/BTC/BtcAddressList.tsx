@@ -10,10 +10,10 @@ import {
   Linking,
 } from 'react-native';
 import {Tab, Text, TabView, Divider} from '@rneui/themed';
-import * as wallet from '../../wallet';
+import * as wallet from '../../../wallet';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
-import {useTheme, Theme} from '../../util/theme';
+import {useTheme, Theme} from '../../../util/theme';
 import {useTranslation, Trans} from 'react-i18next';
 
 type ItemProps = {

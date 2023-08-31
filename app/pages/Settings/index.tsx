@@ -49,16 +49,12 @@ const AccountPage = ({navigation}: {navigation: any}) => {
     ]);
   };
 
-  const jumpToConnectionQR = () => {
-    navigation.navigate(Routes.TABS.CONNECTION);
+  const jumpToEVMWallet = () => {
+    navigation.navigate(Routes.TABS.EVMWallet);
   };
 
-  const jumpToAddressList = () => {
-    navigation.navigate(Routes.TABS.ADDRESS_LIST);
-  };
-
-  const jumpToBTCAddressList = () => {
-    navigation.navigate(Routes.TABS.BTC_ADDRESS_LIST);
+  const jumpToBTCWallet = () => {
+    navigation.navigate(Routes.TABS.BTCWallet);
   };
 
   const jumpToSecuritySetting = () => {
@@ -123,26 +119,12 @@ const AccountPage = ({navigation}: {navigation: any}) => {
           <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
             <Trans>account.account</Trans>
           </Text>
-          <TouchableOpacity style={styles.cell} onPress={jumpToConnectionQR}>
-            <Icon name="qr-code" size={25} color={theme.colors.primary} />
-            <View
-              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
-              <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>account.connection</Trans>
-              </Text>
-              <Icon
-                name="chevron-forward"
-                size={24}
-                color={theme.colors.placeholder}
-              />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} onPress={jumpToAddressList}>
+          <TouchableOpacity style={styles.cell} onPress={jumpToEVMWallet}>
             <MCIcon name="ethereum" size={25} color={theme.colors.primary} />
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>account.evmAddress</Trans>
+                <Trans>account.evmWallet</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -151,12 +133,12 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} onPress={jumpToBTCAddressList}>
+          <TouchableOpacity style={styles.cell} onPress={jumpToBTCWallet}>
             <MCIcon name="bitcoin" size={25} color={theme.colors.primary} />
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>account.btcAddress</Trans>
+                <Trans>account.btcWallet</Trans>
               </Text>
               <Icon
                 name="chevron-forward"

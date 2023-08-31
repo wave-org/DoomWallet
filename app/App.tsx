@@ -15,10 +15,12 @@ import QRScannerPage from './pages/QRScanner';
 import SignPage from './pages/Sign';
 import BTCSignPage from './pages/Sign/BTCSign';
 import ConnectionQRCodePage from './pages/Settings/ConnectionQR';
-import AddressList from './pages/Settings/AddressList';
+import AddressList from './pages/Settings/EVM/AddressList';
 import AutoLockPage from './pages/Settings/AutoLock';
 import LanguagePage from './pages/Settings/LanguagePage';
 import DarkModePage from './pages/Settings/DarkModePage';
+import EVMWalletPage from './pages/Settings/EVM/EVMWallet';
+import DerivationPathPage from './pages/Settings/EVM/DerivationPath';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -28,7 +30,8 @@ import LoginPage from './pages/Login';
 import SetupPage from './pages/Setup';
 import SetPasswordPage from './pages/Setup/SetPassword';
 import SecuritySettingPage from './pages/Setup/SecuritySetting';
-import BtcAddressListPage from './pages/Settings/BtcAddressList';
+import BtcAddressListPage from './pages/Settings/BTC/BtcAddressList';
+import BTCWalletPage from './pages/Settings/BTC/BTCWallet';
 import Toast from 'react-native-toast-message';
 import * as AutoLock from './wallet/autolock';
 import {useNavigationTheme, useTheme} from './util/theme';
@@ -291,6 +294,21 @@ function App(): JSX.Element {
               name={Routes.TABS.LANGUAGE}
               options={{title: t('languageSetting.title')}}
               component={LanguagePage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.EVMWallet}
+              options={{title: t('EVM.title')}}
+              component={EVMWalletPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.EVMDerivation}
+              options={{title: t('EVM.changePath')}}
+              component={DerivationPathPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.BTCWallet}
+              options={{title: t('BTC.title')}}
+              component={BTCWalletPage}
             />
             <RootStack.Screen
               name={Routes.TABS.DARKMODE}

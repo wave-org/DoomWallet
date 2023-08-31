@@ -48,6 +48,8 @@ export type WalletHeader = {
   /// use hash to check password is correct
   passwordHash: string;
   triedTimes: number;
+  /// if it is nil, use default derivation path
+  evmDerivationPath?: string;
 };
 const KEY_WALLET_HEADER = 'wallet_header';
 
@@ -235,6 +237,9 @@ export async function loadWallet(
     EVMWallet: new EVMWallet(key),
     BTCWallet: new BTCWallet(key),
   };
+  if (walletHeader.evmDerivationPath !== undefined) {
+    wallet.EVMWallet.setCustomDerivationPath(walletHeader.evmDerivationPath);
+  }
   return PasswordCheckResult.Correct;
 }
 
@@ -432,14 +437,16 @@ export function getWalletSecuritySetting() {
 }
 
 export function getWallet() {
-  // const mnemonic =
-  //   'farm library shuffle knee equal blush disease table deliver custom farm stereo fat level dawn book advance lamp clutch crumble gaze law bird jazz';
-  // const password = 'j1io2u7$@081nf%@au0-,.,3151lijasfa';
-  // const key = Key.fromMnemonic(mnemonic, password);
-  // wallet = {
-  //   EVMWallet: new EVMWallet(key),
-  //   BTCWallet: new BTCWallet(key),
-  // };
+  // if (wallet === null) {
+  //   const mnemonic =
+  //     'farm library shuffle knee equal blush disease table deliver custom farm stereo fat level dawn book advance lamp clutch crumble gaze law bird jazz';
+  //   const password = 'j1io2u7$@081nf%@au0-,.,3151lijasfa';
+  //   const key = Key.fromMnemonic(mnemonic, password);
+  //   wallet = {
+  //     EVMWallet: new EVMWallet(key),
+  //     BTCWallet: new BTCWallet(key),
+  //   };
+  // }
   return wallet;
 }
 
@@ -460,4 +467,81 @@ export function getRequestType(ur: UR): WalletType {
 
 export function canSignBTCRequest(request: BTCSignRequest): boolean {
   return request.canSignByKey(wallet!.BTCWallet.key);
+}
+
+export type EVMDerivationPathType =
+  | 'Doom'
+  | 'Ledger Legacy'
+  | 'MetaMask'
+  | 'Custom';
+export const EVMDerivationPathTypes: EVMDerivationPathType[] = [
+  'Doom',
+  'Ledger Legacy',
+  'MetaMask',
+  'Custom',
+];
+
+export function getDerivationPathForEVMWallet() {
+  if (wallet === null) {
+    throw new Error('wallet is null');
+  }
+  return wallet.EVMWallet.getDerivationPath();
+}
+
+export function getDerivationTypeForEVMWallet() {
+  const path = getDerivationPathForEVMWallet();
+  if (path === EVMWallet.defaultPath) {
+    return 'Doom';
+  } else if (path === LedgerLegacyDerivationPath + '/*') {
+    return 'Ledger Legacy';
+  } else if (path === MetaMaskDerivationPath + '/*') {
+    return 'MetaMask';
+  } else {
+    return 'Custom';
+  }
+}
+
+const LedgerLegacyDerivationPath = "m/44'/60'/0'";
+const MetaMaskDerivationPath = "m/44'/60'/0'/0";
+export function setLedgercyDerivationPathForEVMWallet() {
+  if (wallet === null) {
+    throw new Error('wallet is null');
+  }
+  wallet.EVMWallet.setCustomDerivationPath(LedgerLegacyDerivationPath);
+  walletHeader!.evmDerivationPath = LedgerLegacyDerivationPath;
+  EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
+}
+
+export function setMetaMaskDerivationPathForEVMWallet() {
+  if (wallet === null) {
+    throw new Error('wallet is null');
+  }
+  wallet.EVMWallet.setCustomDerivationPath(MetaMaskDerivationPath);
+  walletHeader!.evmDerivationPath = MetaMaskDerivationPath;
+  EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
+}
+
+export function setCustomDerivationPathForEVMWallet(path: string) {
+  if (wallet === null) {
+    throw new Error('wallet is null');
+  }
+  // m/44'/60'/0'/
+  wallet.EVMWallet.setCustomDerivationPath(path);
+  walletHeader!.evmDerivationPath = path;
+  EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
+}
+
+// return true if path is valid
+export function checkCustomDerivationPathIsValid(path: string) {
+  const regex = /^m(\/[0-9]+'?)+\/\*$/;
+  return regex.test(path);
+}
+
+export function setDefaultDerivationPathForEVMWallet() {
+  if (wallet === null) {
+    throw new Error('wallet is null');
+  }
+  wallet.EVMWallet.useDefaultDerivationPath();
+  walletHeader!.evmDerivationPath = undefined;
+  EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
 }

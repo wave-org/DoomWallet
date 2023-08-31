@@ -17,6 +17,9 @@ const Routes = {
     AUTOLOCK: 'AutoLock',
     LANGUAGE: 'Language',
     DARKMODE: 'DarkMode',
+    EVMWallet: 'EVMWalletPage',
+    EVMDerivation: 'EVMDerivation',
+    BTCWallet: 'BTCWalletPage',
   },
 };
 

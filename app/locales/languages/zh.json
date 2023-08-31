@@ -72,6 +72,8 @@
       "connection": "连接二维码",
       "evmAddress": "EVM地址列表",
       "btcAddress": "Bitcoin地址列表",
+      "evmWallet": "EVM钱包",
+      "btcWallet": "比特币钱包",
       "reset": "重置钱包",
       "alertTitle": "警告",
       "alertMessage": "是否确认要重置密码？ 如果你没有备份助记词和密码，你将无法恢复你的钱包！",
@@ -172,6 +174,28 @@
       "typedData": "格式化数据：",
       "type": "类型:",
       "fromAddress": "发送方地址："
+    },
+    "EVM": {
+      "title": "EVM钱包",
+      "HDWallet": "分层确定性（HD） 钱包",
+      "derivationPath": "派生路径：",
+      "captionAboutDerivationPath": "*符号表示账户序号： 对于第一个子账户， 这个序号是0， 所以第一个子账户的派生路径为 ",
+      "accountList": "子账户列表",
+      "changePath": "修改派生路径",
+      "derivationCaption": "派生路径用于派生子账户。你可以谷歌BIP32以了解更多关于HD钱包的知识。",
+      "customPathLabel": "使用一个自定义的派生路径：",
+      "customPathWarning": "希望你了解自定义派生路径的意义。 你可以谷歌BIP32来学习相关知识。",
+      "path": "路径：",
+      "inputCaption": "你可以在 m/到/* 中 添加自定义的路径",
+      "inputPlaceholder": "m/ 到 /* 之间的路径",
+      "save": "保存"
+    },
+    "BTC": {
+      "title": "比特币钱包",
+      "HDWallet": "分层确定性（HD） 钱包",
+      "segwit": "隔离鉴证（SegWit）",
+      "addressList": "地址列表",
+      "captionAboutDerivationPath": "末日钱包使用BIP84来管理派生地址。想要学习相关知识，请谷歌BIP44和BIP84. 派生路径的含义是：m / purpose' / coin_type' / account' / change / address_index "
     },
     "signBTC": {
       "title": "签名BTC交易",

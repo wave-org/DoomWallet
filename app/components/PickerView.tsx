@@ -71,6 +71,7 @@ const PickerView = ({
     <FlatList
       data={items}
       style={style}
+      scrollEnabled={false}
       contentContainerStyle={styles.contentContainer}
       renderItem={({item}) => (
         <Item

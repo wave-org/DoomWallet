@@ -10,10 +10,10 @@ import {
   FlatList,
 } from 'react-native';
 
-import * as wallet from '../../wallet';
+import * as wallet from '../../../wallet';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
-import {useTheme, Theme} from '../../util/theme';
+import {useTheme, Theme} from '../../../util/theme';
 
 const jumpToEthscan = (address: string) => {
   Linking.openURL('https://etherscan.io/address/' + address);

@@ -70,8 +70,8 @@
       "title": "Account",
       "account": "Account",
       "connection": "Connection QR Code",
-      "evmAddress": "EVM Derived Addresses",
-      "btcAddress": "Bitcoin Derived Addresses",
+      "evmWallet": "EVM Wallet",
+      "btcWallet": "Bitcoin Wallet",
       "reset": "Reset Wallet",
       "alertTitle": "Warning",
       "alertMessage": "Are you sure to reset wallet? If you have not backup your mnemonic and password, you will never access your account again!",
@@ -172,6 +172,28 @@
       "typedData": "Typed Data:",
       "type": "Type:",
       "fromAddress": "From Address:"
+    },
+    "EVM": {
+      "title": "EVM Wallet",
+      "HDWallet": "HD Wallet",
+      "derivationPath": "Derivation Path:",
+      "captionAboutDerivationPath": "* means account index: for your first account, the account index will be 0. So, the derivation path of the first account will be ",
+      "accountList": "Account List",
+      "changePath": "Change Derivation Path",
+      "derivationCaption": "Derivation Path is used to derive your address. You can learn about it by google BIP32.",
+      "customPathLabel": "Use a custom derivation path:",
+      "customPathWarning": "Make sure you know what you are doing. You can learn more about Derivation Path by google BIP32.",
+      "path": "Path:",
+      "inputCaption": "You can add your path between m/ and /* in the below input:",
+      "inputPlaceholder": "Type your path between m/ and /*",
+      "save": "Save"
+    },
+    "BTC": {
+      "title": "Bitcoin Wallet",
+      "HDWallet": "HD Wallet",
+      "segwit": "SegWit Address",
+      "addressList": "Address List",
+      "captionAboutDerivationPath": "Doom Wallet use BIP84 to derive your address. You can learn about it by google BIP84. The derivation path means m / purpose' / coin_type' / account' / change / address_index "
     },
     "signBTC": {
       "title": "Sign BTC Transaction",

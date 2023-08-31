@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   SafeAreaView,
-  // Text,
+  Text,
   View,
   StyleSheet,
   useWindowDimensions,
@@ -9,20 +9,24 @@ import {
   Linking,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import {Tab, Text, TabView, Button} from '@rneui/themed';
+import {Button} from '@rneui/themed';
 import * as wallet from '../../wallet';
+import {WalletType} from '../../wallet';
 import {useTheme} from '../../util/theme';
 import {Trans} from 'react-i18next';
 
-const ConnectionQRCodePage = () => {
-  const [evmUR, setEvmUR] = React.useState<string | undefined>(undefined);
-  const [btcUR, setBtcUR] = React.useState<string | undefined>(undefined);
-  const [tabIndex, setTabIndex] = React.useState(0);
+const ConnectionQRCodePage = ({route}: {route: any}) => {
+  const {walletType}: {walletType: WalletType} = route.params;
+
+  const [ur, setUR] = React.useState<string | undefined>(undefined);
   const {width} = useWindowDimensions();
   React.useEffect(() => {
-    setEvmUR(wallet.getWallet()!.EVMWallet.getConnectionUR());
-    setBtcUR(wallet.getWallet()!.BTCWallet.getConnectionUR());
-  }, [setBtcUR, setEvmUR]);
+    if (walletType === WalletType.EVM) {
+      setUR(wallet.getWallet()!.EVMWallet.getConnectionUR());
+    } else if (walletType === WalletType.BTC) {
+      setUR(wallet.getWallet()!.BTCWallet.getConnectionUR());
+    }
+  }, [setUR, walletType]);
 
   const getMetaMask = () => {
     Linking.openURL('https://metamask.io/');
@@ -34,119 +38,69 @@ const ConnectionQRCodePage = () => {
 
   const theme = useTheme();
 
-  return (
-    <SafeAreaView style={styles.container}>
-      {evmUR === undefined || btcUR === undefined ? (
+  if (ur === undefined) {
+    return (
+      <SafeAreaView style={styles.container}>
         <ActivityIndicator color={theme.colors.primary} />
-      ) : (
-        <View style={styles.container}>
-          <Tab
-            value={tabIndex}
-            onChange={e => setTabIndex(e)}
+      </SafeAreaView>
+    );
+  }
+
+  if (walletType === WalletType.EVM) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.textContainer}>
+          <View
             style={{
               width: '100%',
-              height: 60,
-              backgroundColor: theme.colors.surface,
-            }}
-            disableIndicator={true}
-            variant="primary">
-            <Tab.Item
-              title="EVM"
-              titleStyle={active => ({
-                fontSize: active ? 13 : 12,
-                fontWeight: active ? 'bold' : 'normal',
-                color: theme.colors.inverse,
-              })}
-              icon={{
-                name: 'ethereum',
-                type: 'material-community',
-                color: 'white',
-              }}
-              containerStyle={active => ({
-                opacity: active ? 1 : 0.5,
-              })}
-              buttonStyle={{
-                backgroundColor: theme.colors.primary,
-              }}
-            />
-            <Tab.Item
-              title="Bitcoin"
-              titleStyle={active => ({
-                fontSize: active ? 13 : 12,
-                fontWeight: active ? 'bold' : 'normal',
-                color: theme.colors.inverse,
-              })}
-              containerStyle={active => ({
-                opacity: active ? 1 : 0.5,
-              })}
-              buttonStyle={{
-                backgroundColor: theme.colors.primary,
-              }}
-              icon={{
-                name: 'bitcoin',
-                type: 'material-community',
-                color: 'white',
-              }}
-            />
-          </Tab>
-          <TabView
-            containerStyle={{
-              flex: 1,
-              width: '100%',
-              height: '100%',
-            }}
-            value={tabIndex}
-            onChange={setTabIndex}
-            animationType="spring">
-            <TabView.Item style={{width: '100%'}}>
-              <View style={styles.textContainer}>
-                <View
-                  style={{
-                    width: '100%',
-                    backgroundColor: '#DFE0E2',
-                    padding: 20,
-                  }}>
-                  <QRCode size={width - 40} value={evmUR} />
-                </View>
-                <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                  <Trans>connection.evmText</Trans>
-                </Text>
-                <Button
-                  title="MetaMask"
-                  type="clear"
-                  onPress={getMetaMask}
-                  style={{marginTop: 25}}
-                  titleStyle={{color: theme.colors.primary}}
-                />
-              </View>
-            </TabView.Item>
-            <TabView.Item style={{width: '100%'}}>
-              <View style={styles.textContainer}>
-                <View
-                  style={{
-                    width: '100%',
-                    backgroundColor: '#DFE0E2',
-                    padding: 20,
-                  }}>
-                  <QRCode size={width - 40} value={btcUR} />
-                </View>
-                <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                  <Trans>connection.btcText</Trans>
-                </Text>
-                <Button
-                  title="BlueWallet"
-                  type="clear"
-                  onPress={getBlueWallet}
-                  style={{marginTop: 25}}
-                  titleStyle={{color: theme.colors.primary}}
-                />
-              </View>
-            </TabView.Item>
-          </TabView>
+              backgroundColor: '#DFE0E2',
+              padding: 20,
+            }}>
+            <QRCode size={width - 40} value={ur} />
+          </View>
+          <Text style={[styles.normalText, {color: theme.colors.text}]}>
+            <Trans>connection.evmText</Trans>
+          </Text>
+          <Button
+            title="MetaMask"
+            type="clear"
+            onPress={getMetaMask}
+            style={{marginTop: 25}}
+            titleStyle={{color: theme.colors.primary}}
+          />
         </View>
-      )}
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
+  }
+
+  if (walletType === WalletType.BTC) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.textContainer}>
+          <View
+            style={{
+              width: '100%',
+              backgroundColor: '#DFE0E2',
+              padding: 20,
+            }}>
+            <QRCode size={width - 40} value={ur} />
+          </View>
+          <Text style={[styles.normalText, {color: theme.colors.text}]}>
+            <Trans>connection.btcText</Trans>
+          </Text>
+          <Button
+            title="BlueWallet"
+            type="clear"
+            onPress={getBlueWallet}
+            style={{marginTop: 25}}
+            titleStyle={{color: theme.colors.primary}}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return <SafeAreaView style={styles.container} />;
 };
 
 const styles = StyleSheet.create({
