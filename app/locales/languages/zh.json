@@ -31,12 +31,23 @@
       "getPermissionButton": "获取相机权限",
       "cameraPermissionBlocked": "请到设置中开启相机权限。"
     },
-    "home": {
-      "title": "网络",
+
+    "tools": {
+      "title": "工具",
       "offlineWarning": "在完全离线的设备上使用末日钱包会更安全！",
       "networkLabel": "网络状态",
       "connected": "在线",
-      "disconnected": "离线"
+      "disconnected": "离线",
+      "QRCode": "二维码",
+      "reader": "扫描二维码",
+      "generator": "生成二维码",
+      "QRResultTitle": "扫描结果",
+      "noCameraPermission": "没有相机权限， 你需要授予末日钱包相机权限以扫描二维码。",
+      "copy": "复制",
+      "copyed": "已复制",
+      "QRGeneratorTitle": "生成二维码",
+      "generatorPlaceHolder": "输入内容来生成二维码，最多1024字节。",
+      "generate": "生成二维码"
     },
     "airgap": {
       "caption": "请关闭网络或者打开飞行模式 以确保当前设备处于离线状态。\n 你可以在设置中关闭严格离线模式。"

@@ -8,7 +8,9 @@ import {
 } from 'react-native';
 
 import {useAirgapMode, AirgapProvider} from './wallet/airgap';
-import HomePage from './pages/Home';
+import ToolsPage from './pages/Tools';
+import QRResultPage from './pages/Tools/QRCodeResult';
+import QRCodeGenerator from './pages/Tools/QRCodeGenerator';
 import FindPage from './pages/Find';
 import AccountPage from './pages/Settings';
 import QRScannerPage from './pages/QRScanner';
@@ -44,7 +46,7 @@ const Tab = createBottomTabNavigator();
 
 const TabHome = () => {
   const {t} = useTranslation();
-  const networkTabIcon = ({
+  const toolsTabIcon = ({
     color,
     // focused,
     size,
@@ -52,7 +54,7 @@ const TabHome = () => {
     focused: boolean;
     color: string;
     size: number;
-  }) => <MCIcon name="wifi" color={color} size={size} />;
+  }) => <MCIcon name="tools" color={color} size={size} />;
   const scanTabIcon = ({
     color,
     // focused,
@@ -81,10 +83,10 @@ const TabHome = () => {
         }}
       />
       <Tab.Screen
-        name={t('home.title')}
-        component={HomePage}
+        name={t('tools.title')}
+        component={ToolsPage}
         options={{
-          tabBarIcon: networkTabIcon,
+          tabBarIcon: toolsTabIcon,
         }}
       />
       <Tab.Screen
@@ -269,6 +271,16 @@ function App(): JSX.Element {
               name={Routes.TABS.BTCSIGN}
               options={{title: t('signBTC.title')}}
               component={BTCSignPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.QRResult}
+              options={{title: t('tools.QRResultTitle')}}
+              component={QRResultPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.QRGenerator}
+              options={{title: t('tools.QRGeneratorTitle')}}
+              component={QRCodeGenerator}
             />
             <RootStack.Screen
               name={Routes.TABS.CONNECTION}

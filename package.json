@@ -14,6 +14,7 @@
   "dependencies": {
     "@doomjs/keystonehq-ur-decoder": "^0.12.3",
     "@ngraveio/bc-ur": "^1.1.6",
+    "@react-native-clipboard/clipboard": "^1.11.2",
     "@react-native-community/netinfo": "^9.4.1",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",

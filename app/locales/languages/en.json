@@ -31,12 +31,22 @@
       "getPermissionButton": "Grant Camera Permission",
       "cameraPermissionBlocked": "Please go to Settings and grant the Camera permission."
     },
-    "home": {
-      "title": "Network",
+    "tools": {
+      "title": "Tools",
       "offlineWarning": "Using this wallet in a offline device will be much safer!",
       "networkLabel": "Network status",
       "connected": "Connected",
-      "disconnected": "Not connected"
+      "disconnected": "Not connected",
+      "QRCode": "QR Code",
+      "reader": "Reader",
+      "generator": "Generator",
+      "QRResultTitle": "QR Code Result",
+      "noCameraPermission": "No Camera Permission. You need to grant camera permission to use QR Code Reader.",
+      "copy": "Copy",
+      "copyed": "Copyed",
+      "QRGeneratorTitle": "QR Code Generator",
+      "generatorPlaceHolder": "Type text to generate QR Code, max length is 1024",
+      "generate": "Generate"
     },
     "login": {
       "passwordIsWrong": "Password is wrong",

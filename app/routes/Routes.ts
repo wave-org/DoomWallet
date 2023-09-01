@@ -20,6 +20,9 @@ const Routes = {
     EVMWallet: 'EVMWalletPage',
     EVMDerivation: 'EVMDerivation',
     BTCWallet: 'BTCWalletPage',
+    Tools: 'Tools',
+    QRResult: 'QRResult',
+    QRGenerator: 'QRGenerator',
   },
 };
 

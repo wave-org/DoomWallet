@@ -17,7 +17,7 @@ import {useTranslation} from 'react-i18next';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const QRScannerPage = ({route}: {route: any}) => {
-  const {onSuccess} = route.params;
+  const {onSuccess, notUR} = route.params;
   const [progress, setProgress] = React.useState(0);
 
   const navigation = useNavigation();
@@ -28,31 +28,37 @@ const QRScannerPage = ({route}: {route: any}) => {
 
   const onScanSuccess = React.useCallback(
     (e: BarCodeReadEvent) => {
-      const _decoder = decoder.current;
-      if (!_decoder.isComplete()) {
-        _decoder.receivePart(e.data);
-        if (_decoder.isComplete()) {
-          if (_decoder.isSuccess()) {
-            navigation.goBack();
-            onSuccess(_decoder.resultUR());
+      if (notUR) {
+        // not UR type, just return the data
+        navigation.goBack();
+        onSuccess(e.data);
+      } else {
+        const _decoder = decoder.current;
+        if (!_decoder.isComplete()) {
+          _decoder.receivePart(e.data);
+          if (_decoder.isComplete()) {
+            if (_decoder.isSuccess()) {
+              navigation.goBack();
+              onSuccess(_decoder.resultUR());
+            } else {
+              Toast.show({
+                type: 'error',
+                text1: t('scan.scanFailed'),
+                position: 'bottom',
+                bottomOffset: 100,
+                visibilityTime: 2500,
+              });
+              navigation.goBack();
+            }
           } else {
-            Toast.show({
-              type: 'error',
-              text1: t('scan.scanFailed'),
-              position: 'bottom',
-              bottomOffset: 100,
-              visibilityTime: 2500,
-            });
-            navigation.goBack();
+            let _progress =
+              Math.round(_decoder.estimatedPercentComplete() * 100) / 100;
+            setProgress(_progress);
           }
-        } else {
-          let _progress =
-            Math.round(_decoder.estimatedPercentComplete() * 100) / 100;
-          setProgress(_progress);
         }
       }
     },
-    [navigation, onSuccess, t],
+    [navigation, onSuccess, t, notUR],
   );
 
   const close = () => {
