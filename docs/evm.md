@@ -1,3 +1,5 @@
+# EVM Wallet User Guide
+
 #### 1. Use MetaMask
 
 [MetaMask](https://metamask.io/)

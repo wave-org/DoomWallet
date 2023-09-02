@@ -1,3 +1,5 @@
+# Create a new wallet
+
 ### 1 Open Doom Wallet; you can create a random mnemonic or hash a given text to generate a mnemonic.
 
 ![](./2-1.jpg)
