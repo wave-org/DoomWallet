@@ -235,6 +235,7 @@ function App(): JSX.Element {
             screenOptions={{
               headerShown: false,
               presentation: 'modal',
+              headerBackTitleVisible: false,
             }}>
             <RootStack.Screen
               name={Routes.ROOT.LOGIN}
@@ -252,7 +253,7 @@ function App(): JSX.Element {
               options={{headerShown: false, animation: 'none'}}
             />
           </RootStack.Group>
-          <RootStack.Group>
+          <RootStack.Group screenOptions={{headerBackTitleVisible: false}}>
             <RootStack.Screen
               name={Routes.ROOT.SETPASSWORD}
               component={SetPasswordPage}
@@ -269,7 +270,7 @@ function App(): JSX.Element {
               component={ImportWalletPage}
             />
           </RootStack.Group>
-          <RootStack.Group>
+          <RootStack.Group screenOptions={{headerBackTitleVisible: false}}>
             <RootStack.Screen
               name={Routes.TABS.SIGN}
               options={{title: t('signEVM.title')}}
