@@ -24,7 +24,7 @@ const SetPasswordPage = ({
   route: any;
   navigation: any;
 }) => {
-  const {mnemonic, setupComplete} = route.params;
+  const {mnemonic, setupComplete, usingUnlockPassword} = route.params;
   const [password, setPassword] = React.useState<string>('');
   const [editingPassword, setEditingPassword] = React.useState<boolean>(false);
 
@@ -33,6 +33,7 @@ const SetPasswordPage = ({
       mnemonic,
       password,
       setupComplete,
+      usingUnlockPassword: usingUnlockPassword === true,
     });
   };
 
@@ -75,8 +76,12 @@ const SetPasswordPage = ({
               <Trans>setPassword.mnemonic</Trans>
             </Text>
             <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
-            <Text style={[styles.normalText, {color: theme.colors.text}]}>
-              <Trans>setPassword.caption</Trans>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              {usingUnlockPassword === true ? (
+                <Trans>setPassword.unlockPassword</Trans>
+              ) : (
+                <Trans>setPassword.password</Trans>
+              )}
             </Text>
             <TextInput
               style={[
@@ -107,6 +112,17 @@ const SetPasswordPage = ({
               }}
               inputMode="text"
             />
+            <Text
+              style={[
+                styles.normalText,
+                {color: theme.colors.text, marginTop: 10},
+              ]}>
+              {usingUnlockPassword === true ? (
+                <Trans>setPassword.unlockCaption</Trans>
+              ) : (
+                <Trans>setPassword.caption</Trans>
+              )}
+            </Text>
             {password.length >= 8 ? (
               <View style={styles.passwordStrengthContainer}>
                 <Text

@@ -27,6 +27,8 @@ const SetupPage = ({navigation}: {navigation: any}) => {
   const [success, setSuccess] = React.useState<boolean>(false);
   const [password, setPassword] = React.useState<string>('');
   const [useBiometrics, setUseBiometrics] = React.useState<boolean>(false);
+  const [usingUnlockPassword, setUsingUnlockPassword] =
+    React.useState<boolean>(false);
   const [passwordType, setPasswordType] =
     React.useState<wallet.PasswordType>('FullPassword');
   const [simplePassword, setSimplePassword] = React.useState<string>('');
@@ -68,6 +70,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
     passwordType: wallet.PasswordType;
     simplePassword: string | undefined;
     useBiometrics: boolean;
+    usingUnlockPassword?: boolean;
   }) => {
     setSuccess(true);
     setMnemonic(keyInfo.mnemonic);
@@ -77,6 +80,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
     if (keyInfo.simplePassword !== undefined) {
       setSimplePassword(keyInfo.simplePassword);
     }
+    setUsingUnlockPassword(keyInfo.usingUnlockPassword === true);
   };
 
   const complete = () => {
@@ -90,6 +94,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
           passwordType,
           simplePassword,
           useBiometrics,
+          usingUnlockPassword,
         });
         setTimeout(() => {
           setLoading(false);
@@ -168,7 +173,11 @@ const SetupPage = ({navigation}: {navigation: any}) => {
                 <Trans>setup.differentPlaces</Trans>
               </Text>
               <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                <Trans>setup.neverRecover</Trans>
+                {usingUnlockPassword ? (
+                  <Trans>setup.forgetPassword</Trans>
+                ) : (
+                  <Trans>setup.neverRecover</Trans>
+                )}
               </Text>
               {simplePassword !== '' ? (
                 <Text style={[styles.normalText, {color: theme.colors.text}]}>

@@ -137,6 +137,7 @@
       "simplePassword": "Simple Password:",
       "differentPlaces": "You should backup your mnemonic and password in different places.",
       "neverRecover": "If you forget your password, you will never recover your private key.",
+      "forgetPassword": "If you forget your password, you can recover your wallet by importing your mnemonic again.",
       "rememberSimplePassword": "You have to remember your simplePassword.",
       "startButton": "Use Doom Wallet",
       "resetButton": "Reset",
@@ -159,7 +160,10 @@
         "4": "Safe: strong protection from offline slow-hash scenario. (guesses >= 10^10)"
       },
       "mnemonic": "Mnemonic:",
+      "password": "Password:",
+      "unlockPassword": "Unlock Password:",
       "caption": "If you forget your password, you can never recover your private key. \nInput your password(It should be very complex):",
+      "unlockCaption": "You need a unlock password for imported wallet. It's used to encrypt and decrypt the mnemonic. \nIf you forget your unlock password, you can recover your wallet by import the mnemonic again.",
       "placeholder": "Password: at least 8 characters",
       "passwordStrengthLabel": "Password Strength:",
       "securityButton": "Security Setting"
@@ -175,6 +179,7 @@
       "withoutBiometrics": "Sorry, your device don't support biometrics. It's better to use another device which support biometrics.\nOr, you need to enroll your biometrics in your device.",
       "biometricsLabel": "Biometrics:",
       "passwordLabel": "Password:",
+      "unlockPasswordLabel": "Unlock Password:",
       "passwordOption": "Login by full password:",
       "simplePasswordLabel": "Simple Password:",
       "simplePasswordCaption": "Simple password is a password which is easy to remember. If you trust this device, you can use simple password to login.",

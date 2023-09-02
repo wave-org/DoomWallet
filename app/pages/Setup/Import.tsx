@@ -137,11 +137,19 @@ const ImportWalletPage = ({
     if (wallet.validateMnemonic(mnemonic) === false) {
       setShowWordNotInList(true);
     } else {
-      navigation.navigate(Routes.ROOT.SECURITY_SETTING, {
-        mnemonic,
-        password: usePassphrase ? passphrase : undefined,
-        setupComplete,
-      });
+      if (!usePassphrase) {
+        navigation.navigate(Routes.ROOT.SETPASSWORD, {
+          mnemonic,
+          setupComplete,
+          usingUnlockPassword: true,
+        });
+      } else {
+        navigation.navigate(Routes.ROOT.SECURITY_SETTING, {
+          mnemonic,
+          password: passphrase!,
+          setupComplete,
+        });
+      }
     }
   };
 

@@ -8,6 +8,8 @@ import {
   encryptWEF,
   decryptWEF,
   isWEF,
+  decrypt,
+  encrypt,
 } from 'doom-wallet-core';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
@@ -29,9 +31,13 @@ export type PasswordType =
 
 type WalletSetupParam = {
   mnemonic: string;
+  /// Doom type: Wallet created by Doom will use this password and mnemonic to generate private key. So, this password is seed password.
+  /// Imported type: Imported wallet will use this password to encrypt and decrypt mnemonic. usingUnlockPassword will be true.
   password: string;
   // how to store password
   passwordType: PasswordType;
+  // if usingUnlockPassword is true, the password is used to encrypt and decrypt mnemonic
+  usingUnlockPassword?: boolean;
   useBiometrics: boolean;
   simplePassword?: string;
 };
@@ -39,6 +45,7 @@ type WalletSetupParam = {
 let walletSecret: WalletSecret | null = null;
 /// stored in Keychain. If user use biometrics, this is encrypted by biometrics.
 type WalletSecret = {
+  /// when usingUnlockPassword is true, mnemonic will be encrypted before stored in Keychain
   mnemonic: string;
   /// if only use biometrics, password will be stored here
   password?: string;
@@ -47,7 +54,6 @@ let walletHeader: WalletHeader | null = null;
 export const maxTryTimes = 5;
 /// stored in EncryptedStorage
 export type WalletHeader = {
-  // TODO unlock password type
   passwordType: PasswordType;
   useBiometrics: boolean;
   encryptedPassword: string | undefined;
@@ -56,6 +62,8 @@ export type WalletHeader = {
   triedTimes: number;
   /// if it is nil, use default derivation path
   evmDerivationPath?: string;
+  // For imported wallet, there may be no password. In this case, use unlockPassword to encrypt and decrypt mnemonic
+  usingUnlockPassword?: boolean;
 };
 const KEY_WALLET_HEADER = 'wallet_header';
 
@@ -238,7 +246,20 @@ export async function loadWallet(
     throw new Error('correctPassword is undefined');
   }
   walletSecret.password = correctPassword;
-  const key = Key.fromMnemonic(walletSecret.mnemonic, correctPassword);
+  if (walletHeader.usingUnlockPassword === true) {
+    // while usingUnlockPassword, the mnemonic is encrypted, we need to decrypt it
+    try {
+      let mnemonic = decrypt(walletSecret.mnemonic, correctPassword);
+      walletSecret.mnemonic = mnemonic;
+    } catch (error) {
+      console.log('decrypt mnemonic failed');
+      throw new Error('decrypt mnemonic failed');
+    }
+  }
+  const key = Key.fromMnemonic(
+    walletSecret.mnemonic,
+    walletHeader.usingUnlockPassword === true ? undefined : correctPassword,
+  );
   wallet = {
     EVMWallet: new EVMWallet(key),
     BTCWallet: new BTCWallet(key),
@@ -251,35 +272,65 @@ export async function loadWallet(
 
 export async function setupWallet(walletInfo: WalletSetupParam) {
   // get password hash.
-  const passwordHash = Key.hashPassword(walletInfo.password);
+  const passwordHash: string = Key.hashPassword(walletInfo.password);
+  let usingUnlockPassword = walletInfo.usingUnlockPassword === true;
+
   walletHeader = {
     passwordType: walletInfo.passwordType,
     useBiometrics: walletInfo.useBiometrics,
     passwordHash: passwordHash,
     encryptedPassword: undefined,
     triedTimes: 0,
+    usingUnlockPassword: usingUnlockPassword,
   };
-  if (walletInfo.passwordType === 'FullPassword') {
-    walletSecret = {
-      mnemonic: walletInfo.mnemonic,
-    };
-  } else if (walletInfo.passwordType === 'NoPassword') {
-    walletSecret = {
-      mnemonic: walletInfo.mnemonic,
-      password: walletInfo.password,
-    };
-  } else {
-    if (walletInfo.simplePassword === undefined) {
-      throw new Error('simplePassword is undefined');
+  if (!usingUnlockPassword) {
+    if (walletInfo.passwordType === 'FullPassword') {
+      walletSecret = {
+        mnemonic: walletInfo.mnemonic,
+      };
+    } else if (walletInfo.passwordType === 'NoPassword') {
+      walletSecret = {
+        mnemonic: walletInfo.mnemonic,
+        password: walletInfo.password,
+      };
+    } else {
+      if (walletInfo.simplePassword === undefined) {
+        throw new Error('simplePassword is undefined');
+      }
+      walletHeader.encryptedPassword = encryptPassword(
+        walletInfo.password,
+        walletInfo.simplePassword,
+      );
+      walletSecret = {
+        mnemonic: walletInfo.mnemonic,
+      };
     }
-    walletHeader.encryptedPassword = encryptPassword(
-      walletInfo.password,
-      walletInfo.simplePassword,
-    );
-    walletSecret = {
-      mnemonic: walletInfo.mnemonic,
-    };
+  } else {
+    // usingUnlockPassword
+    let encryptedMnemonic = encrypt(walletInfo.mnemonic, walletInfo.password);
+    if (walletInfo.passwordType === 'FullPassword') {
+      walletSecret = {
+        mnemonic: encryptedMnemonic,
+      };
+    } else if (walletInfo.passwordType === 'NoPassword') {
+      walletSecret = {
+        mnemonic: encryptedMnemonic,
+        password: walletInfo.password!,
+      };
+    } else {
+      if (walletInfo.simplePassword === undefined) {
+        throw new Error('simplePassword is undefined');
+      }
+      walletHeader.encryptedPassword = encryptPassword(
+        walletInfo.password,
+        walletInfo.simplePassword,
+      );
+      walletSecret = {
+        mnemonic: encryptedMnemonic,
+      };
+    }
   }
+
   let keyChainOptions: Keychain.Options | undefined;
   if (walletInfo.useBiometrics) {
     keyChainOptions = {
@@ -312,12 +363,21 @@ export async function setupWallet(walletInfo: WalletSetupParam) {
     JSON.stringify(walletHeader),
   );
 
-  const key = Key.fromMnemonic(walletInfo.mnemonic, walletInfo.password);
+  const key = Key.fromMnemonic(
+    walletInfo.mnemonic,
+    usingUnlockPassword ? undefined : walletInfo.password,
+  );
   wallet = {
     EVMWallet: new EVMWallet(key),
     BTCWallet: new BTCWallet(key),
   };
-  walletSecret.password = walletInfo.password;
+  // show mnemonic and password in security setting page
+  if (usingUnlockPassword) {
+    walletSecret.password = walletInfo.password;
+    walletSecret.mnemonic = walletInfo.mnemonic;
+  } else {
+    walletSecret.password = walletInfo.password;
+  }
 }
 
 export async function logout() {
@@ -439,6 +499,7 @@ export function getWalletSecuritySetting() {
     password: walletSecret!.password,
     passwordType: walletHeader!.passwordType,
     useBiometrics: walletHeader!.useBiometrics,
+    usingUnlockPassword: walletHeader!.usingUnlockPassword === true,
   };
 }
 
@@ -559,6 +620,11 @@ export function validateMnemonic(mnemonic: string) {
 export function getExportData(): WalletExportFormat {
   if (wallet === null) {
     throw new Error('wallet is null');
+  }
+  if (walletHeader?.usingUnlockPassword === true) {
+    return {
+      mnemonic: walletSecret!.mnemonic,
+    };
   }
   return {
     mnemonic: walletSecret!.mnemonic,

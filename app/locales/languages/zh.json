@@ -139,6 +139,7 @@
       "simplePassword": "简单密码：",
       "differentPlaces": "你应该将助记词和密码备份在不同的地方。",
       "neverRecover": "如果你忘记你的密码， 你将无法恢复你的私钥。",
+      "forgetPassword": "如果你忘记密码，可以通过重新导入助记词来恢复你的钱包。",
       "rememberSimplePassword": "你必须记住你的简单密码。",
       "startButton": "使用钱包",
       "resetButton": "重置",
@@ -161,7 +162,10 @@
         "4": "安全: 对离线攻击有很强程度的保护效果 (平均尝试次数 >= 10^10)"
       },
       "mnemonic": "助记词：",
+      "password": "密码：",
+      "unlockPassword": "解锁密码：",
       "caption": " 如果你忘记了你的密码，你不可能再恢复你的私钥\n请输入一个非常复杂的密码：",
+      "unlockCaption": "对于导入钱包，你需要一个解锁密码。这个密码用于加密和解密你的助记词。\n 如果你忘记密码，可以通过重新导入助记词来恢复你的钱包。",
       "placeholder": "密码长度至少8位",
       "passwordStrengthLabel": "密码强度：",
       "securityButton": "安全设置"
@@ -177,6 +181,7 @@
       "withoutBiometrics": "你的设备可能不支持生物信息。 你可以使用支持人脸或者指纹的设备。\n或者， 你需要在你的设备中添加指纹或在人脸设定。",
       "biometricsLabel": "生物信息：",
       "passwordLabel": "密码：",
+      "unlockPasswordLabel": "解锁密码：",
       "passwordOption": "使用完整密码解锁：",
       "simplePasswordLabel": "简单密码：",
       "simplePasswordCaption": "简单密码用于简化解锁流程。 如果你信任这个设备， 你可以使用简单密码来解锁。",

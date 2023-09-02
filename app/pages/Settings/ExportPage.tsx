@@ -18,7 +18,8 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const ExportPage = ({navigation}: {navigation: any}) => {
-  const {mnemonic, password} = wallet.getWalletSecuritySetting();
+  const {mnemonic, password, usingUnlockPassword} =
+    wallet.getWalletSecuritySetting();
 
   const theme = useTheme();
 
@@ -54,7 +55,7 @@ const ExportPage = ({navigation}: {navigation: any}) => {
         </Text>
         <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
 
-        {password && password.length > 0 && (
+        {usingUnlockPassword !== true && password && password.length > 0 && (
           <View
             style={{
               height: 44,

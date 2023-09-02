@@ -34,7 +34,11 @@ const SecuritySettingPage = ({
 }) => {
   const setupComplete =
     route.params !== undefined ? route.params.setupComplete : undefined;
-  const {mnemonic, password}: {mnemonic: string; password: string} =
+  const {
+    mnemonic,
+    password,
+    usingUnlockPassword,
+  }: {mnemonic: string; password: string; usingUnlockPassword?: boolean} =
     setupComplete !== undefined ? route.params : getWalletSecuritySetting();
   const {t} = useTranslation();
 
@@ -233,6 +237,7 @@ const SecuritySettingPage = ({
       passwordType,
       simplePassword: useSimplePassword ? simplePassword : undefined,
       useBiometrics: usebiometrics,
+      usingUnlockPassword: usingUnlockPassword === true,
     };
     if (setupComplete !== undefined) {
       navigation.popToTop();
@@ -311,7 +316,11 @@ const SecuritySettingPage = ({
               <View style={styles.subArea}>
                 <View style={styles.line}>
                   <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                    <Trans>securitySetting.passwordLabel</Trans>
+                    {usingUnlockPassword ? (
+                      <Trans>securitySetting.unlockPasswordLabel</Trans>
+                    ) : (
+                      <Trans>securitySetting.passwordLabel</Trans>
+                    )}
                   </Text>
                   <Text style={[styles.lineText, {color: theme.colors.text}]}>
                     {password}

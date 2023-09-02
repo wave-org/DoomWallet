@@ -151,6 +151,20 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               />
             </View>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.cell} onPress={jumpToSecuritySetting}>
+            <MCIcon name="security" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>account.security</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={jumpToExportWallet}>
             <MCIcon
               name="restore-alert"
@@ -188,20 +202,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
           <Text style={[styles.sectionHeader, {color: theme.colors.title}]}>
             <Trans>account.setting</Trans>
           </Text>
-          <TouchableOpacity style={styles.cell} onPress={jumpToSecuritySetting}>
-            <MCIcon name="security" size={25} color={theme.colors.primary} />
-            <View
-              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
-              <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>account.security</Trans>
-              </Text>
-              <Icon
-                name="chevron-forward"
-                size={24}
-                color={theme.colors.placeholder}
-              />
-            </View>
-          </TouchableOpacity>
+
           <TouchableOpacity style={styles.cell} onPress={jumpToAutoLock}>
             <Icon name="timer-outline" size={25} color={theme.colors.primary} />
             <View
