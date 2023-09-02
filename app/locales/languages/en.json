@@ -89,6 +89,8 @@
       "alertCancel": "Cancel",
       "alertConfirm": "Reset Wallet",
       "setting": "Setting",
+      "share": "Share to Friends",
+      "shareTitle": "Doom Wallet : a mobile airgap cold wallet",
       "security": "Security Setting",
       "autoLock": "Auto Lock",
       "language": "Language",

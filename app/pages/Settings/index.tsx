@@ -9,6 +9,7 @@ import {
   Alert,
   ScrollView,
   Switch,
+  Share,
 } from 'react-native';
 import {useTranslation, Trans} from 'react-i18next';
 
@@ -99,6 +100,18 @@ const AccountPage = ({navigation}: {navigation: any}) => {
     InAppReview.RequestInAppReview().catch(error => {
       console.log(error);
     });
+  };
+
+  const onShare = async () => {
+    try {
+      await Share.share({
+        message: t('account.shareTitle'),
+        title: t('account.shareTitle'),
+        url: 'https://wave-org.github.io/DoomWallet/',
+      });
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   const {airgapMode, toggleAirgapMode} = useAirgapMode();
@@ -284,6 +297,20 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               </Text>
             </View>
           </View>
+          <TouchableOpacity style={styles.cell} onPress={onShare}>
+            <Icon name="share-outline" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>account.share</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
 
           <TouchableOpacity style={styles.cell} onPress={jumpToPrivacyPolicy}>
             <Icon
