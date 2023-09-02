@@ -4,6 +4,10 @@ import {
   SignRequest,
   BTCWallet,
   BTCSignRequest,
+  WalletExportFormat,
+  encryptWEF,
+  decryptWEF,
+  isWEF,
 } from 'doom-wallet-core';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
@@ -26,6 +30,7 @@ export type PasswordType =
 type WalletSetupParam = {
   mnemonic: string;
   password: string;
+  // how to store password
   passwordType: PasswordType;
   useBiometrics: boolean;
   simplePassword?: string;
@@ -42,6 +47,7 @@ let walletHeader: WalletHeader | null = null;
 export const maxTryTimes = 5;
 /// stored in EncryptedStorage
 export type WalletHeader = {
+  // TODO unlock password type
   passwordType: PasswordType;
   useBiometrics: boolean;
   encryptedPassword: string | undefined;
@@ -365,7 +371,7 @@ export function generateRandomMnemonic() {
 }
 
 export function generateMnemonicByHashingText(text: string) {
-  return Key.generateMenoicByHashString(text);
+  return Key.generateMnemonicByHashString(text);
 }
 
 export function checkEVMAddressCanBeDerived(
@@ -430,7 +436,7 @@ export function getWalletSecuritySetting() {
   }
   return {
     mnemonic: walletSecret!.mnemonic,
-    password: walletSecret!.password!,
+    password: walletSecret!.password,
     passwordType: walletHeader!.passwordType,
     useBiometrics: walletHeader!.useBiometrics,
   };
@@ -544,4 +550,36 @@ export function setDefaultDerivationPathForEVMWallet() {
   wallet.EVMWallet.useDefaultDerivationPath();
   walletHeader!.evmDerivationPath = undefined;
   EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
+}
+
+export function validateMnemonic(mnemonic: string) {
+  return Key.validateMnemonic(mnemonic);
+}
+
+export function getExportData(): WalletExportFormat {
+  if (wallet === null) {
+    throw new Error('wallet is null');
+  }
+  return {
+    mnemonic: walletSecret!.mnemonic,
+    password: walletSecret!.password,
+  };
+}
+
+export function encryptWalletExportData(
+  data: WalletExportFormat,
+  password: string,
+): string {
+  return encryptWEF(data, password);
+}
+
+export function isWalletExportData(data: string): boolean {
+  return isWEF(data);
+}
+
+export function decryptWalletExportData(
+  data: string,
+  password: string,
+): WalletExportFormat {
+  return decryptWEF(data, password);
 }

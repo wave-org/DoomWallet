@@ -5,6 +5,7 @@ const Routes = {
     SETUP: 'Setup',
     SETPASSWORD: 'SetPassword',
     SECURITY_SETTING: 'SecuritySetting',
+    ImportWallet: 'ImportWallet',
   },
   TABS: {
     FIND: 'FIND',
@@ -23,6 +24,8 @@ const Routes = {
     Tools: 'Tools',
     QRResult: 'QRResult',
     QRGenerator: 'QRGenerator',
+    ExportWallet: 'ExportWallet',
+    ExportWalletByQRCode: 'ExportWalletByQRCode',
   },
 };
 

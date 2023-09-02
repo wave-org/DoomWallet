@@ -11,6 +11,9 @@ import {useAirgapMode, AirgapProvider} from './wallet/airgap';
 import ToolsPage from './pages/Tools';
 import QRResultPage from './pages/Tools/QRCodeResult';
 import QRCodeGenerator from './pages/Tools/QRCodeGenerator';
+import ExportPage from './pages/Settings/ExportPage';
+import ExportByQRCode from './pages/Settings/ExportByQRCode';
+import ImportWalletPage from './pages/Setup/Import';
 import FindPage from './pages/Find';
 import AccountPage from './pages/Settings';
 import QRScannerPage from './pages/QRScanner';
@@ -260,6 +263,11 @@ function App(): JSX.Element {
               component={SecuritySettingPage}
               options={{title: t('securitySetting.title')}}
             />
+            <RootStack.Screen
+              name={Routes.ROOT.ImportWallet}
+              options={{title: t('import.title')}}
+              component={ImportWalletPage}
+            />
           </RootStack.Group>
           <RootStack.Group>
             <RootStack.Screen
@@ -281,6 +289,16 @@ function App(): JSX.Element {
               name={Routes.TABS.QRGenerator}
               options={{title: t('tools.QRGeneratorTitle')}}
               component={QRCodeGenerator}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.ExportWallet}
+              options={{title: t('export.title')}}
+              component={ExportPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.ExportWalletByQRCode}
+              options={{title: t('export.byQRCode')}}
+              component={ExportByQRCode}
             />
             <RootStack.Screen
               name={Routes.TABS.CONNECTION}

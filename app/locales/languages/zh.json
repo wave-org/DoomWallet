@@ -31,7 +31,6 @@
       "getPermissionButton": "获取相机权限",
       "cameraPermissionBlocked": "请到设置中开启相机权限。"
     },
-
     "tools": {
       "title": "工具",
       "offlineWarning": "在完全离线的设备上使用末日钱包会更安全！",
@@ -85,6 +84,7 @@
       "btcAddress": "Bitcoin地址列表",
       "evmWallet": "EVM钱包",
       "btcWallet": "比特币钱包",
+      "exportWallet": "导出钱包",
       "reset": "重置钱包",
       "alertTitle": "警告",
       "alertMessage": "是否确认要重置密码？ 如果你没有备份助记词和密码，你将无法恢复你的钱包！",
@@ -103,6 +103,30 @@
       "github": "Github",
       "rating": "点评一下",
       "issue": "反馈问题"
+    },
+    "export": {
+      "title": "导出钱包",
+      "byQRCode": "使用二维码导出",
+      "exportedData": "导出数据：",
+      "qrCodePassword": "二维码密码：",
+      "passwordPlaceholder": "密码至少4个字符",
+      "passwordCaption": "解锁密码用于加密二维码。 当你使用这个二维码导入钱包时，需要输入这个密码进行解锁。"
+    },
+    "import": {
+      "title": "导入钱包",
+      "qrcodeCaption": "你可以通过二维码导入钱包， 二维码必须是末日钱包生成的。",
+      "byQRCode": "使用二维码导入",
+      "notWEF": "这不是 末日钱包 格式的二维码！",
+      "mnemonicPlaceholder": "输入你的助记词，至少12个单词，用空格分隔",
+      "mnemonicWrong": "助记词错误，请检查格式",
+      "wordNotInList": "助记词错误，一些单词不在列表中！",
+      "passphrase": "密码：",
+      "passphrasePlaceholder": "助记词密码，用于生成种子",
+      "encrypted": "加密数据：",
+      "unlockFailed": "解锁失败，请检查密码！",
+      "unlock": "解锁",
+      "unlockPassword": "解锁密码：",
+      "unlockPasswordPlaceholder": "输入二维码生成时的密码"
     },
     "setup": {
       "title": "创建钱包",
@@ -124,7 +148,8 @@
       "hashPlaceholder": "输入随机文字，至少16个字符",
       "hashButton": "通过哈希生成助记词",
       "passwordCaption": "现在， 你可以设置密码了。",
-      "passwordButton": "去设置密码"
+      "passwordButton": "去设置密码",
+      "import": "导入钱包"
     },
     "setPassword": {
       "title": "设置密码",

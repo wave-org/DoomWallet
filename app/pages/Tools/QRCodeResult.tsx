@@ -12,7 +12,6 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'react-native-toast-message';
 
 const QRResultPage = ({route}: {route: any}) => {
-  // const ur = route.params.ur as UR;
   const result = route.params.result as string;
   const theme = useTheme();
   const {t} = useTranslation();

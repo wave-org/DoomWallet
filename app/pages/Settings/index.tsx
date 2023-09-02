@@ -57,6 +57,10 @@ const AccountPage = ({navigation}: {navigation: any}) => {
     navigation.navigate(Routes.TABS.BTCWallet);
   };
 
+  const jumpToExportWallet = () => {
+    navigation.navigate(Routes.TABS.ExportWallet);
+  };
+
   const jumpToSecuritySetting = () => {
     navigation.navigate(Routes.ROOT.SECURITY_SETTING);
   };
@@ -139,6 +143,24 @@ const AccountPage = ({navigation}: {navigation: any}) => {
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
                 <Trans>account.btcWallet</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cell} onPress={jumpToExportWallet}>
+            <MCIcon
+              name="restore-alert"
+              size={25}
+              color={theme.colors.primary}
+            />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>account.exportWallet</Trans>
               </Text>
               <Icon
                 name="chevron-forward"

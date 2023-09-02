@@ -12,9 +12,11 @@ import {
 import {Trans, useTranslation} from 'react-i18next';
 import {useTheme} from '../../util/theme';
 import QRCode from 'react-native-qrcode-svg';
+import * as wallet from '../../wallet';
 
-const QRCodeGenerator = () => {
-  const [text, setText] = React.useState<string>('');
+const ExportByQRCode = () => {
+  const exportedData = wallet.getExportData();
+  const [password, setPassword] = React.useState<string>('');
   const [qrCode, setQRCode] = React.useState<string>('');
   const [editing, setEditing] = React.useState<boolean>(false);
   const theme = useTheme();
@@ -22,7 +24,8 @@ const QRCodeGenerator = () => {
   const scrollViewRef = React.useRef<ScrollView>(null);
   const generate = () => {
     Keyboard.dismiss();
-    setQRCode(text);
+    let encrypted = wallet.encryptWalletExportData(exportedData, password);
+    setQRCode(encrypted);
     setTimeout(() => {
       if (scrollViewRef.current) {
         scrollViewRef.current.scrollToEnd({animated: true});
@@ -30,6 +33,10 @@ const QRCodeGenerator = () => {
     }, 100);
   };
   const {width} = useWindowDimensions();
+
+  const buttonIsDisable = () => {
+    return password.length < 4;
+  };
 
   return (
     <SafeAreaView
@@ -46,28 +53,72 @@ const QRCodeGenerator = () => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            padding: 20,
+            color: theme.colors.title,
+            width: '100%',
+            textAlign: 'left',
+          }}>
+          <Trans>export.exportedData</Trans>
+        </Text>
+        <View
+          style={{
+            paddingLeft: 20,
+            paddingRight: 20,
+            width: '100%',
+          }}>
+          <Text
+            style={{
+              borderColor: theme.colors.border,
+              backgroundColor: theme.colors.surface,
+              color: theme.colors.text,
+              fontSize: 16,
+              marginBottom: 10,
+              textAlign: 'left',
+              width: '98%',
+              padding: 15,
+              borderWidth: 1,
+              borderRadius: 8,
+              overflow: 'hidden',
+            }}>
+            {JSON.stringify(exportedData, null, 4)}
+          </Text>
+        </View>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            padding: 20,
+            color: theme.colors.title,
+            width: '100%',
+            textAlign: 'left',
+          }}>
+          <Trans>export.qrCodePassword</Trans>
+        </Text>
+
         <TextInput
           style={{
             borderColor: editing ? theme.colors.primary : theme.colors.border,
             color: theme.colors.text,
-            height: 360,
+            height: 60,
             width: '90%',
             borderWidth: 1.5,
             padding: 10,
-            marginTop: 20,
             fontSize: 18,
             textAlignVertical: 'top',
             borderRadius: 4,
           }}
-          placeholder={t('tools.generatorPlaceHolder')}
+          placeholder={t('export.passwordPlaceholder')}
           placeholderTextColor={theme.colors.placeholder}
-          onChangeText={newText => setText(newText)}
-          value={text}
+          onChangeText={newText => setPassword(newText)}
+          value={password}
           autoComplete="off"
           autoCorrect={false}
           returnKeyType="done"
-          maxLength={1024}
-          multiline={true}
+          maxLength={32}
           // inputMode="search"
           clearButtonMode="while-editing"
           autoCapitalize="none"
@@ -79,11 +130,22 @@ const QRCodeGenerator = () => {
           }}
           inputMode="text"
         />
+        <Text
+          style={{
+            fontSize: 15,
+            padding: 20,
+            color: theme.colors.placeholder,
+            width: '100%',
+            textAlign: 'left',
+          }}>
+          <Trans>export.passwordCaption</Trans>
+        </Text>
         <TouchableOpacity
           activeOpacity={0.6}
           style={{
-            height: 36,
-            width: '60%',
+            opacity: buttonIsDisable() ? 0.5 : 1,
+            height: 44,
+            width: '75%',
             marginTop: 25,
             marginBottom: 25,
             flexDirection: 'column',
@@ -92,6 +154,7 @@ const QRCodeGenerator = () => {
             borderRadius: 22,
             backgroundColor: theme.colors.primary,
           }}
+          disabled={buttonIsDisable()}
           onPress={generate}>
           <Text style={{fontSize: 17, color: theme.colors.inverse}}>
             <Trans>tools.generate</Trans>
@@ -112,4 +175,4 @@ const QRCodeGenerator = () => {
   );
 };
 
-export default QRCodeGenerator;
+export default ExportByQRCode;

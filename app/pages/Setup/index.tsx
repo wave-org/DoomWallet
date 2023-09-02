@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import Routes from '../../routes/Routes';
 import * as wallet from '../../wallet';
@@ -30,6 +31,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
     React.useState<wallet.PasswordType>('FullPassword');
   const [simplePassword, setSimplePassword] = React.useState<string>('');
   const {t} = useTranslation();
+  const {height} = Dimensions.get('window');
 
   const generateRandomMnemonic = () => {
     setText('');
@@ -48,6 +50,10 @@ const SetupPage = ({navigation}: {navigation: any}) => {
 
   const goToSetPassword = () => {
     navigation.navigate(Routes.ROOT.SETPASSWORD, {mnemonic, setupComplete});
+  };
+
+  const goToImportWallet = () => {
+    navigation.navigate(Routes.ROOT.ImportWallet, {setupComplete});
   };
 
   const reset = () => {
@@ -222,88 +228,14 @@ const SetupPage = ({navigation}: {navigation: any}) => {
         onPress={Keyboard.dismiss}
         accessible={false}>
         <ScrollView style={styles.container}>
-          <View style={styles.textContainer}>
-            <Text style={[styles.normalText, {color: theme.colors.text}]}>
-              <Trans>setup.caption</Trans>
-            </Text>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              style={[
-                styles.button,
-                {
-                  backgroundColor: theme.colors.primary,
-                },
-              ]}
-              onPress={generateRandomMnemonic}>
-              <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                <Trans>setup.randomButton</Trans>
-              </Text>
-            </TouchableOpacity>
-
-            <Text style={[styles.textInputLabel, {color: theme.colors.text}]}>
-              <Trans>setup.hashCaption</Trans>
-            </Text>
-            <TextInput
-              style={[
-                styles.textInput,
-                {
-                  borderColor: editingText
-                    ? theme.colors.primary
-                    : theme.colors.border,
-                  color: theme.colors.text,
-                },
-              ]}
-              placeholder={t('setup.hashPlaceholder')}
-              placeholderTextColor={theme.colors.placeholder}
-              onChangeText={newText => setText(newText)}
-              defaultValue={text}
-              autoComplete="off"
-              multiline={true}
-              numberOfLines={2}
-              autoCorrect={false}
-              returnKeyType="done"
-              clearButtonMode="while-editing"
-              autoCapitalize="none"
-              onFocus={() => {
-                setEditingText(true);
-              }}
-              onBlur={() => {
-                setEditingText(false);
-              }}
-              inputMode="text"
-            />
-            <TouchableOpacity
-              activeOpacity={0.6}
-              disabled={hashButtonDisable()}
-              style={[
-                styles.button,
-                {
-                  opacity: hashButtonDisable() ? 0.5 : 1,
-                  backgroundColor: theme.colors.primary,
-                },
-              ]}
-              onPress={generateMnemonicByText}>
-              <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                <Trans>setup.hashButton</Trans>
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {mnemonic !== '' ? (
-            <View style={styles.mnemonicContainer}>
-              {/* <Text>{mnemonic}</Text> */}
-              <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
-
-              <Text
-                style={[
-                  styles.normalText,
-                  {
-                    paddingLeft: 20,
-                    color: theme.colors.title,
-                    textAlign: 'center',
-                  },
-                ]}>
-                <Trans>setup.passwordCaption</Trans>
+          <View
+            style={{
+              minHeight: height - 200,
+              width: '100%',
+            }}>
+            <View style={styles.textContainer}>
+              <Text style={[styles.normalText, {color: theme.colors.text}]}>
+                <Trans>setup.caption</Trans>
               </Text>
               <TouchableOpacity
                 activeOpacity={0.6}
@@ -313,16 +245,121 @@ const SetupPage = ({navigation}: {navigation: any}) => {
                     backgroundColor: theme.colors.primary,
                   },
                 ]}
-                onPress={goToSetPassword}>
+                onPress={generateRandomMnemonic}>
                 <Text
                   style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                  <Trans>setup.passwordButton</Trans>
+                  <Trans>setup.randomButton</Trans>
+                </Text>
+              </TouchableOpacity>
+
+              <Text style={[styles.textInputLabel, {color: theme.colors.text}]}>
+                <Trans>setup.hashCaption</Trans>
+              </Text>
+              <TextInput
+                style={[
+                  styles.textInput,
+                  {
+                    borderColor: editingText
+                      ? theme.colors.primary
+                      : theme.colors.border,
+                    color: theme.colors.text,
+                  },
+                ]}
+                placeholder={t('setup.hashPlaceholder')}
+                placeholderTextColor={theme.colors.placeholder}
+                onChangeText={newText => setText(newText)}
+                defaultValue={text}
+                autoComplete="off"
+                multiline={true}
+                numberOfLines={2}
+                autoCorrect={false}
+                returnKeyType="done"
+                clearButtonMode="while-editing"
+                autoCapitalize="none"
+                onFocus={() => {
+                  setEditingText(true);
+                }}
+                onBlur={() => {
+                  setEditingText(false);
+                }}
+                inputMode="text"
+              />
+              <TouchableOpacity
+                activeOpacity={0.6}
+                disabled={hashButtonDisable()}
+                style={[
+                  styles.button,
+                  {
+                    opacity: hashButtonDisable() ? 0.5 : 1,
+                    backgroundColor: theme.colors.primary,
+                  },
+                ]}
+                onPress={generateMnemonicByText}>
+                <Text
+                  style={[styles.buttonText, {color: theme.colors.inverse}]}>
+                  <Trans>setup.hashButton</Trans>
                 </Text>
               </TouchableOpacity>
             </View>
-          ) : (
-            <View style={styles.mnemonicContainer} />
-          )}
+
+            {mnemonic !== '' ? (
+              <View style={styles.mnemonicContainer}>
+                {/* <Text>{mnemonic}</Text> */}
+                <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
+
+                <Text
+                  style={[
+                    styles.normalText,
+                    {
+                      paddingLeft: 20,
+                      color: theme.colors.title,
+                      textAlign: 'center',
+                    },
+                  ]}>
+                  <Trans>setup.passwordCaption</Trans>
+                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  style={[
+                    styles.button,
+                    {
+                      backgroundColor: theme.colors.primary,
+                    },
+                  ]}
+                  onPress={goToSetPassword}>
+                  <Text
+                    style={[styles.buttonText, {color: theme.colors.inverse}]}>
+                    <Trans>setup.passwordButton</Trans>
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.mnemonicContainer} />
+            )}
+          </View>
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity
+              style={{
+                height: 32,
+                paddingHorizontal: 44,
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 15,
+                backgroundColor: theme.colors.secondary,
+              }}
+              onPress={goToImportWallet}>
+              <Text style={{color: theme.colors.inverse, fontSize: 14}}>
+                <Trans>setup.import</Trans>
+              </Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
