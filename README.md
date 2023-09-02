@@ -4,7 +4,7 @@ Doom Wallet is a mobile cold wallet. You can use it to secure your private keys 
 
 You need to use Doom Wallet with an online wallet, like [MetaMask](https://metamask.io/), to send transactions to the network. You can use the QR code scanner to scan the transaction data from the online wallet, sign it and send it back to the online wallet.
 
-## Download Now
+## Download
 
 <a href="https://apps.apple.com/us/app/doom-wallet/id6455836435?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px; margin: 20px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1691020800" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;"></a>
 
@@ -59,5 +59,5 @@ We will support Bitcoin and other chains in the future.
 
 - [Create a new wallet](./docs/create.md)
 - [Import and Export](./docs/import.md)
-- [EVM wallet with MetaMask?](./docs/evm.md)
+- [EVM wallet with MetaMask](./docs/evm.md)
 - [Bitcoin wallet with BlueWallet](./docs/btc.md)
