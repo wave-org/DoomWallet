@@ -6,8 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Keyboard,
-  TouchableWithoutFeedback,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
 import Routes from '../../routes/Routes';
 import MnemonicView from '../../components/MnemonicView';
@@ -49,7 +49,7 @@ const SetPasswordPage = ({
   zxcvbnOptions.setOptions(options);
 
   const {t} = useTranslation();
-
+  const {height} = Dimensions.get('window');
   const passwordStrengthByScore = {
     0: t('setPassword.passwordStrengthByScore.0'),
     1: t('setPassword.passwordStrengthByScore.1'),
@@ -63,26 +63,48 @@ const SetPasswordPage = ({
     return passwordStrengthByScore[score];
   };
 
+  const buttonDisabled = () => {
+    return password.length < 8;
+  };
+
   const theme = useTheme();
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback
-        style={styles.container}
-        onPress={Keyboard.dismiss}
-        accessible={false}>
-        <View style={styles.container}>
-          <View style={styles.textContainer}>
-            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-              <Trans>setPassword.mnemonic</Trans>
-            </Text>
-            <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
-            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-              {usingUnlockPassword === true ? (
-                <Trans>setPassword.unlockPassword</Trans>
-              ) : (
-                <Trans>setPassword.password</Trans>
-              )}
-            </Text>
+      <ScrollView
+        style={{
+          width: '100%',
+          height: '100%',
+        }}
+        contentContainerStyle={{
+          width: '100%',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: 20,
+            minHeight: height - 220,
+          }}>
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            <Trans>setPassword.mnemonic</Trans>
+          </Text>
+          <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
+          <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+            {usingUnlockPassword === true ? (
+              <Trans>setPassword.unlockPassword</Trans>
+            ) : (
+              <Trans>setPassword.password</Trans>
+            )}
+          </Text>
+          <View
+            style={{
+              width: '100%',
+              paddingHorizontal: 15,
+              marginVertical: 10,
+            }}>
             <TextInput
               style={[
                 styles.textInput,
@@ -112,49 +134,55 @@ const SetPasswordPage = ({
               }}
               inputMode="text"
             />
-            <Text
-              style={[
-                styles.normalText,
-                {color: theme.colors.text, marginTop: 10},
-              ]}>
-              {usingUnlockPassword === true ? (
-                <Trans>setPassword.unlockCaption</Trans>
-              ) : (
-                <Trans>setPassword.caption</Trans>
-              )}
-            </Text>
-            {password.length >= 8 ? (
-              <View style={styles.passwordStrengthContainer}>
-                <Text
-                  style={[styles.highlightText, {color: theme.colors.title}]}>
-                  <Trans>setPassword.passwordStrengthLabel</Trans>
-                </Text>
-                <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                  {passwordStrength()}
-                </Text>
-              </View>
-            ) : null}
           </View>
-          <View style={styles.buttonContainer}>
-            {password.length >= 8 ? (
-              <TouchableOpacity
-                activeOpacity={0.6}
-                style={[
-                  styles.button,
-                  {
-                    backgroundColor: theme.colors.primary,
-                  },
-                ]}
-                onPress={goSecurityPage}>
-                <Text
-                  style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                  <Trans>setPassword.securityButton</Trans>
-                </Text>
-              </TouchableOpacity>
-            ) : null}
-          </View>
+
+          <Text
+            style={[
+              styles.normalText,
+              {color: theme.colors.text, marginTop: 10},
+            ]}>
+            {usingUnlockPassword === true ? (
+              <Trans>setPassword.unlockCaption</Trans>
+            ) : (
+              <Trans>setPassword.caption</Trans>
+            )}
+          </Text>
+          {password.length >= 8 ? (
+            <View style={styles.passwordStrengthContainer}>
+              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+                <Trans>setPassword.passwordStrengthLabel</Trans>
+              </Text>
+              <Text style={[styles.normalText, {color: theme.colors.text}]}>
+                {passwordStrength()}
+              </Text>
+            </View>
+          ) : null}
         </View>
-      </TouchableWithoutFeedback>
+        <View
+          style={{
+            width: '100%',
+            paddingHorizontal: 20,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            disabled={buttonDisabled()}
+            style={[
+              styles.button,
+              {
+                backgroundColor: theme.colors.primary,
+                opacity: buttonDisabled() ? 0.5 : 1,
+              },
+            ]}
+            onPress={goSecurityPage}>
+            <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
+              <Trans>setPassword.securityButton</Trans>
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -169,13 +197,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textContainer: {
-    flex: 2,
-    width: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: 20,
-  },
+
   passwordStrengthContainer: {
     width: '100%',
     marginTop: 20,
@@ -203,16 +225,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 50,
-    width: '85%',
+    width: '100%',
     borderWidth: 1.5,
     padding: 10,
     fontSize: 18,
     borderRadius: 4,
   },
-  buttonContainer: {
-    width: '100%',
-    padding: 30,
-  },
+
   button: {
     height: 44,
     width: '100%',

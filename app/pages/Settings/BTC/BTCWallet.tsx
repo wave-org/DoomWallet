@@ -120,12 +120,12 @@ const BTCWalletPage = ({navigation}: {navigation: any}) => {
           </Text>
         </View>
         <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
-          <TouchableOpacity style={styles.cell} onPress={jumpToAddressList}>
-            <MCIcon name="bitcoin" size={25} color={theme.colors.primary} />
+          <TouchableOpacity style={styles.cell} onPress={jumpToConnectionQR}>
+            <Icon name="qr-code" size={25} color={theme.colors.primary} />
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>BTC.addressList</Trans>
+                <Trans>account.connection</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
@@ -134,13 +134,12 @@ const BTCWalletPage = ({navigation}: {navigation: any}) => {
               />
             </View>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.cell} onPress={jumpToConnectionQR}>
-            <Icon name="qr-code" size={25} color={theme.colors.primary} />
+          <TouchableOpacity style={styles.cell} onPress={jumpToAddressList}>
+            <MCIcon name="bitcoin" size={25} color={theme.colors.primary} />
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>account.connection</Trans>
+                <Trans>BTC.addressList</Trans>
               </Text>
               <Icon
                 name="chevron-forward"

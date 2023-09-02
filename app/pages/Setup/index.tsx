@@ -122,102 +122,109 @@ const SetupPage = ({navigation}: {navigation: any}) => {
   const successView = () => {
     return (
       <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback
-          style={styles.container}
-          onPress={Keyboard.dismiss}
-          accessible={false}>
-          <ScrollView style={styles.container}>
-            <View style={styles.textContainer}>
-              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                <Trans>setup.mnemonic</Trans>
+        <ScrollView
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+          contentContainerStyle={{
+            width: '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: 20,
+              minHeight: height - 250,
+            }}>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              <Trans>setup.mnemonic</Trans>
+            </Text>
+            <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                <Trans>setup.password</Trans>
               </Text>
-              <MnemonicView mnemonic={mnemonic.split(' ')} theme={theme} />
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  <Trans>setup.password</Trans>
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {password}
-                </Text>
-              </View>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  <Trans>setup.biometrics</Trans>
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {useBiometrics ? t('setup.use') : t('setup.notUse')}
-                </Text>
-              </View>
-              {simplePassword !== '' ? (
-                <View style={styles.line}>
-                  <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                    <Trans>setup.passwordType</Trans>
-                  </Text>
-                  <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                    {passwordType}
-                  </Text>
-                </View>
-              ) : null}
-              {simplePassword !== '' ? (
-                <View style={styles.line}>
-                  <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                    <Trans>setup.simplePassword</Trans>
-                  </Text>
-                  <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                    {simplePassword}
-                  </Text>
-                </View>
-              ) : null}
-
-              <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                <Trans>setup.differentPlaces</Trans>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {password}
               </Text>
-              <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                {usingUnlockPassword ? (
-                  <Trans>setup.forgetPassword</Trans>
-                ) : (
-                  <Trans>setup.neverRecover</Trans>
-                )}
-              </Text>
-              {simplePassword !== '' ? (
-                <Text style={[styles.normalText, {color: theme.colors.text}]}>
-                  <Trans>setup.rememberSimplePassword</Trans>
-                </Text>
-              ) : null}
-              <TouchableOpacity
-                activeOpacity={0.6}
-                style={[
-                  styles.button,
-                  {
-                    backgroundColor: theme.colors.primary,
-                  },
-                ]}
-                onPress={complete}>
-                <Text
-                  style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                  <Trans>setup.startButton</Trans>
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.6}
-                style={[
-                  styles.resetButton,
-                  {
-                    backgroundColor: theme.colors.error,
-                  },
-                ]}
-                onPress={reset}>
-                <Text
-                  style={[
-                    styles.resetButtonText,
-                    {color: theme.colors.inverse},
-                  ]}>
-                  <Trans>setup.resetButton</Trans>
-                </Text>
-              </TouchableOpacity>
             </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                <Trans>setup.biometrics</Trans>
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {useBiometrics ? t('setup.use') : t('setup.notUse')}
+              </Text>
+            </View>
+            {simplePassword !== '' ? (
+              <View style={styles.line}>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  <Trans>setup.passwordType</Trans>
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                  {passwordType}
+                </Text>
+              </View>
+            ) : null}
+            {simplePassword !== '' ? (
+              <View style={styles.line}>
+                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                  <Trans>setup.simplePassword</Trans>
+                </Text>
+                <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                  {simplePassword}
+                </Text>
+              </View>
+            ) : null}
+
+            <Text style={[styles.normalText, {color: theme.colors.text}]}>
+              <Trans>setup.differentPlaces</Trans>
+            </Text>
+            <Text style={[styles.normalText, {color: theme.colors.text}]}>
+              {usingUnlockPassword ? (
+                <Trans>setup.forgetPassword</Trans>
+              ) : (
+                <Trans>setup.neverRecover</Trans>
+              )}
+            </Text>
+            {simplePassword !== '' ? (
+              <Text style={[styles.normalText, {color: theme.colors.text}]}>
+                <Trans>setup.rememberSimplePassword</Trans>
+              </Text>
+            ) : null}
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={[
+              styles.button,
+              {
+                backgroundColor: theme.colors.primary,
+              },
+            ]}
+            onPress={complete}>
+            <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
+              <Trans>setup.startButton</Trans>
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={[
+              styles.resetButton,
+              {
+                backgroundColor: theme.colors.error,
+              },
+            ]}
+            onPress={reset}>
+            <Text
+              style={[styles.resetButtonText, {color: theme.colors.inverse}]}>
+              <Trans>setup.resetButton</Trans>
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
         {loading ? (
           <View style={styles.indicatorView}>
             <ActivityIndicator size="large" color={theme.colors.primary} />
@@ -321,7 +328,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
                     styles.normalText,
                     {
                       paddingLeft: 20,
-                      color: theme.colors.title,
+                      color: theme.colors.placeholder,
                       textAlign: 'center',
                     },
                   ]}>

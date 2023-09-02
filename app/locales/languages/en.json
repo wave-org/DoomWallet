@@ -162,7 +162,7 @@
       "mnemonic": "Mnemonic:",
       "password": "Password:",
       "unlockPassword": "Unlock Password:",
-      "caption": "If you forget your password, you can never recover your private key. \nInput your password(It should be very complex):",
+      "caption": "If you forget your password, you can never recover your private key.",
       "unlockCaption": "You need a unlock password for imported wallet. It's used to encrypt and decrypt the mnemonic. \nIf you forget your unlock password, you can recover your wallet by import the mnemonic again.",
       "placeholder": "Password: at least 8 characters",
       "passwordStrengthLabel": "Password Strength:",
