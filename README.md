@@ -1,6 +1,3 @@
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-
 # Doom Wallet
 
 Doom Wallet is a mobile cold wallet. You can use it to secure your private keys and sign transactions offline. It's supposed to be used in a dedicated offline device.
