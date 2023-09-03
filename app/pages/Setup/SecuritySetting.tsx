@@ -320,7 +320,7 @@ const SecuritySettingPage = ({
               flexDirection: 'column',
               alignItems: 'center',
               padding: 20,
-              height: height - 220,
+              minHeight: height - 220,
             }}>
             <Text style={[styles.normalText, {color: theme.colors.text}]}>
               <Trans>securitySetting.biometricsCaption</Trans>
