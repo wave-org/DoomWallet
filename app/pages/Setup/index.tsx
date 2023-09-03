@@ -88,7 +88,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
     // save to storage
     async function loadWallet() {
       try {
-        wallet.setupWallet({
+        await wallet.setupWallet({
           mnemonic,
           password,
           passwordType,
