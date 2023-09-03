@@ -56,7 +56,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
     }
   }, [walletHeader, t]);
 
-  const login = () => {
+  const login = React.useCallback(() => {
     Keyboard.dismiss();
     setLoading(true);
 
@@ -81,7 +81,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
           } else {
             setTimeout(() => {
               navigation.replace(Routes.ROOT.TABS);
-            }, 300);
+            }, 100);
           }
         } else if (result === wallet.PasswordCheckResult.OverMaxTryTimes) {
           // over max try times
@@ -109,7 +109,32 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
     setImmediate(() => {
       loadWallet();
     });
-  };
+  }, [
+    navigation,
+    onLogin,
+    password,
+    simplePassword,
+    walletHeader,
+    t,
+    setRootRoute,
+  ]);
+
+  const checked = React.useRef(false);
+  React.useEffect(() => {
+    // when only check biometrics, auto login
+    if (!checked.current) {
+      if (
+        walletHeader.passwordType === 'NoPassword' &&
+        walletHeader.useBiometrics === true
+      ) {
+        setTimeout(() => {
+          login();
+        }, 300);
+      }
+      checked.current = true;
+    }
+  }, [walletHeader, login]);
+
   const reset = () => {
     Keyboard.dismiss();
     Alert.alert(t('login.alertTitle'), t('login.alertMessage'), [
