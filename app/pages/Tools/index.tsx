@@ -80,6 +80,10 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
     navigation.navigate(Routes.TABS.QRGenerator);
   };
 
+  const jumpToURCodeGenerator = () => {
+    navigation.navigate(Routes.TABS.URGenerator);
+  };
+
   const theme = useTheme();
 
   return (
@@ -157,6 +161,21 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
                 <Trans>tools.generator</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.cell} onPress={jumpToURCodeGenerator}>
+            <MCIcon name="qrcode-plus" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>tools.urTitle</Trans>
               </Text>
               <Icon
                 name="chevron-forward"

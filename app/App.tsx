@@ -12,6 +12,7 @@ import {useRootRoute, RootRouteProvider} from './wallet/useRootRoute';
 import ToolsPage from './pages/Tools';
 import QRResultPage from './pages/Tools/QRCodeResult';
 import QRCodeGenerator from './pages/Tools/QRCodeGenerator';
+import URCodeGenerator from './pages/Tools/URCodeGenerator';
 import ExportPage from './pages/Settings/ExportPage';
 import ExportByQRCode from './pages/Settings/ExportByQRCode';
 import ImportWalletPage from './pages/Setup/Import';
@@ -292,6 +293,11 @@ function App(): JSX.Element {
               name={Routes.TABS.QRGenerator}
               options={{title: t('tools.QRGeneratorTitle')}}
               component={QRCodeGenerator}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.URGenerator}
+              options={{title: t('tools.urTitle')}}
+              component={URCodeGenerator}
             />
             <RootStack.Screen
               name={Routes.TABS.ExportWallet}

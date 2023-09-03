@@ -24,6 +24,7 @@ const Routes = {
     Tools: 'Tools',
     QRResult: 'QRResult',
     QRGenerator: 'QRGenerator',
+    URGenerator: 'URGenerator',
     ExportWallet: 'ExportWallet',
     ExportWalletByQRCode: 'ExportWalletByQRCode',
   },
