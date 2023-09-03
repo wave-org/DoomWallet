@@ -10,6 +10,7 @@ import {
   ScrollView,
   Switch,
   Share,
+  Platform,
 } from 'react-native';
 import {useTranslation, Trans} from 'react-i18next';
 
@@ -104,11 +105,18 @@ const AccountPage = ({navigation}: {navigation: any}) => {
 
   const onShare = async () => {
     try {
-      await Share.share({
-        message: t('account.shareTitle'),
-        title: t('account.shareTitle'),
-        url: 'https://wave-org.github.io/DoomWallet/',
-      });
+      if (Platform.OS === 'ios') {
+        await Share.share({
+          message: t('account.shareTitle'),
+          title: t('account.shareTitle'),
+          url: 'https://wave-org.github.io/DoomWallet/',
+        });
+      } else {
+        await Share.share({
+          title: t('account.shareTitle'),
+          message: t('account.shareMessageAndroid'),
+        });
+      }
     } catch (error) {
       console.log('error', error);
     }
