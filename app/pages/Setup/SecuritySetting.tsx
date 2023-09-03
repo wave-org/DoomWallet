@@ -16,6 +16,7 @@ import {
   PasswordType,
   getWalletSecuritySetting,
   setupWallet,
+  checkBiometricsAvailable,
 } from '../../wallet';
 // import Routes from '../../routes/Routes';
 import * as Keychain from 'react-native-keychain';
@@ -84,7 +85,7 @@ const SecuritySettingPage = ({
 
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const switchBiometrics = async () => {
+  const switchBiometrics = async (newValue: boolean) => {
     // check ios permission
     if (Platform.OS === 'ios') {
       const permission = await check(PERMISSIONS.IOS.FACE_ID);
@@ -114,10 +115,41 @@ const SecuritySettingPage = ({
           }
         });
       } else if (permission === RESULTS.GRANTED) {
-        toggleBiometricsSwitch();
+        if (newValue) {
+          // when first time using biometrics, check if biometrics is available
+          let available = await checkBiometricsAvailable();
+          if (available) {
+            toggleBiometricsSwitch();
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: t('securitySetting.faceIDPermissionBlocked'),
+              position: 'bottom',
+              bottomOffset: 100,
+              visibilityTime: 2500,
+            });
+          }
+        } else {
+          toggleBiometricsSwitch();
+        }
       }
     } else {
-      toggleBiometricsSwitch();
+      if (newValue) {
+        let available = await checkBiometricsAvailable();
+        if (available) {
+          toggleBiometricsSwitch();
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: t('securitySetting.faceIDPermissionBlocked'),
+            position: 'bottom',
+            bottomOffset: 100,
+            visibilityTime: 2500,
+          });
+        }
+      } else {
+        toggleBiometricsSwitch();
+      }
     }
   };
 

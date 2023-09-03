@@ -132,9 +132,10 @@ export async function checkBiometrics() {
     },
   });
   if (result === false) {
-    throw new Error('save failed. Unknown error');
+    throw new Error('load failed. Unknown error');
   }
   walletSecret = JSON.parse(result.password);
+  biometricsChecked = true;
   if (walletSecret === null) {
     throw new Error('walletSecret is null');
   }
@@ -235,7 +236,7 @@ export async function loadWallet(
   } else {
     const result = await Keychain.getGenericPassword();
     if (result === false) {
-      throw new Error('save failed. Unknown error');
+      throw new Error('load failed. Unknown error');
     }
     walletSecret = JSON.parse(result.password);
     if (walletSecret === null) {
@@ -268,6 +269,36 @@ export async function loadWallet(
     wallet.EVMWallet.setCustomDerivationPath(walletHeader.evmDerivationPath);
   }
   return PasswordCheckResult.Correct;
+}
+
+let biometricsChecked = false;
+export async function checkBiometricsAvailable() {
+  // when first time set biometrics, check if biometrics is available
+  if (biometricsChecked) {
+    return true;
+  }
+  // store and read a value to check if biometrics is available
+  const keyChainOptions = {
+    accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET,
+    accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    // accessGroup: null,
+    authenticationPrompt: {
+      title: 'Doom wallet need use your biometrics to secure your wallet',
+    },
+    authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
+    securityLevel: Keychain.SECURITY_LEVEL.SECURE_HARDWARE,
+    storage: Keychain.STORAGE_TYPE.RSA,
+    rules: Keychain.SECURITY_RULES.NONE,
+    service: 'org.wave.doom.test',
+  };
+  await Keychain.setGenericPassword('doom', 'test', keyChainOptions);
+  const result = await Keychain.getGenericPassword(keyChainOptions);
+  if (result === false) {
+    return false;
+  } else {
+    biometricsChecked = true;
+    return true;
+  }
 }
 
 export async function setupWallet(walletInfo: WalletSetupParam) {
