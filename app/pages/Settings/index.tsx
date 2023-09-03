@@ -90,9 +90,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
   };
 
   const jumpToDocuments = () => {
-    Linking.openURL(
-      'https://github.com/wave-org/DoomWallet#how-to-use-doom-wallet',
-    );
+    Linking.openURL('https://wave-org.github.io/DoomWallet');
   };
 
   const jumpToPrivacyPolicy = () => {
@@ -111,7 +109,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
         await Share.share({
           message: t('account.shareTitle'),
           title: t('account.shareTitle'),
-          url: 'https://wave-org.github.io/DoomWallet/',
+          url: 'https://wave-org.github.io/DoomWallet/#download',
         });
       } else {
         await Share.share({
