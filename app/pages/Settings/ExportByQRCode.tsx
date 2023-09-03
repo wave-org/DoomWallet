@@ -108,7 +108,6 @@ const ExportByQRCode = () => {
             borderWidth: 1.5,
             padding: 10,
             fontSize: 18,
-            textAlignVertical: 'top',
             borderRadius: 4,
           }}
           placeholder={t('export.passwordPlaceholder')}

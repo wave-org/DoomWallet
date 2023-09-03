@@ -36,9 +36,25 @@ const Item = ({
   <TouchableOpacity style={styles.cell} onPress={() => jumpToEthscan(address)}>
     <Text style={[styles.index, {color: theme.colors.title}]}>{index}.</Text>
     <View style={[styles.line, {borderBottomColor: theme.colors.border}]}>
-      <Text style={[styles.address, {color: theme.colors.text}]}>
-        {address}
-      </Text>
+      <View
+        style={{
+          flex: 1,
+          height: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Text
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
+          style={{
+            color: theme.colors.text,
+            textAlign: 'left',
+            width: '100%',
+            textAlignVertical: 'center',
+          }}>
+          {address}
+        </Text>
+      </View>
       <Icon name="chevron-forward" size={24} color={theme.colors.placeholder} />
     </View>
   </TouchableOpacity>
@@ -122,10 +138,6 @@ const styles = StyleSheet.create({
   index: {
     fontSize: 17,
     width: 24,
-  },
-  address: {
-    fontSize: 14,
-    marginTop: 2,
   },
 });
 export default EVMAddressListPage;

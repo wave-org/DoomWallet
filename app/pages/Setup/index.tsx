@@ -359,6 +359,7 @@ const SetupPage = ({navigation}: {navigation: any}) => {
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
+              marginBottom: 25,
             }}>
             <TouchableOpacity
               style={{
@@ -455,7 +456,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   textInput: {
-    height: 60,
+    height: 70,
     width: '100%',
     borderWidth: 1.5,
     padding: 10,
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   resetButton: {
-    marginBottom: 10,
+    marginBottom: 25,
     marginTop: 20,
     height: 36,
     width: 160,

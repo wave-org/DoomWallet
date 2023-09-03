@@ -60,12 +60,13 @@ const ImportWalletPage = ({
   };
 
   const importByQRCode = async () => {
-    let permission: string = '';
-    if (Platform.OS === 'android') {
-      permission = await check(PERMISSIONS.ANDROID.CAMERA);
-    } else if (Platform.OS === 'ios') {
-      permission = await check(PERMISSIONS.IOS.CAMERA);
-    }
+    const cameraPermission =
+      Platform.OS === 'ios'
+        ? PERMISSIONS.IOS.CAMERA
+        : PERMISSIONS.ANDROID.CAMERA;
+
+    const permission = await check(cameraPermission);
+    console.log('permission', permission);
     if (permission === RESULTS.GRANTED) {
       navigation.navigate(Routes.TABS.QR_SCANNER, {
         onSuccess: onScanSuccess,
@@ -75,7 +76,7 @@ const ImportWalletPage = ({
       permission === RESULTS.BLOCKED ||
       permission === RESULTS.DENIED
     ) {
-      request(PERMISSIONS.ANDROID.CAMERA).then(_permission => {
+      request(cameraPermission).then(_permission => {
         if (_permission === RESULTS.GRANTED) {
           navigation.navigate(Routes.TABS.QR_SCANNER, {
             onSuccess: onScanSuccess,
@@ -298,7 +299,7 @@ const ImportWalletPage = ({
                 width: '80%',
                 flexDirection: 'column',
                 alignSelf: 'center',
-                marginBottom: 10,
+                marginBottom: 25,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 22,
@@ -545,7 +546,7 @@ const ImportWalletPage = ({
               width: '80%',
               flexDirection: 'column',
               alignSelf: 'center',
-              marginBottom: 10,
+              marginBottom: 25,
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: 22,

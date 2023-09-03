@@ -165,6 +165,7 @@ const SetPasswordPage = ({
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+            marginBottom: 25,
           }}>
           <TouchableOpacity
             activeOpacity={0.6}

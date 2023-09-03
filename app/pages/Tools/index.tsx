@@ -36,12 +36,11 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
   const {t} = useTranslation();
 
   const scanQRCode = async () => {
-    let permission: string = '';
-    if (Platform.OS === 'android') {
-      permission = await check(PERMISSIONS.ANDROID.CAMERA);
-    } else if (Platform.OS === 'ios') {
-      permission = await check(PERMISSIONS.IOS.CAMERA);
-    }
+    const cameraPermission =
+      Platform.OS === 'ios'
+        ? PERMISSIONS.IOS.CAMERA
+        : PERMISSIONS.ANDROID.CAMERA;
+    const permission = await check(cameraPermission);
     if (permission === RESULTS.GRANTED) {
       navigation.navigate(Routes.TABS.QR_SCANNER, {
         onSuccess: onScanSuccess,
@@ -51,7 +50,7 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
       permission === RESULTS.BLOCKED ||
       permission === RESULTS.DENIED
     ) {
-      request(PERMISSIONS.ANDROID.CAMERA).then(_permission => {
+      request(cameraPermission).then(_permission => {
         if (_permission === RESULTS.GRANTED) {
           navigation.navigate(Routes.TABS.QR_SCANNER, {
             onSuccess: onScanSuccess,

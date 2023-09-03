@@ -73,17 +73,36 @@ const EVMWalletPage = ({navigation}: {navigation: any}) => {
             style={{
               width: '100%',
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               alignItems: 'center',
               paddingLeft: 25,
+              paddingRight: 0,
               height: 32,
             }}>
             <Text style={[styles.label, {color: theme.colors.text}]}>
               <Trans>EVM.derivationPath</Trans>
             </Text>
-            <Text style={[styles.text, {color: theme.colors.text}]}>
-              {derivationPath}
-            </Text>
+            <View
+              style={{
+                flex: 1,
+                height: '100%',
+                paddingLeft: 20,
+                paddingRight: 12,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                adjustsFontSizeToFit={true}
+                numberOfLines={1}
+                style={{
+                  color: theme.colors.text,
+                  textAlign: 'right',
+                  width: '100%',
+                  textAlignVertical: 'center',
+                }}>
+                {derivationPath}
+              </Text>
+            </View>
           </View>
           <Text
             style={{
@@ -91,6 +110,7 @@ const EVMWalletPage = ({navigation}: {navigation: any}) => {
               fontSize: 13,
               width: '100%',
               paddingLeft: 25,
+              paddingRight: 10,
               textAlign: 'left',
             }}>
             <Trans>EVM.captionAboutDerivationPath</Trans>

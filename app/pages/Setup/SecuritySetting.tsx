@@ -633,7 +633,7 @@ const styles = StyleSheet.create({
     width: '80%',
     flexDirection: 'column',
     alignSelf: 'center',
-    marginBottom: 10,
+    marginBottom: 25,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 22,
