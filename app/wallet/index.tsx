@@ -272,6 +272,10 @@ export async function loadWallet(
 }
 
 let biometricsChecked = false;
+export function getBiometricsChecked() {
+  return biometricsChecked;
+}
+
 export async function checkBiometricsAvailable() {
   // when first time set biometrics, check if biometrics is available
   if (biometricsChecked) {

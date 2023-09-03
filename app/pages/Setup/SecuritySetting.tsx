@@ -17,6 +17,7 @@ import {
   getWalletSecuritySetting,
   setupWallet,
   checkBiometricsAvailable,
+  getBiometricsChecked,
 } from '../../wallet';
 // import Routes from '../../routes/Routes';
 import * as Keychain from 'react-native-keychain';
@@ -117,7 +118,36 @@ const SecuritySettingPage = ({
       } else if (permission === RESULTS.GRANTED) {
         if (newValue) {
           // when first time using biometrics, check if biometrics is available
+          if (getBiometricsChecked()) {
+            toggleBiometricsSwitch();
+          } else {
+            setLoading(true);
+            let available = await checkBiometricsAvailable();
+            setLoading(false);
+            if (available) {
+              toggleBiometricsSwitch();
+            } else {
+              Toast.show({
+                type: 'error',
+                text1: t('securitySetting.faceIDPermissionBlocked'),
+                position: 'bottom',
+                bottomOffset: 100,
+                visibilityTime: 2500,
+              });
+            }
+          }
+        } else {
+          toggleBiometricsSwitch();
+        }
+      }
+    } else {
+      if (newValue) {
+        if (getBiometricsChecked()) {
+          toggleBiometricsSwitch();
+        } else {
+          setLoading(true);
           let available = await checkBiometricsAvailable();
+          setLoading(false);
           if (available) {
             toggleBiometricsSwitch();
           } else {
@@ -129,23 +159,6 @@ const SecuritySettingPage = ({
               visibilityTime: 2500,
             });
           }
-        } else {
-          toggleBiometricsSwitch();
-        }
-      }
-    } else {
-      if (newValue) {
-        let available = await checkBiometricsAvailable();
-        if (available) {
-          toggleBiometricsSwitch();
-        } else {
-          Toast.show({
-            type: 'error',
-            text1: t('securitySetting.faceIDPermissionBlocked'),
-            position: 'bottom',
-            bottomOffset: 100,
-            visibilityTime: 2500,
-          });
         }
       } else {
         toggleBiometricsSwitch();
