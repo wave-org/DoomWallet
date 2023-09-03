@@ -183,7 +183,7 @@
       "savedToast": "Security setting saved",
       "saveFailedToast": "Failed to save security setting",
       "biometricsCaption": "With biometrics, you can use your face or fingerprint to store your secret and unlock your wallet.\n It's much safer. The data will be encrypted by your biometrics. Without your biometrics, no one can access your secret.",
-      "withoutBiometrics": "Sorry, your device don't support biometrics. It's better to use another device which support biometrics.\nOr, you need to enroll your biometrics in your device.",
+      "withoutBiometrics": "Sorry, your device don't support biometrics. It's better to use another device which support biometrics.\n If your device is supporting biometrics, but you can't find a button to enable biometrics here. You need to restart Doom Wallet after enrolling your biometrics in your device or granting Face ID permission in settings.",
       "biometricsLabel": "Biometrics:",
       "passwordLabel": "Password:",
       "unlockPasswordLabel": "Unlock Password:",

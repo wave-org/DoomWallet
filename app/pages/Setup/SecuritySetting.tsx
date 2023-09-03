@@ -74,8 +74,8 @@ const SecuritySettingPage = ({
     setUsebiometrics(previousState => !previousState);
   useEffect(() => {
     async function checkBiometrics() {
+      // TODO, When devices are supporting biometrics, but user has not set up biometrics or doesn't grant permission, supportedType wiil be null.
       const supportedType = await Keychain.getSupportedBiometryType();
-      // console.log(supportedType);
       if (supportedType === null) {
         setSupportBiometrics(false);
       } else {
