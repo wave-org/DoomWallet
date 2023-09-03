@@ -453,7 +453,7 @@ const ImportWalletPage = ({
                 placeholderTextColor={theme.colors.placeholder}
                 onChangeText={newText => setPassphrase(newText)}
                 defaultValue={passphrase}
-                maxLength={16}
+                maxLength={50}
                 clearButtonMode="while-editing"
                 autoComplete="off"
                 autoCorrect={false}
