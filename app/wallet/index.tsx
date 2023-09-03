@@ -118,19 +118,25 @@ export function getWalletHeader() {
   return walletHeader;
 }
 
-export async function checkBiometrics() {
+export async function checkBiometrics(prompt: string) {
   if (walletHeader === null) {
     throw new Error('walletHeader is null');
   }
   if (!walletHeader.useBiometrics) {
     throw new Error('useBiometrics is false');
   }
-  // TODO permission check again
-  const result = await Keychain.getGenericPassword({
+  const keyChainOptions = {
+    accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET,
+    accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
     authenticationPrompt: {
-      title: 'Doom wallet need use your biometrics to secure your wallet',
+      title: prompt,
     },
-  });
+    authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
+    securityLevel: Keychain.SECURITY_LEVEL.SECURE_HARDWARE,
+    storage: Keychain.STORAGE_TYPE.RSA,
+    rules: Keychain.SECURITY_RULES.NONE,
+  };
+  const result = await Keychain.getGenericPassword(keyChainOptions);
   if (result === false) {
     throw new Error('load failed. Unknown error');
   }
@@ -149,6 +155,7 @@ export enum PasswordCheckResult {
 /// if password is correct and pass the Biometrics check, return true
 /// if password is wrong, it will return false
 export async function loadWallet(
+  prompt: string,
   password: string | undefined,
   simplePassword: string | undefined,
 ): Promise<PasswordCheckResult> {
@@ -222,7 +229,7 @@ export async function loadWallet(
 
   if (walletHeader.useBiometrics) {
     if (walletSecret === null) {
-      await checkBiometrics();
+      await checkBiometrics(prompt);
     }
     if (walletSecret === null) {
       throw new Error('walletSecret is null');
@@ -276,7 +283,7 @@ export function getBiometricsChecked() {
   return biometricsChecked;
 }
 
-export async function checkBiometricsAvailable() {
+export async function checkBiometricsAvailable(prompt: string) {
   // when first time set biometrics, check if biometrics is available
   if (biometricsChecked) {
     return true;
@@ -287,7 +294,7 @@ export async function checkBiometricsAvailable() {
     accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
     // accessGroup: null,
     authenticationPrompt: {
-      title: 'Doom wallet need use your biometrics to secure your wallet',
+      title: prompt,
     },
     authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
     securityLevel: Keychain.SECURITY_LEVEL.SECURE_HARDWARE,
@@ -295,13 +302,18 @@ export async function checkBiometricsAvailable() {
     rules: Keychain.SECURITY_RULES.NONE,
     service: 'org.wave.doom.test',
   };
-  await Keychain.setGenericPassword('doom', 'test', keyChainOptions);
-  const result = await Keychain.getGenericPassword(keyChainOptions);
-  if (result === false) {
+  try {
+    await Keychain.setGenericPassword('doom', 'test', keyChainOptions);
+    const result = await Keychain.getGenericPassword(keyChainOptions);
+    if (result === false) {
+      return false;
+    } else {
+      biometricsChecked = true;
+      return true;
+    }
+  } catch (error) {
+    console.log('checkBiometricsAvailable error', error);
     return false;
-  } else {
-    biometricsChecked = true;
-    return true;
   }
 }
 
@@ -372,9 +384,9 @@ export async function setupWallet(walletInfo: WalletSetupParam) {
       accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET,
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
       // accessGroup: null,
-      authenticationPrompt: {
-        title: 'Doom wallet need use your biometrics to secure your wallet',
-      },
+      // authenticationPrompt: {
+      //   title: prompt,
+      // },
       authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_HARDWARE,
       storage: Keychain.STORAGE_TYPE.RSA,

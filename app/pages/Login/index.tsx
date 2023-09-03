@@ -66,11 +66,23 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
       let result: wallet.PasswordCheckResult = wallet.PasswordCheckResult.Wrong;
       try {
         if (walletHeader.passwordType === 'FullPassword') {
-          result = await wallet.loadWallet(password, undefined);
+          result = await wallet.loadWallet(
+            t('securitySetting.unlockBiometricPrompt'),
+            password,
+            undefined,
+          );
         } else if (walletHeader.passwordType === 'NoPassword') {
-          result = await wallet.loadWallet(undefined, undefined);
+          result = await wallet.loadWallet(
+            t('securitySetting.unlockBiometricPrompt'),
+            undefined,
+            undefined,
+          );
         } else {
-          result = await wallet.loadWallet(undefined, simplePassword);
+          result = await wallet.loadWallet(
+            t('securitySetting.unlockBiometricPrompt'),
+            undefined,
+            simplePassword,
+          );
         }
         setLoading(false);
         if (result === wallet.PasswordCheckResult.Correct) {

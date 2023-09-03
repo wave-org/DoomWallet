@@ -75,6 +75,7 @@ const SecuritySettingPage = ({
   useEffect(() => {
     async function checkBiometrics() {
       const supportedType = await Keychain.getSupportedBiometryType();
+      // console.log(supportedType);
       if (supportedType === null) {
         setSupportBiometrics(false);
       } else {
@@ -95,17 +96,47 @@ const SecuritySettingPage = ({
         // toast ask for permission
         Toast.show({
           type: 'error',
-          text1: t('securitySetting.faceIDPermissionBlocked'),
+          text2: t('securitySetting.faceIDPermissionBlocked'),
           position: 'bottom',
           bottomOffset: 100,
           visibilityTime: 2500,
         });
       } else if (permission === RESULTS.DENIED) {
+        if (!newValue) {
+          toggleBiometricsSwitch();
+          return;
+        }
+        if (!getBiometricsChecked()) {
+          // first turn on biometrics, loading and request for permission
+          // turn on the swtich. if failed, turn off the switch
+          toggleBiometricsSwitch();
+          setLoading(true);
+        }
         // request for permission
-        request(PERMISSIONS.IOS.FACE_ID).then(_permission => {
+        request(PERMISSIONS.IOS.FACE_ID).then(async _permission => {
           if (_permission === RESULTS.GRANTED) {
-            toggleBiometricsSwitch();
+            // when first time using biometrics, check if biometrics is available
+            if (getBiometricsChecked()) {
+              toggleBiometricsSwitch();
+            } else {
+              let available = await checkBiometricsAvailable(
+                t('securitySetting.testBiometricPrompt'),
+              );
+              setLoading(false);
+              if (!available) {
+                toggleBiometricsSwitch();
+                Toast.show({
+                  type: 'error',
+                  text2: t('securitySetting.faceIDCheckFailed'),
+                  position: 'bottom',
+                  bottomOffset: 100,
+                  visibilityTime: 2500,
+                });
+              }
+            }
           } else {
+            setLoading(false);
+            setUsebiometrics(false);
             Toast.show({
               type: 'error',
               text1: t('securitySetting.faceIDPermissionBlocked'),
@@ -122,14 +153,16 @@ const SecuritySettingPage = ({
             toggleBiometricsSwitch();
           } else {
             setLoading(true);
-            let available = await checkBiometricsAvailable();
+            toggleBiometricsSwitch();
+            let available = await checkBiometricsAvailable(
+              t('securitySetting.testBiometricPrompt'),
+            );
             setLoading(false);
-            if (available) {
-              toggleBiometricsSwitch();
-            } else {
+            if (!available) {
+              setUsebiometrics(false);
               Toast.show({
                 type: 'error',
-                text1: t('securitySetting.faceIDPermissionBlocked'),
+                text2: t('securitySetting.faceIDCheckFailed'),
                 position: 'bottom',
                 bottomOffset: 100,
                 visibilityTime: 2500,
@@ -146,19 +179,23 @@ const SecuritySettingPage = ({
           toggleBiometricsSwitch();
         } else {
           setLoading(true);
-          let available = await checkBiometricsAvailable();
-          setLoading(false);
-          if (available) {
-            toggleBiometricsSwitch();
-          } else {
-            Toast.show({
-              type: 'error',
-              text1: t('securitySetting.faceIDPermissionBlocked'),
-              position: 'bottom',
-              bottomOffset: 100,
-              visibilityTime: 2500,
-            });
-          }
+          toggleBiometricsSwitch();
+          setTimeout(async () => {
+            let available = await checkBiometricsAvailable(
+              t('securitySetting.testBiometricPrompt'),
+            );
+            setLoading(false);
+            if (!available) {
+              setUsebiometrics(false);
+              Toast.show({
+                type: 'error',
+                text2: t('securitySetting.touchIDCheckFailed'),
+                position: 'bottom',
+                bottomOffset: 100,
+                visibilityTime: 2500,
+              });
+            }
+          }, 50);
         }
       } else {
         toggleBiometricsSwitch();

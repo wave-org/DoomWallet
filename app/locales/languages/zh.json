@@ -176,6 +176,10 @@
     "securitySetting": {
       "title": "安全设置",
       "faceIDPermissionBlocked": "请去系统设置中为末日钱包开启Face ID权限",
+      "faceIDCheckFailed": "Face ID检测失败，请稍后重试",
+      "touchIDCheckFailed": "Touch ID检测失败，请稍后重试",
+      "testBiometricPrompt": "末日钱包需要使用你的生物信息来加密你的钱包",
+      "unlockBiometricPrompt": "末日钱包需要使用你的生物信息来解锁你的钱包",
       "simplePasswordLengthError": "简单密码至少需要4个字符",
       "noSecurityOptionError":"请至少选择一个安全选项！",
       "savedToast": "保存成功",
