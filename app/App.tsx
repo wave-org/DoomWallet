@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import {useAirgapMode, AirgapProvider} from './wallet/airgap';
+import {useRootRoute, RootRouteProvider} from './wallet/useRootRoute';
 import ToolsPage from './pages/Tools';
 import QRResultPage from './pages/Tools/QRCodeResult';
 import QRCodeGenerator from './pages/Tools/QRCodeGenerator';
@@ -105,7 +106,7 @@ const TabHome = () => {
 
 const RootStack = createNativeStackNavigator();
 function App(): JSX.Element {
-  const [route, setRoute] = useState('');
+  const {rootRoute, setRootRoute} = useRootRoute();
   const navigation = React.useRef(null);
   const {airgapMode} = useAirgapMode();
   // console.log('airgapMode: ', airgapMode);
@@ -117,14 +118,14 @@ function App(): JSX.Element {
     async function checkExisting() {
       let wallet = getWallet();
       if (wallet !== null) {
-        setRoute(Routes.ROOT.TABS);
+        setRootRoute(Routes.ROOT.TABS);
       } else {
         try {
           const walletHeader = await checkWalletExists();
           if (walletHeader !== null) {
-            setRoute(Routes.ROOT.LOGIN);
+            setRootRoute(Routes.ROOT.LOGIN);
           } else {
-            setRoute(Routes.ROOT.SETUP);
+            setRootRoute(Routes.ROOT.SETUP);
           }
         } catch (error) {
           let message = (error as Error).message;
@@ -139,9 +140,10 @@ function App(): JSX.Element {
         }
       }
     }
-
-    checkExisting();
-  }, []);
+    if (rootRoute === '') {
+      checkExisting();
+    }
+  }, [rootRoute, setRootRoute]);
 
   useEffect(() => {
     // auto lock
@@ -228,9 +230,9 @@ function App(): JSX.Element {
   }
 
   return (
-    (route !== '' && (
+    (rootRoute !== '' && (
       <NavigationContainer theme={navigationTheme} ref={navigation}>
-        <RootStack.Navigator initialRouteName={route}>
+        <RootStack.Navigator initialRouteName={rootRoute}>
           <RootStack.Group
             screenOptions={{
               headerShown: false,
@@ -374,9 +376,11 @@ function App(): JSX.Element {
 
 const withProviders = () => {
   return (
-    <AirgapProvider>
-      <App />
-    </AirgapProvider>
+    <RootRouteProvider>
+      <AirgapProvider>
+        <App />
+      </AirgapProvider>
+    </RootRouteProvider>
   );
 };
 

@@ -28,8 +28,10 @@ import {
 import {useTheme} from '../../util/theme';
 import InAppReview from 'react-native-in-app-review';
 import {useAirgapMode} from '../../wallet/airgap';
+import {useRootRoute} from '../../wallet/useRootRoute';
 
 const AccountPage = ({navigation}: {navigation: any}) => {
+  const {setRootRoute} = useRootRoute();
   const canRating = InAppReview.isAvailable();
   const [version, setVersion] = React.useState('');
   const {t} = useTranslation();
@@ -45,7 +47,7 @@ const AccountPage = ({navigation}: {navigation: any}) => {
         style: 'destructive',
         onPress: () => {
           wallet.resetWallet();
-          navigation.replace(Routes.ROOT.SETUP);
+          setRootRoute('');
         },
       },
     ]);

@@ -16,6 +16,7 @@ import {
   Platform,
 } from 'react-native';
 import * as wallet from '../../wallet';
+import {useRootRoute} from '../../wallet/useRootRoute';
 import Routes from '../../routes/Routes';
 import {useTheme} from '../../util/theme';
 import {Trans, useTranslation} from 'react-i18next';
@@ -23,6 +24,7 @@ import {Trans, useTranslation} from 'react-i18next';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
+  const {setRootRoute} = useRootRoute();
   const walletHeader = React.useMemo(() => wallet.getWalletHeader(), []);
   const [pageDisabled, setPageDisabled] = React.useState<boolean>(false);
   const [password, setPassword] = React.useState<string>('');
@@ -86,7 +88,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
           setErrorText(t('login.overMaxTryTimes'));
           setPageDisabled(true);
           setTimeout(() => {
-            navigation.replace(Routes.ROOT.SETUP);
+            setRootRoute('');
           }, 3500);
         } else {
           setErrorText(
@@ -121,7 +123,7 @@ const LoginPage = ({route, navigation}: {navigation: any; route: any}) => {
         style: 'destructive',
         onPress: () => {
           wallet.resetWallet();
-          navigation.replace(Routes.ROOT.SETUP);
+          setRootRoute('');
         },
       },
     ]);
