@@ -481,16 +481,11 @@ export function generateMnemonicByHashingText(text: string) {
   return Key.generateMnemonicByHashString(text);
 }
 
-export function checkEVMAddressCanBeDerived(
-  address: string,
-  derivationPath: string,
-) {
+export function getDerivedAddressByPath(derivationPath: string) {
   if (wallet === null) {
     throw new Error('Wallet is not loaded');
   }
-  const expectedAddress =
-    wallet.EVMWallet.getDerivedAddressByPath(derivationPath);
-  return expectedAddress === address;
+  return wallet.EVMWallet.getDerivedAddressByPath(derivationPath);
 }
 
 export function checkBTCAddressCanBeDerived(

@@ -32,6 +32,7 @@ const EVMSignPage = ({route}: {route: any}) => {
   const [request, setRequest] = React.useState<SignRequest | undefined | null>(
     undefined,
   );
+  const [fromAddress, setFromAddress] = React.useState<string>('');
   const {t} = useTranslation();
   const typeText = (type: RequestType) => {
     switch (type) {
@@ -48,9 +49,10 @@ const EVMSignPage = ({route}: {route: any}) => {
   React.useEffect(() => {
     try {
       const req = wallet.parseEVMRequest(ur);
-      if (
-        !wallet.checkEVMAddressCanBeDerived(req.address, req.derivationPath)
-      ) {
+      const derivedAddress = wallet.getDerivedAddressByPath(req.derivationPath);
+      if (req.address === undefined) {
+        setFromAddress(derivedAddress);
+      } else if (derivedAddress !== req.address) {
         setWrongUr(true);
         // console.log('address can not be derived');
         Toast.show({
@@ -61,6 +63,9 @@ const EVMSignPage = ({route}: {route: any}) => {
           bottomOffset: 100,
           visibilityTime: 2500,
         });
+        setFromAddress(req.address);
+      } else {
+        setFromAddress(req.address);
       }
       setRequest(req);
     } catch (error) {
@@ -317,8 +322,20 @@ const EVMSignPage = ({route}: {route: any}) => {
             <Trans>signEVM.fromAddress</Trans>
           </Text>
           <Text style={[styles.addressText, {color: theme.colors.text}]}>
-            {request.address}
+            {fromAddress}
           </Text>
+          {request.address === undefined && (
+            <Text
+              style={{
+                marginBottom: 15,
+                color: theme.colors.placeholder,
+                fontSize: 13,
+                width: '100%',
+                textAlign: 'left',
+              }}>
+              <Trans>signEVM.noAddressCaption</Trans>
+            </Text>
+          )}
           {request.type === RequestType.transaction ? (
             <View style={styles.line}>
               <Text style={[styles.lineLabel, {color: theme.colors.title}]}>

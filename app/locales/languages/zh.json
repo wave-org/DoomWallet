@@ -216,6 +216,7 @@
       "invalidQR": "错误的二维码",
       "noFoundAddressToast": "该钱包无法派生得到这个交易的地址， 即输入地址不在这个钱包内，无法处理。",
       "invalidQRText": "二维码有问题， 无法签名，请检查该二维码。",
+      "noAddressCaption": "这个是末日钱包生成的地址，请确认这个地址无误。如果这个地址不是MetaMask中发起请求的地址，你将无法签名。",
       "sign": "签名",
       "result": "签名结果 ：",
       "toAddress": "接收方地址：",

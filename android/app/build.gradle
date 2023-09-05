@@ -78,8 +78,8 @@ android {
         applicationId "org.wave.doom"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21
-        versionName "0.2.1"
+        versionCode 25
+        versionName "0.2.2"
 
         missingDimensionStrategy 'react-native-camera', 'general'
     }
