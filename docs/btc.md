@@ -6,7 +6,7 @@ We suggest you use Blue Wallet as a hot wallet.
 
 Get Blue Wallet: https://bluewallet.io/
 
-## 1. Get Connection QR Code in Doom Wallet
+## 1. Get the Connection QR Code in Doom Wallet
 
 Click the "Account" tab:
 
@@ -20,7 +20,7 @@ then "Connection QR Code".
 
 ![](./7-6.jpg)
 
-You need to import account by this QR code.
+You need to import the account with this QR code.
 
 In "Address List", you can see all addresses in this wallet. You can use any address to receive BTC.
 
@@ -67,7 +67,7 @@ In Blue Wallet, you need to click the "Send" button and edit the transaction:
 
 ![](./7-12.jpg)
 
-Then, you will see a animated QR code after you click the "Send" button:
+Then, you will see an animated QR code after you click the "Send" button:
 
 ![](./7-13.jpg)
 

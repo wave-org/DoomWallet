@@ -1,12 +1,12 @@
 # EVM Wallet User Guide
 
-You can use Doom Wallet to manage your EVM wallets, such as Ethereum, Binance Smart Chain, and other EVM compatible networks.
+You can use Doom Wallet to manage your EVM wallets, such as Ethereum, Binance Smart Chain, and other EVM-compatible networks.
 
 ### 1. Use MetaMask
 
 [MetaMask](https://metamask.io/)
 
-You must have an online hot wallet to check balance and send transactions. Doom Wallet is used to secure your private key and sign transactions.
+You must have an online hot wallet to check your balance and send transactions. Doom Wallet is used to secure your private key and sign transactions.
 
 We recommend MetaMask.
 

@@ -12,11 +12,9 @@ You can export your wallet by your mnemonic and password here.
 
 ### by QR code
 
-You can export your wallet by QR code. Click "Export Wallet by QR Code" button.
+You can export your wallet by QR code. Click the "Export Wallet by QR Code" button.
 
-![](./6-3.jpg)
-
-Doom wallet require you to use a password to encrypt your exported data. So the QR code is encrypted. If the password is complex enough, no one can know the actual mnemonic even they got this QR code.
+Doom Wallet requires you to use a password to encrypt your exported data. So the QR code is encrypted. If the password is complex enough, no one can know the actual mnemonic even if they have this QR code.
 
 After you set a password, you can click the "Generate" button to generate a QR code.
 
@@ -32,7 +30,7 @@ When you set up your wallet, you can click the "Import Wallet" button to import 
 
 ### by QR code
 
-You can import your wallet by QR code. Click "Import Wallet by QR Code" button.
+You can import your wallet by QR code. Click the "Import Wallet by QR Code" button.
 
 ![](./6-6.jpg)
 
@@ -52,9 +50,9 @@ Then, you need to finish the security settings before you can use your wallet.
 
 ![](./6-9.jpg)
 
-You can import your wallet by mnemonic and passphrase. Passphrase is used to generate the private key with mnemonic.
+You can import your wallet by mnemonic and passphrase. The passphrase is used to generate the private key with mnemonic.
 
-If your old wallet doesn't have a passphrase, you can turn of passphrase option.
+If your old wallet doesn't have a passphrase, you can turn off the passphrase option.
 
 ![](./6-10.jpg)
 
