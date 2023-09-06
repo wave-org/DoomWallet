@@ -1,16 +1,22 @@
 # EVM Wallet User Guide
 
-#### 1. Use MetaMask
+You can use Doom Wallet to manage your EVM wallets, such as Ethereum, Binance Smart Chain, and other EVM compatible networks.
+
+### 1. Use MetaMask
 
 [MetaMask](https://metamask.io/)
 
-You must have an online wallet to use Doom Wallet. We recommend MetaMask.
+You must have an online hot wallet to check balance and send transactions. Doom Wallet is used to secure your private key and sign transactions.
 
-#### 2. Get Connection QR Code
+We recommend MetaMask.
 
-Click the "Account" tab and click "Connection QR Code".
+### 2. Get Connection QR Code
+
+Click the "Account" tab and click "EVM wallet", then "Connection QR Code".
 
 ![](./3-1.jpg)
+
+![](./3-3.jpg)
 
 The Doom Wallet will show a QR code. Then, you need to use Metamask to scan this QR code.
 
