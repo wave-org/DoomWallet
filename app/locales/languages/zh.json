@@ -50,7 +50,11 @@
       "copyed": "已复制",
       "QRGeneratorTitle": "生成二维码",
       "generatorPlaceHolder": "输入内容来生成二维码，最多1024字节。",
-      "generate": "生成二维码"
+      "generate": "生成二维码",
+      "ABI": "ABI(应用二进制接口)",
+      "Import": "导入ABI",
+      "ImportSuccess": "已成功导入ABI",
+      "pasteABI": "将ABI粘贴到这里"
     },
     "airgap": {
       "caption": "请关闭网络或者打开飞行模式 以确保当前设备处于离线状态。\n 你可以在设置中关闭严格离线模式。"
@@ -226,7 +230,8 @@
       "message": "消息：",
       "typedData": "格式化数据：",
       "type": "类型:",
-      "fromAddress": "发送方地址："
+      "fromAddress": "发送方地址：",
+      "decodedData": "解析后的输入数据:"
     },
     "EVM": {
       "title": "EVM钱包",

@@ -27,9 +27,11 @@
     "buffer": "^6.0.3",
     "doom-wallet-core": "^0.5.5",
     "events": "^3.3.0",
+    "evm-data-decoder": "^0.1.0",
     "fast-text-encoding": "^1.0.6",
     "i18next": "^23.4.4",
     "joi": "^17.9.2",
+    "json-bigint": "^1.0.0",
     "react": "18.2.0",
     "react-i18next": "^13.1.2",
     "react-native": "0.72.4",
@@ -39,6 +41,7 @@
     "react-native-get-random-values": "^1.9.0",
     "react-native-in-app-review": "^4.3.3",
     "react-native-keychain": "^8.1.1",
+    "react-native-mmkv": "^2.12.2",
     "react-native-permissions": "^3.8.4",
     "react-native-qrcode-scanner": "^1.5.5",
     "react-native-qrcode-svg": "^6.2.0",
@@ -51,11 +54,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-private-methods": "^7.24.1",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@react-native/eslint-config": "^0.72.2",
-    "@react-native/metro-config": "^0.72.9",
-    "@tsconfig/react-native": "^3.0.0",
+    "@react-native/babel-preset": "^0.73.18",
+    "@react-native/eslint-config": "^0.73.1",
+    "@react-native/metro-config": "^0.73.2",
+    "@react-native/typescript-config": "^0.73.1",
     "@types/react": "^18.0.24",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.2.1",
@@ -65,7 +70,7 @@
     "pod-install": "0.1.38",
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
-    "typescript": "4.8.4"
+    "typescript": "5.0.4"
   },
   "resolutions": {
     "react-native-permissions": "^3.8.0"
@@ -81,5 +86,6 @@
   ],
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

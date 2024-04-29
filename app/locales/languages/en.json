@@ -50,7 +50,11 @@
       "copyed": "Copyed",
       "QRGeneratorTitle": "QR Code Generator",
       "generatorPlaceHolder": "Type text to generate QR Code, max length is 1024",
-      "generate": "Generate"
+      "generate": "Generate",
+      "ABI": "ABI",
+      "Import": "Import",
+      "ImportSuccess": "Import ABI Successfully",
+      "pasteABI": "Paste ABI here"
     },
     "login": {
       "passwordIsWrong": "Password is wrong",
@@ -224,7 +228,8 @@
       "message": "Message:",
       "typedData": "Typed Data:",
       "type": "Type:",
-      "fromAddress": "From Address:"
+      "fromAddress": "From Address:",
+      "decodedData": "Decoded Data:"
     },
     "EVM": {
       "title": "EVM Wallet",

@@ -23,6 +23,7 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {UR} from '@ngraveio/bc-ur';
 import {useTheme} from '../../util/theme';
 import {useTranslation, Trans} from 'react-i18next';
+import {EVMDataDecoder} from '../../wallet/EVMDataDecoder';
 
 const EVMSignPage = ({route}: {route: any}) => {
   const ur = route.params.ur as UR;
@@ -115,12 +116,35 @@ const EVMSignPage = ({route}: {route: any}) => {
     }, 100);
   };
 
+  const decodeData = (data: string) => {
+    let decodedData: string | undefined;
+    if (data !== '0x') {
+      try {
+        const result = EVMDataDecoder.decodeInputData(data);
+        if (result.length > 0) {
+          if (result.length > 1) {
+            decodedData = JSON.stringify(result, null, 4);
+          } else {
+            decodedData = JSON.stringify(result[0], null, 4);
+          }
+        }
+      } catch (error) {
+        console.log('decode data error:', error);
+      }
+    }
+    return decodedData;
+  };
+
   const payloadView = () => {
     switch (request.type) {
       case RequestType.transaction:
         if (request instanceof EIP1559TransactionSignRequest) {
           // eth transaction
           const payload = request.payload;
+
+          // decode data
+          let decodedData = decodeData(payload.data);
+
           return (
             <View style={styles.payloadView}>
               <View style={styles.line}>
@@ -183,10 +207,31 @@ const EVMSignPage = ({route}: {route: any}) => {
                 ]}>
                 {payload.data}
               </Text>
+              {decodedData !== undefined ? (
+                <>
+                  <Text
+                    style={[styles.highlightText, {color: theme.colors.title}]}>
+                    <Trans>signEVM.decodedData</Trans>
+                  </Text>
+                  <Text
+                    style={[
+                      styles.dataText,
+                      {
+                        borderColor: theme.colors.border,
+                        backgroundColor: theme.colors.surface,
+                        color: theme.colors.text,
+                      },
+                    ]}>
+                    {decodedData}
+                  </Text>
+                </>
+              ) : null}
             </View>
           );
         } else if (request instanceof TransactionSignRequest) {
           const payload = request.payload;
+          // decode data
+          let decodedData = decodeData(payload.data);
           return (
             <View style={styles.payloadView}>
               <View style={styles.line}>
@@ -241,6 +286,25 @@ const EVMSignPage = ({route}: {route: any}) => {
                 ]}>
                 {payload.data}
               </Text>
+              {decodedData !== undefined ? (
+                <>
+                  <Text
+                    style={[styles.highlightText, {color: theme.colors.title}]}>
+                    <Trans>signEVM.decodedData</Trans>
+                  </Text>
+                  <Text
+                    style={[
+                      styles.dataText,
+                      {
+                        borderColor: theme.colors.border,
+                        backgroundColor: theme.colors.surface,
+                        color: theme.colors.text,
+                      },
+                    ]}>
+                    {decodedData}
+                  </Text>
+                </>
+              ) : null}
             </View>
           );
         } else {

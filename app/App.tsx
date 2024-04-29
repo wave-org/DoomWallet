@@ -27,6 +27,7 @@ import AutoLockPage from './pages/Settings/AutoLock';
 import LanguagePage from './pages/Settings/LanguagePage';
 import DarkModePage from './pages/Settings/DarkModePage';
 import EVMWalletPage from './pages/Settings/EVM/EVMWallet';
+import ABIImportScreen from './pages/Tools/ImportABI';
 import DerivationPathPage from './pages/Settings/EVM/DerivationPath';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
@@ -293,6 +294,11 @@ function App(): JSX.Element {
               name={Routes.TABS.QRGenerator}
               options={{title: t('tools.QRGeneratorTitle')}}
               component={QRCodeGenerator}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.ImportABI}
+              options={{title: t('tools.import')}}
+              component={ABIImportScreen}
             />
             <RootStack.Screen
               name={Routes.TABS.URGenerator}

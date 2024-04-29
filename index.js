@@ -3,6 +3,7 @@
  */
 
 import 'fast-text-encoding';
+// eslint-disable-next-line no-unused-vars
 import Joi from 'joi';
 global.Buffer = require('buffer').Buffer;
 import 'react-native-get-random-values';
@@ -20,6 +21,7 @@ import {
 import {loadAirgapMode} from './app/wallet/airgap';
 import * as AutoLock from './app/wallet/autolock';
 import './app/locales/i18n';
+import {initEVMDecoder} from './app/wallet/EVMDataDecoder';
 
 async function load() {
   // const startTime = Date.now();
@@ -38,6 +40,7 @@ async function load() {
     Appearance.setColorScheme(undefined);
   }
   // console.log('load time', Date.now() - startTime);
+  initEVMDecoder();
 }
 
 AppRegistry.registerRunnable(appName, async initialProps => {

@@ -27,6 +27,7 @@ const Routes = {
     URGenerator: 'URGenerator',
     ExportWallet: 'ExportWallet',
     ExportWalletByQRCode: 'ExportWalletByQRCode',
+    ImportABI: 'ImportABI',
   },
 };
 

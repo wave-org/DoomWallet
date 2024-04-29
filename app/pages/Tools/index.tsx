@@ -80,6 +80,10 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
     navigation.navigate(Routes.TABS.QRGenerator);
   };
 
+  const jumpToImportABI = () => {
+    navigation.navigate(Routes.TABS.ImportABI);
+  };
+
   const jumpToURCodeGenerator = () => {
     navigation.navigate(Routes.TABS.URGenerator);
   };
@@ -176,6 +180,33 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
                 <Trans>tools.urTitle</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
+          <Text
+            style={{
+              width: '100%',
+              fontSize: 16,
+              fontWeight: 'bold',
+              paddingLeft: 20,
+              paddingTop: 20,
+              color: theme.colors.title,
+            }}>
+            <Trans>tools.ABI</Trans>
+          </Text>
+          <TouchableOpacity style={styles.cell} onPress={jumpToImportABI}>
+            <MCIcon name="scan-helper" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>tools.Import</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
