@@ -57,6 +57,7 @@
       "generate": "生成二维码",
       "ABI": "ABI(应用二进制接口)",
       "importByQR": "通过二维码导入ABI",
+      "importButton": "扫描二维码",
       "importedCount": "已导入函数数量：",
       "cleanABIData": "清除本地ABI数据",
       "cleanABIDataMessage": "导入的ABI数据存储在本地磁盘上。你可以点击下面按钮来删除所有本地ABI数据。",

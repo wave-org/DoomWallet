@@ -60,4 +60,5 @@ We will support Bitcoin and other chains in the future.
 - [Create a new wallet](./docs/create.md)
 - [Import and Export](./docs/import.md)
 - [EVM wallet with MetaMask](./docs/evm.md)
+- [EVM Contract ABI](./docs/abi/README.md)
 - [Bitcoin wallet with BlueWallet](./docs/btc.md)

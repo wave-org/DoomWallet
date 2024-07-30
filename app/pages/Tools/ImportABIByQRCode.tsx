@@ -143,7 +143,7 @@ const QRCodeABIImportScreen = ({navigation}: {navigation: any}) => {
           }}
           onPress={scanQRCode}>
           <Text style={{fontSize: 17, color: theme.colors.inverse}}>
-            <Trans>tools.importByQR</Trans>
+            <Trans>tools.importButton</Trans>
           </Text>
         </TouchableOpacity>
       </ScrollView>

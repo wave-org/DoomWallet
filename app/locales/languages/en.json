@@ -57,6 +57,7 @@
       "generate": "Generate",
       "ABI": "EVM ABI",
       "importByQR": "Import ABI by QR Code",
+      "importButton": "Scan QR Code",
       "importedCount": "Imported functions count:",
       "cleanABIData": "Remove all ABI data",
       "cleanABIDataMessage": "Imported ABI data is stored in local storage. You can remove all ABI data by clicking the button below.",
