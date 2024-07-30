@@ -16,6 +16,10 @@
       },
       "connector": "at"
     },
+    "common": {
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
     "language": {
       "title": "Language",
       "caption": "Doom Wallet will support more language in the future.",
@@ -51,9 +55,15 @@
       "QRGeneratorTitle": "QR Code Generator",
       "generatorPlaceHolder": "Type text to generate QR Code, max length is 1024",
       "generate": "Generate",
-      "ABI": "ABI",
-      "Import": "Import",
-      "ImportSuccess": "Import ABI Successfully",
+      "ABI": "EVM ABI",
+      "importByQR": "Import ABI by QR Code",
+      "importedCount": "Imported functions count:",
+      "cleanABIData": "Remove all ABI data",
+      "cleanABIDataMessage": "Imported ABI data is stored in local storage. You can remove all ABI data by clicking the button below.",
+      "importSuccess": "Import ABI Successfully",
+      "importFailed": "Import ABI Failed, please check your ABI or QR code",
+      "scanABICaption1": "Contract ABI is used to decode the input data of EVM sign request. With ABI, you can learn the function name and parameters while reviewing the sign request.\n You can import ABI by animated QR code. \n First, you need to get the ABI from the contract. You can get it from etherscan.io or other block explorers. \n Then, you need to use the link below to generate an animated QR code: ",
+      "scanABICaption2": " Finally, you can click the button below to scan the QR code.",
       "pasteABI": "Paste ABI here"
     },
     "login": {

@@ -16,6 +16,10 @@
       },
       "connector": "于"
     },
+    "common": {
+      "cancel": "取消",
+      "confirm": "确认"
+    },
     "language": {
         "title": "语言",
         "caption": "末日钱包将会支持更多语言选项。",
@@ -52,8 +56,14 @@
       "generatorPlaceHolder": "输入内容来生成二维码，最多1024字节。",
       "generate": "生成二维码",
       "ABI": "ABI(应用二进制接口)",
-      "Import": "导入ABI",
-      "ImportSuccess": "已成功导入ABI",
+      "importByQR": "通过二维码导入ABI",
+      "importedCount": "已导入函数数量：",
+      "cleanABIData": "清除本地ABI数据",
+      "cleanABIDataMessage": "导入的ABI数据存储在本地磁盘上。你可以点击下面按钮来删除所有本地ABI数据。",
+      "importSuccess": "ABI导入成功",
+      "importFailed": "ABI导入失败， 请检查ABI或者二维码是否正确。",
+      "scanABICaption1": "合约ABI（应用二进制接口）用于解析EVM签名请求中的数据。在ABI的帮助下， 你可以了解函数名称和调用参数。\n 你可以通过动态二维码导入ABI。\n 首先，你需要获取合约的ABI数据。你可以从 etherscan.io 或者其他的区块链浏览器获取到ABI。 \n 然后，你需要使用下方的链接来生成一个动态二维码： ",
+      "scanABICaption2": "最后，你可以点击下面的按钮来扫描之前生成的二维码。",
       "pasteABI": "将ABI粘贴到这里"
     },
     "airgap": {

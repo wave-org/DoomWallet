@@ -45,6 +45,7 @@ import * as AutoLock from './wallet/autolock';
 import {useNavigationTheme, useTheme} from './util/theme';
 import {useTranslation, Trans} from 'react-i18next';
 import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
+import QRCodeABIImportScreen from './pages/Tools/ImportABIByQRCode';
 // @ts-ignore
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -297,8 +298,8 @@ function App(): JSX.Element {
             />
             <RootStack.Screen
               name={Routes.TABS.ImportABI}
-              options={{title: t('tools.import')}}
-              component={ABIImportScreen}
+              options={{title: t('tools.importByQR')}}
+              component={QRCodeABIImportScreen}
             />
             <RootStack.Screen
               name={Routes.TABS.URGenerator}

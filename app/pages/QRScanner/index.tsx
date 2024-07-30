@@ -15,6 +15,9 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {useTranslation} from 'react-i18next';
 // @ts-ignore
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {isAQR, AnimatedQRCodeDecoder} from '@doomjs/animated-qrcode';
+
+const aqrDecoder = new AnimatedQRCodeDecoder();
 
 const QRScannerPage = ({route}: {route: any}) => {
   const {onSuccess, notUR} = route.params;
@@ -26,12 +29,34 @@ const QRScannerPage = ({route}: {route: any}) => {
   const theme = useTheme();
   const {t} = useTranslation();
 
+  const [isAnimatedQRCode, setIsAnimatedQRCode] = React.useState(false);
+
   const onScanSuccess = React.useCallback(
     (e: BarCodeReadEvent) => {
+      const handleAnimatedQRCode = (data: string) => {
+        aqrDecoder.receivePart(data);
+        if (aqrDecoder.finished) {
+          navigation.goBack();
+          let result = aqrDecoder.result!.toString('utf-8');
+          onSuccess(result);
+        } else {
+          setProgress(aqrDecoder.getProgress());
+        }
+      };
+
       if (notUR) {
-        // not UR type, just return the data
-        navigation.goBack();
-        onSuccess(e.data);
+        // check whether it is a Doom animated QR code
+        if (isAnimatedQRCode) {
+          handleAnimatedQRCode(e.data);
+        } else if (isAQR(e.data)) {
+          setIsAnimatedQRCode(true);
+          aqrDecoder.reset();
+          handleAnimatedQRCode(e.data);
+        } else {
+          // not UR type, just return the data
+          navigation.goBack();
+          onSuccess(e.data);
+        }
       } else {
         const _decoder = decoder.current;
         if (!_decoder.isComplete()) {
@@ -58,7 +83,7 @@ const QRScannerPage = ({route}: {route: any}) => {
         }
       }
     },
-    [navigation, onSuccess, t, notUR],
+    [navigation, onSuccess, t, notUR, isAnimatedQRCode],
   );
 
   const close = () => {

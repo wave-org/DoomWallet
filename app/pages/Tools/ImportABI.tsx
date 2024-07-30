@@ -19,15 +19,26 @@ const ABIImportScreen = () => {
   const {t} = useTranslation();
   const importABI = async () => {
     Keyboard.dismiss();
-    await EVMDataDecoder.importABI(text);
-    setText('');
-    Toast.show({
-      type: 'success',
-      text1: t('tools.ImportSuccess'),
-      position: 'bottom',
-      bottomOffset: 100,
-      visibilityTime: 2500,
-    });
+    try {
+      await EVMDataDecoder.importABI(text);
+      setText('');
+      Toast.show({
+        type: 'success',
+        text1: t('tools.importSuccess'),
+        position: 'bottom',
+        bottomOffset: 100,
+        visibilityTime: 2500,
+      });
+    } catch (error) {
+      console.log(error);
+      Toast.show({
+        type: 'error',
+        text1: t('tools.importFailed'),
+        position: 'bottom',
+        bottomOffset: 100,
+        visibilityTime: 2500,
+      });
+    }
   };
 
   return (
@@ -50,6 +61,7 @@ const ABIImportScreen = () => {
             borderColor: editing ? theme.colors.primary : theme.colors.border,
             color: theme.colors.text,
             minHeight: 400,
+            maxHeight: '80%',
             width: '90%',
             borderWidth: 1.5,
             padding: 10,
@@ -92,7 +104,7 @@ const ABIImportScreen = () => {
           }}
           onPress={importABI}>
           <Text style={{fontSize: 17, color: theme.colors.inverse}}>
-            <Trans>tools.Import</Trans>
+            <Trans>tools.import</Trans>
           </Text>
         </TouchableOpacity>
       </ScrollView>

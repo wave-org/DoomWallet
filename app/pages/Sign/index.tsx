@@ -34,6 +34,7 @@ const EVMSignPage = ({route}: {route: any}) => {
     undefined,
   );
   const [fromAddress, setFromAddress] = React.useState<string>('');
+  const [decodedData, setDecodedData] = React.useState<string>('');
   const {t} = useTranslation();
   const typeText = (type: RequestType) => {
     switch (type) {
@@ -47,6 +48,28 @@ const EVMSignPage = ({route}: {route: any}) => {
         return t('signEVM.transactionType.unknown');
     }
   };
+
+  const decodeData = async (data: string) => {
+    let decoded: string | undefined;
+    if (data !== '0x') {
+      try {
+        const result = await EVMDataDecoder.decodeInputData(data);
+        if (result.length > 0) {
+          if (result.length > 1) {
+            decoded = JSON.stringify(result, null, 4);
+          } else {
+            decoded = JSON.stringify(result[0], null, 4);
+          }
+        }
+      } catch (error) {
+        console.log('decode data error:', error);
+      }
+    }
+    if (decoded !== undefined) {
+      setDecodedData(decoded);
+    }
+  };
+
   React.useEffect(() => {
     try {
       const req = wallet.parseEVMRequest(ur);
@@ -69,6 +92,11 @@ const EVMSignPage = ({route}: {route: any}) => {
         setFromAddress(req.address);
       }
       setRequest(req);
+      if (req instanceof EIP1559TransactionSignRequest) {
+        decodeData(req.payload.data);
+      } else if (req instanceof TransactionSignRequest) {
+        decodeData(req.payload.data);
+      }
     } catch (error) {
       let errorMessage = (error as Error).message;
       Toast.show({
@@ -116,35 +144,12 @@ const EVMSignPage = ({route}: {route: any}) => {
     }, 100);
   };
 
-  const decodeData = (data: string) => {
-    let decodedData: string | undefined;
-    if (data !== '0x') {
-      try {
-        const result = EVMDataDecoder.decodeInputData(data);
-        if (result.length > 0) {
-          if (result.length > 1) {
-            decodedData = JSON.stringify(result, null, 4);
-          } else {
-            decodedData = JSON.stringify(result[0], null, 4);
-          }
-        }
-      } catch (error) {
-        console.log('decode data error:', error);
-      }
-    }
-    return decodedData;
-  };
-
   const payloadView = () => {
     switch (request.type) {
       case RequestType.transaction:
         if (request instanceof EIP1559TransactionSignRequest) {
           // eth transaction
           const payload = request.payload;
-
-          // decode data
-          let decodedData = decodeData(payload.data);
-
           return (
             <View style={styles.payloadView}>
               <View style={styles.line}>
@@ -207,7 +212,7 @@ const EVMSignPage = ({route}: {route: any}) => {
                 ]}>
                 {payload.data}
               </Text>
-              {decodedData !== undefined ? (
+              {decodedData !== '' ? (
                 <>
                   <Text
                     style={[styles.highlightText, {color: theme.colors.title}]}>
@@ -230,8 +235,6 @@ const EVMSignPage = ({route}: {route: any}) => {
           );
         } else if (request instanceof TransactionSignRequest) {
           const payload = request.payload;
-          // decode data
-          let decodedData = decodeData(payload.data);
           return (
             <View style={styles.payloadView}>
               <View style={styles.line}>
@@ -286,7 +289,7 @@ const EVMSignPage = ({route}: {route: any}) => {
                 ]}>
                 {payload.data}
               </Text>
-              {decodedData !== undefined ? (
+              {decodedData !== '' ? (
                 <>
                   <Text
                     style={[styles.highlightText, {color: theme.colors.title}]}>

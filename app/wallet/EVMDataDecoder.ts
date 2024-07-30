@@ -1,37 +1,43 @@
-import {EVMInputDataDecoder} from 'evm-data-decoder';
-import database from '../util/database';
+import {
+  ABIDatabase,
+  EVMInputDataDecoder,
+  FunctionData,
+  FunctionHeader,
+  FunctionSignature,
+} from '@doomjs/evm-data-decoder';
+import {evmABIInstance} from '../util/database';
 
 export const EVMDataDecoder = new EVMInputDataDecoder();
 
 let inited = false;
-const ABIKey = 'EVM-ABI';
+const headersKey = 'ABI-Headers';
+const dataKey = 'ABI-Data';
 
-class ABIStorage {
-  count: number = 0;
-  async saveABI(abi: string) {
-    database.defaultInstance.setString(`${ABIKey}-${this.count}`, abi);
-    this.count++;
-    database.defaultInstance.setNumber(ABIKey, this.count);
+class ABIStorage implements ABIDatabase {
+  async loadAllFunctionHeaders(): Promise<FunctionHeader[]> {
+    const headers: FunctionHeader[] = evmABIInstance.getArray(headersKey) || [];
+    return headers;
   }
 
-  async loadAllABI() {
-    this.count = database.defaultInstance.getNumber(ABIKey) || 0;
-    const abiList: string[] = [];
-    for (let i = 0; i < this.count; i++) {
-      let abi = database.defaultInstance.getString(`${ABIKey}-${i}`);
-      if (abi) {
-        abiList.push(abi);
-      }
-    }
-    return abiList;
+  async saveFunctionHeaders(headers: FunctionHeader[]): Promise<void> {
+    const allHeaders: FunctionHeader[] =
+      evmABIInstance.getArray(headersKey) || [];
+    allHeaders.push(...headers);
+    await evmABIInstance.setArray(headersKey, allHeaders);
   }
 
-  async deleteAllABI() {
-    for (let i = 0; i < this.count; i++) {
-      database.defaultInstance.delete(`${ABIKey}-${i}`);
-    }
-    database.defaultInstance.delete(ABIKey);
-    this.count = 0;
+  async saveFunctionData(data: FunctionData[]): Promise<void> {
+    data.forEach(d => {
+      evmABIInstance.setString(`${dataKey}-${d.signature}`, d.data);
+    });
+  }
+
+  async getFunctionData(signature: FunctionSignature): Promise<string | null> {
+    return evmABIInstance.getString(`${dataKey}-${signature}`) || null;
+  }
+
+  async reomveAllData(): Promise<void> {
+    evmABIInstance.clearAll();
   }
 }
 

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import {Trans, useTranslation} from 'react-i18next';
 import Toast from 'react-native-toast-message';
@@ -18,6 +19,8 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
 import {useTheme} from '../../util/theme';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {useFocusEffect} from '@react-navigation/native';
+import {EVMDataDecoder} from '../../wallet/EVMDataDecoder';
 
 const ToolsPage = ({navigation}: {navigation: any}) => {
   const [networkState, setNetworkState] = React.useState<NetInfoState | null>(
@@ -86,6 +89,33 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
 
   const jumpToURCodeGenerator = () => {
     navigation.navigate(Routes.TABS.URGenerator);
+  };
+
+  const [importedABIFunctionsCount, setImportedABIFunctionsCount] =
+    React.useState<number>(0);
+  useFocusEffect(
+    React.useCallback(() => {
+      //View did appear
+      setImportedABIFunctionsCount(EVMDataDecoder.importedFunctionCount());
+    }, []),
+  );
+
+  const cleanABIData = () => {
+    Alert.alert(t('tools.cleanABIData'), t('tools.cleanABIDataMessage'), [
+      {
+        text: t('common.cancel'),
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: t('common.confirm'),
+        style: 'destructive',
+        onPress: async () => {
+          await EVMDataDecoder.reomveAllData();
+          setImportedABIFunctionsCount(0);
+        },
+      },
+    ]);
   };
 
   const theme = useTheme();
@@ -202,11 +232,46 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
             <Trans>tools.ABI</Trans>
           </Text>
           <TouchableOpacity style={styles.cell} onPress={jumpToImportABI}>
-            <MCIcon name="scan-helper" size={25} color={theme.colors.primary} />
+            <MCIcon
+              name="data-matrix-scan"
+              size={25}
+              color={theme.colors.primary}
+            />
             <View
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>tools.Import</Trans>
+                <Trans>tools.importByQR</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
+          <View style={styles.cell}>
+            <MCIcon name="database" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>tools.importedCount</Trans>
+              </Text>
+              <Text style={[styles.text, {color: theme.colors.text}]}>
+                {importedABIFunctionsCount}
+              </Text>
+            </View>
+          </View>
+
+          <TouchableOpacity style={styles.cell} onPress={cleanABIData}>
+            <MCIcon
+              name="delete-alert"
+              size={25}
+              color={theme.colors.primary}
+            />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>tools.cleanABIData</Trans>
               </Text>
               <Icon
                 name="chevron-forward"

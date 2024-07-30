@@ -84,8 +84,12 @@ const migrateData = async () => {
   return;
 };
 
+// save evm abi data
+export const evmABIInstance = new MMKVInstance(new MMKV({id: 'evm-abi'}));
+
 export default {
   defaultInstance,
+  evmABIInstance,
   checkIfNeedtoMigrateData,
   migrateData,
   clearAll,
