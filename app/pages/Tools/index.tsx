@@ -172,63 +172,6 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
               paddingTop: 20,
               color: theme.colors.title,
             }}>
-            <Trans>tools.QRCode</Trans>
-          </Text>
-          <TouchableOpacity style={styles.cell} onPress={scanQRCode}>
-            <MCIcon name="scan-helper" size={25} color={theme.colors.primary} />
-            <View
-              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
-              <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>tools.reader</Trans>
-              </Text>
-              <Icon
-                name="chevron-forward"
-                size={24}
-                color={theme.colors.placeholder}
-              />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.cell} onPress={jumpToGenerator}>
-            <MCIcon name="qrcode-edit" size={25} color={theme.colors.primary} />
-            <View
-              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
-              <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>tools.generator</Trans>
-              </Text>
-              <Icon
-                name="chevron-forward"
-                size={24}
-                color={theme.colors.placeholder}
-              />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.cell} onPress={jumpToURCodeGenerator}>
-            <MCIcon name="qrcode-plus" size={25} color={theme.colors.primary} />
-            <View
-              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
-              <Text style={[styles.label, {color: theme.colors.text}]}>
-                <Trans>tools.urTitle</Trans>
-              </Text>
-              <Icon
-                name="chevron-forward"
-                size={24}
-                color={theme.colors.placeholder}
-              />
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
-          <Text
-            style={{
-              width: '100%',
-              fontSize: 16,
-              fontWeight: 'bold',
-              paddingLeft: 20,
-              paddingTop: 20,
-              color: theme.colors.title,
-            }}>
             <Trans>tools.ABI</Trans>
           </Text>
           <TouchableOpacity style={styles.cell} onPress={jumpToImportABI}>
@@ -272,6 +215,63 @@ const ToolsPage = ({navigation}: {navigation: any}) => {
               style={[styles.line, {borderBottomColor: theme.colors.border}]}>
               <Text style={[styles.label, {color: theme.colors.text}]}>
                 <Trans>tools.cleanABIData</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.section, {backgroundColor: theme.colors.surface}]}>
+          <Text
+            style={{
+              width: '100%',
+              fontSize: 16,
+              fontWeight: 'bold',
+              paddingLeft: 20,
+              paddingTop: 20,
+              color: theme.colors.title,
+            }}>
+            <Trans>tools.QRCode</Trans>
+          </Text>
+          <TouchableOpacity style={styles.cell} onPress={scanQRCode}>
+            <MCIcon name="scan-helper" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>tools.reader</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.cell} onPress={jumpToGenerator}>
+            <MCIcon name="qrcode-edit" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>tools.generator</Trans>
+              </Text>
+              <Icon
+                name="chevron-forward"
+                size={24}
+                color={theme.colors.placeholder}
+              />
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.cell} onPress={jumpToURCodeGenerator}>
+            <MCIcon name="qrcode-plus" size={25} color={theme.colors.primary} />
+            <View
+              style={[styles.line, {borderBottomColor: theme.colors.border}]}>
+              <Text style={[styles.label, {color: theme.colors.text}]}>
+                <Trans>tools.urTitle</Trans>
               </Text>
               <Icon
                 name="chevron-forward"
