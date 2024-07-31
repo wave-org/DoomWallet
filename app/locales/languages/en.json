@@ -55,7 +55,7 @@
       "QRGeneratorTitle": "QR Code Generator",
       "generatorPlaceHolder": "Type text to generate QR Code, max length is 1024",
       "generate": "Generate",
-      "ABI": "EVM ABI",
+      "ABI": "EVM Contract ABI",
       "importByQR": "Import ABI by QR Code",
       "importButton": "Scan QR Code",
       "importedCount": "Imported functions count:",

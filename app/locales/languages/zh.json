@@ -55,7 +55,7 @@
       "QRGeneratorTitle": "生成二维码",
       "generatorPlaceHolder": "输入内容来生成二维码，最多1024字节。",
       "generate": "生成二维码",
-      "ABI": "ABI(应用二进制接口)",
+      "ABI": "EVM ABI(应用二进制接口)",
       "importByQR": "通过二维码导入ABI",
       "importButton": "扫描二维码",
       "importedCount": "已导入函数数量：",
