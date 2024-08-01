@@ -14,6 +14,7 @@ import {
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
 import {UR} from '@ngraveio/bc-ur';
+import {getPreviousVersion} from '../util/upgrade';
 
 export type Wallet = {
   EVMWallet: EVMWallet;
@@ -273,7 +274,7 @@ export async function loadWallet(
     BTCWallet: new BTCWallet(key),
   };
   if (walletHeader.evmDerivationPath !== undefined) {
-    wallet.EVMWallet.setCustomDerivationPath(walletHeader.evmDerivationPath);
+    setupSavedDerivationPath(walletHeader.evmDerivationPath);
   }
   return PasswordCheckResult.Correct;
 }
@@ -578,15 +579,30 @@ export function canSignBTCRequest(request: BTCSignRequest): boolean {
   return request.canSignByKey(wallet!.BTCWallet.key);
 }
 
+function setupSavedDerivationPath(path: string) {
+  if (wallet === null) {
+    throw new Error('wallet is null');
+  }
+  if (path === EVMWallet.defaultPath || path === undefined) {
+    wallet.EVMWallet.useDefaultDerivationPath();
+  } else if (path === EVMWallet.ledgerLegacyDerivationPath) {
+    wallet.EVMWallet.useLedgerLegacyDerivationPath();
+  } else if (path === EVMWallet.doomPath) {
+    wallet.EVMWallet.useDoomDerivationPath();
+  } else {
+    wallet.EVMWallet.setCustomDerivationPath(path);
+  }
+}
+
 export type EVMDerivationPathType =
-  | 'Doom'
+  | 'Doom Legacy'
   | 'Ledger Legacy'
-  | 'MetaMask'
+  | 'Default'
   | 'Custom';
 export const EVMDerivationPathTypes: EVMDerivationPathType[] = [
-  'Doom',
+  'Default',
+  'Doom Legacy',
   'Ledger Legacy',
-  'MetaMask',
   'Custom',
 ];
 
@@ -599,34 +615,32 @@ export function getDerivationPathForEVMWallet() {
 
 export function getDerivationTypeForEVMWallet() {
   const path = getDerivationPathForEVMWallet();
-  if (path === EVMWallet.defaultPath) {
-    return 'Doom';
-  } else if (path === LedgerLegacyDerivationPath + '/*') {
+  if (path === EVMWallet.defaultPath || path === undefined) {
+    return 'Default';
+  } else if (path === EVMWallet.ledgerLegacyDerivationPath) {
     return 'Ledger Legacy';
-  } else if (path === MetaMaskDerivationPath + '/*') {
-    return 'MetaMask';
+  } else if (path === EVMWallet.doomPath) {
+    return 'Doom Legacy';
   } else {
     return 'Custom';
   }
 }
 
-const LedgerLegacyDerivationPath = "m/44'/60'/0'";
-const MetaMaskDerivationPath = "m/44'/60'/0'/0";
 export function setLedgercyDerivationPathForEVMWallet() {
   if (wallet === null) {
     throw new Error('wallet is null');
   }
-  wallet.EVMWallet.setCustomDerivationPath(LedgerLegacyDerivationPath);
-  walletHeader!.evmDerivationPath = LedgerLegacyDerivationPath;
+  wallet.EVMWallet.useLedgerLegacyDerivationPath();
+  walletHeader!.evmDerivationPath = EVMWallet.ledgerLegacyDerivationPath;
   EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
 }
 
-export function setMetaMaskDerivationPathForEVMWallet() {
+export function setDoomDerivationPathForEVMWallet() {
   if (wallet === null) {
     throw new Error('wallet is null');
   }
-  wallet.EVMWallet.setCustomDerivationPath(MetaMaskDerivationPath);
-  walletHeader!.evmDerivationPath = MetaMaskDerivationPath;
+  wallet.EVMWallet.useDoomDerivationPath();
+  walletHeader!.evmDerivationPath = EVMWallet.doomPath;
   EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
 }
 
@@ -651,9 +665,22 @@ export function setDefaultDerivationPathForEVMWallet() {
     throw new Error('wallet is null');
   }
   wallet.EVMWallet.useDefaultDerivationPath();
-  walletHeader!.evmDerivationPath = undefined;
+  walletHeader!.evmDerivationPath = EVMWallet.defaultPath;
   EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
 }
+
+// The default derivation path for EVM wallet is changed in version 0.3.0, so we need to update the derivation path for the existing wallets.
+// TODO this function will be removed in the future, maybe version 0.4.0.
+export const derivationPathPatch = (header: WalletHeader | null) => {
+  const previousVersion = getPreviousVersion();
+  if (previousVersion === undefined && header !== null) {
+    if (header.evmDerivationPath === undefined) {
+      // It means the wallet is created before version 0.3.0, and it use the default doom derivation path.
+      header.evmDerivationPath = EVMWallet.doomPath;
+      EncryptedStorage.setItem(KEY_WALLET_HEADER, JSON.stringify(walletHeader));
+    }
+  }
+};
 
 export function validateMnemonic(mnemonic: string) {
   return Key.validateMnemonic(mnemonic);

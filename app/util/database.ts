@@ -60,13 +60,13 @@ export class MMKVInstance {
     this.instance.clearAll();
   };
 }
-const defaultInstance = new MMKVInstance(new MMKV());
+export const defaultInstance = new MMKVInstance(new MMKV());
 
 const dbVersion = 1;
 const dbVersionKey = 'dbversion';
 
 // true means need migrate data
-const checkIfNeedtoMigrateData = () => {
+export const checkIfNeedtoMigrateData = () => {
   const version = defaultInstance.getNumber(dbVersionKey);
   if (version === undefined) {
     defaultInstance.setNumber(dbVersionKey, dbVersion);

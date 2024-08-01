@@ -16,7 +16,7 @@ import {
   setCustomDerivationPathForEVMWallet,
   checkCustomDerivationPathIsValid,
   setDefaultDerivationPathForEVMWallet,
-  setMetaMaskDerivationPathForEVMWallet,
+  setDoomDerivationPathForEVMWallet,
   EVMDerivationPathType,
   EVMDerivationPathTypes,
   getDerivationTypeForEVMWallet,
@@ -45,10 +45,10 @@ const DerivationPathPage = ({navigation}: {navigation: any}) => {
     setDerivationType(type);
     if (type === 'Ledger Legacy') {
       setLedgercyDerivationPathForEVMWallet();
-    } else if (type === 'MetaMask') {
-      setMetaMaskDerivationPathForEVMWallet();
-    } else if (type === 'Doom') {
+    } else if (type === 'Default') {
       setDefaultDerivationPathForEVMWallet();
+    } else if (type === 'Doom Legacy') {
+      setDoomDerivationPathForEVMWallet();
     }
   };
 

@@ -27,13 +27,18 @@ import AutoLockPage from './pages/Settings/AutoLock';
 import LanguagePage from './pages/Settings/LanguagePage';
 import DarkModePage from './pages/Settings/DarkModePage';
 import EVMWalletPage from './pages/Settings/EVM/EVMWallet';
-import ABIImportScreen from './pages/Tools/ImportABI';
+// import ABIImportScreen from './pages/Tools/ImportABI';
 import DerivationPathPage from './pages/Settings/EVM/DerivationPath';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Routes from './routes/Routes';
-import {checkWalletExists, getWallet, logout} from './wallet';
+import {
+  checkWalletExists,
+  getWallet,
+  logout,
+  derivationPathPatch,
+} from './wallet';
 import LoginPage from './pages/Login';
 import SetupPage from './pages/Setup';
 import SetPasswordPage from './pages/Setup/SetPassword';
@@ -125,6 +130,7 @@ function App(): JSX.Element {
       } else {
         try {
           const walletHeader = await checkWalletExists();
+          await derivationPathPatch(walletHeader);
           if (walletHeader !== null) {
             setRootRoute(Routes.ROOT.LOGIN);
           } else {

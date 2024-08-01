@@ -22,8 +22,14 @@ import {loadAirgapMode} from './app/wallet/airgap';
 import * as AutoLock from './app/wallet/autolock';
 import './app/locales/i18n';
 import {initEVMDecoder} from './app/wallet/EVMDataDecoder';
+import {checkIfNeedtoMigrateData} from './app/util/database';
+import {needUpgrade, upgrade} from './app/util/upgrade';
 
 async function load() {
+  await checkIfNeedtoMigrateData();
+  if (needUpgrade()) {
+    await upgrade();
+  }
   // const startTime = Date.now();
   const load1 = loadDarkMode();
   const load2 = loadLanguage();
