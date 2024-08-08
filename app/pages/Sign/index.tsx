@@ -38,6 +38,7 @@ const EVMSignPage = ({route}: {route: any}) => {
   const {t} = useTranslation();
   const typeText = (type: RequestType) => {
     switch (type) {
+      case RequestType.legacyTransaction:
       case RequestType.transaction:
         return t('signEVM.transactionType.transaction');
       case RequestType.personalMessage:
@@ -146,174 +147,171 @@ const EVMSignPage = ({route}: {route: any}) => {
 
   const payloadView = () => {
     switch (request.type) {
-      case RequestType.transaction:
-        if (request instanceof EIP1559TransactionSignRequest) {
-          // eth transaction
-          const payload = request.payload;
-          return (
-            <View style={styles.payloadView}>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  Nonce:
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.nonce}
-                </Text>
-              </View>
-              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                <Trans>signEVM.toAddress</Trans>
+      case RequestType.transaction: {
+        // eth transaction, EIP1559 transaction
+        const payload = request.payload;
+        return (
+          <View style={styles.payloadView}>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                Nonce:
               </Text>
-              <Text style={[styles.addressText, {color: theme.colors.text}]}>
-                {payload.to}
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.nonce}
               </Text>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  <Trans>signEVM.value</Trans>
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.value.toString()}
-                </Text>
-              </View>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  maxFeePerGas:
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.maxFeePerGas.toString()}
-                </Text>
-              </View>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  maxPriorityFeePerGas:
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.maxPriorityFeePerGas.toString()}
-                </Text>
-              </View>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  gasLimit:
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.gasLimit.toString()}
-                </Text>
-              </View>
-              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                <Trans>signEVM.data</Trans>
-              </Text>
-              <Text
-                style={[
-                  styles.dataText,
-                  {
-                    borderColor: theme.colors.border,
-                    backgroundColor: theme.colors.surface,
-                    color: theme.colors.text,
-                  },
-                ]}>
-                {payload.data}
-              </Text>
-              {decodedData !== '' ? (
-                <>
-                  <Text
-                    style={[styles.highlightText, {color: theme.colors.title}]}>
-                    <Trans>signEVM.decodedData</Trans>
-                  </Text>
-                  <Text
-                    style={[
-                      styles.dataText,
-                      {
-                        borderColor: theme.colors.border,
-                        backgroundColor: theme.colors.surface,
-                        color: theme.colors.text,
-                      },
-                    ]}>
-                    {decodedData}
-                  </Text>
-                </>
-              ) : null}
             </View>
-          );
-        } else if (request instanceof TransactionSignRequest) {
-          const payload = request.payload;
-          return (
-            <View style={styles.payloadView}>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  Nonce:
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.nonce}
-                </Text>
-              </View>
-              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                <Trans>signEVM.toAddress</Trans>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              <Trans>signEVM.toAddress</Trans>
+            </Text>
+            <Text style={[styles.addressText, {color: theme.colors.text}]}>
+              {payload.to}
+            </Text>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                <Trans>signEVM.value</Trans>
               </Text>
-              <Text style={[styles.addressText, {color: theme.colors.text}]}>
-                {payload.to}
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.value.toString()}
               </Text>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  <Trans>signEVM.value</Trans>
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.value.toString()}
-                </Text>
-              </View>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  <Trans>signEVM.gasPrice</Trans>
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.gasPrice.toString()}
-                </Text>
-              </View>
-              <View style={styles.line}>
-                <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
-                  gasLimit:
-                </Text>
-                <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                  {payload.gasLimit.toString()}
-                </Text>
-              </View>
-              <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-                <Trans>signEVM.data</Trans>
-              </Text>
-              <Text
-                style={[
-                  styles.dataText,
-                  {
-                    borderColor: theme.colors.border,
-                    backgroundColor: theme.colors.surface,
-                    color: theme.colors.text,
-                  },
-                ]}>
-                {payload.data}
-              </Text>
-              {decodedData !== '' ? (
-                <>
-                  <Text
-                    style={[styles.highlightText, {color: theme.colors.title}]}>
-                    <Trans>signEVM.decodedData</Trans>
-                  </Text>
-                  <Text
-                    style={[
-                      styles.dataText,
-                      {
-                        borderColor: theme.colors.border,
-                        backgroundColor: theme.colors.surface,
-                        color: theme.colors.text,
-                      },
-                    ]}>
-                    {decodedData}
-                  </Text>
-                </>
-              ) : null}
             </View>
-          );
-        } else {
-          // never
-          return null;
-        }
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                maxFeePerGas:
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.maxFeePerGas.toString()}
+              </Text>
+            </View>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                maxPriorityFeePerGas:
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.maxPriorityFeePerGas.toString()}
+              </Text>
+            </View>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                gasLimit:
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.gasLimit.toString()}
+              </Text>
+            </View>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              <Trans>signEVM.data</Trans>
+            </Text>
+            <Text
+              style={[
+                styles.dataText,
+                {
+                  borderColor: theme.colors.border,
+                  backgroundColor: theme.colors.surface,
+                  color: theme.colors.text,
+                },
+              ]}>
+              {payload.data}
+            </Text>
+            {decodedData !== '' ? (
+              <>
+                <Text
+                  style={[styles.highlightText, {color: theme.colors.title}]}>
+                  <Trans>signEVM.decodedData</Trans>
+                </Text>
+                <Text
+                  style={[
+                    styles.dataText,
+                    {
+                      borderColor: theme.colors.border,
+                      backgroundColor: theme.colors.surface,
+                      color: theme.colors.text,
+                    },
+                  ]}>
+                  {decodedData}
+                </Text>
+              </>
+            ) : null}
+          </View>
+        );
+      }
+      case RequestType.legacyTransaction: {
+        const payload = request.payload;
+        return (
+          <View style={styles.payloadView}>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                Nonce:
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.nonce}
+              </Text>
+            </View>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              <Trans>signEVM.toAddress</Trans>
+            </Text>
+            <Text style={[styles.addressText, {color: theme.colors.text}]}>
+              {payload.to}
+            </Text>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                <Trans>signEVM.value</Trans>
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.value.toString()}
+              </Text>
+            </View>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                <Trans>signEVM.gasPrice</Trans>
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.gasPrice.toString()}
+              </Text>
+            </View>
+            <View style={styles.line}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                gasLimit:
+              </Text>
+              <Text style={[styles.lineText, {color: theme.colors.text}]}>
+                {payload.gasLimit.toString()}
+              </Text>
+            </View>
+            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
+              <Trans>signEVM.data</Trans>
+            </Text>
+            <Text
+              style={[
+                styles.dataText,
+                {
+                  borderColor: theme.colors.border,
+                  backgroundColor: theme.colors.surface,
+                  color: theme.colors.text,
+                },
+              ]}>
+              {payload.data}
+            </Text>
+            {decodedData !== '' ? (
+              <>
+                <Text
+                  style={[styles.highlightText, {color: theme.colors.title}]}>
+                  <Trans>signEVM.decodedData</Trans>
+                </Text>
+                <Text
+                  style={[
+                    styles.dataText,
+                    {
+                      borderColor: theme.colors.border,
+                      backgroundColor: theme.colors.surface,
+                      color: theme.colors.text,
+                    },
+                  ]}>
+                  {decodedData}
+                </Text>
+              </>
+            ) : null}
+          </View>
+        );
+      }
       case RequestType.personalMessage: {
         const payload = (request as MessageSignRequest).payload;
         return (
@@ -403,7 +401,8 @@ const EVMSignPage = ({route}: {route: any}) => {
               <Trans>signEVM.noAddressCaption</Trans>
             </Text>
           )}
-          {request.type === RequestType.transaction ? (
+          {request.type === RequestType.transaction ||
+          request.type === RequestType.legacyTransaction ? (
             <View style={styles.line}>
               <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
                 Chain ID:

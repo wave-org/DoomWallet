@@ -29,15 +29,30 @@
     },
     "find": {
       "title": "Sign",
-      "beforeScan": "If you want to sign a transaction, you need to use MetaMask or BlueWallet to start a transaction and get a QR code. Then you can scan the QR code to sign the transaction.",
-      "scanButton": "Scan QR Code And Sign",
-      "permessionText": "Doom Wallet need camera permission to scan a QR code to sign Transaction.",
+      "beforeScan": "You need to use a hot wallet, like MetaMask or BlueWallet, to create a transaction and get a QR Code to sign that transaction. ",
+      "scanButton": "Scan and Sign",
+      "permessionText": "Doom Wallet needs camera permission to scan a QR code to sign Transaction.",
+      "evmTransactionTypes": {
+        "transaction": "Transaction",
+        "legacyTransaction": "Legacy Transaction",
+        "typedData": "Typed Data",
+        "personalMessage": "Message"
+      },
       "getPermissionButton": "Grant Camera Permission",
-      "cameraPermissionBlocked": "Please go to Settings and grant the Camera permission."
+      "cameraPermissionBlocked": "Please go to Settings and grant the Camera permission.",
+      "recordHeader": "Sign Records",
+      "recordStatus": "Status: ",
+      "recordSuccess": "Success",
+      "recordFailed": "Failed",
+      "recordPending": "Pending",
+      "recordFees": "Fees: ",
+      "recordFromAddress": "Signed by: ",
+      "recordEVMType": "Type: ",
+      "recordsHint": "Doom Wallet will store the signed request data. You can check and review what you have signed here."
     },
     "tools": {
       "title": "Tools",
-      "offlineWarning": "Using this wallet in a offline device will be much safer!",
+      "offlineWarning": "Using this wallet in an offline device will be much safer!",
       "networkLabel": "Network status",
       "connected": "Connected",
       "disconnected": "Not connected",
