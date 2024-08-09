@@ -28,6 +28,7 @@ const Routes = {
     ExportWallet: 'ExportWallet',
     ExportWalletByQRCode: 'ExportWalletByQRCode',
     ImportABI: 'ImportABI',
+    BTCSignRecord: 'BTCSignRecord',
   },
 };
 

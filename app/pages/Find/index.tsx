@@ -311,6 +311,7 @@ const FindPage = ({navigation}: {navigation: any}) => {
   const [cameraPermission, setCameraPermission] =
     React.useState('not-determined');
   const [records, setRecords] = React.useState<SignRecord[]>([]);
+  const [recordPage, setRecordPage] = React.useState(0);
   const [recordsPageCount, setRecordsPageCount] = React.useState(0);
 
   const refreshRecordsPageCount = () => {
@@ -321,11 +322,19 @@ const FindPage = ({navigation}: {navigation: any}) => {
   useFocusEffect(
     React.useCallback(() => {
       //View did appear
-      refreshRecordsPageCount();
-    }, []),
+      const count = refreshRecordsPageCount();
+      if (count > 0) {
+        if (recordPage >= count) {
+          refreshRecords(count - 1);
+        } else {
+          refreshRecords(recordPage);
+        }
+      }
+    }, [recordPage]),
   );
 
   const refreshRecords = (page: number) => {
+    setRecordPage(page);
     setRecords(getRecords(page));
   };
 
@@ -374,10 +383,16 @@ const FindPage = ({navigation}: {navigation: any}) => {
     }
   };
 
+  const onClickSignRecord = (record: SignRecord) => {
+    const route =
+      record.chainType === 'BTC' ? Routes.TABS.BTCSignRecord : 'TODO eth';
+    navigation.navigate(route, {
+      record,
+    });
+  };
+
   const renderItem = ({item}: {item: SignRecord}) => {
-    return (
-      <Item item={item} onPress={o => console.log(o.index)} theme={theme} />
-    );
+    return <Item item={item} onPress={onClickSignRecord} theme={theme} />;
   };
 
   return (
@@ -435,11 +450,17 @@ const FindPage = ({navigation}: {navigation: any}) => {
           }
           ListFooterComponent={
             records.length > 0 ? (
-              <Pagination
-                count={recordsPageCount}
-                onPageChange={index => refreshRecords(index)}
-                theme={theme}
-              />
+              <View
+                style={{
+                  paddingBottom: 20,
+                  paddingTop: 10,
+                }}>
+                <Pagination
+                  count={recordsPageCount}
+                  onPageChange={index => refreshRecords(index)}
+                  theme={theme}
+                />
+              </View>
             ) : null
           }
         />

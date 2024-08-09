@@ -27,6 +27,7 @@ import AutoLockPage from './pages/Settings/AutoLock';
 import LanguagePage from './pages/Settings/LanguagePage';
 import DarkModePage from './pages/Settings/DarkModePage';
 import EVMWalletPage from './pages/Settings/EVM/EVMWallet';
+import BTCSignRecordScreen from './pages/Find/BTCSignRecord';
 // import ABIImportScreen from './pages/Tools/ImportABI';
 import DerivationPathPage from './pages/Settings/EVM/DerivationPath';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -361,6 +362,11 @@ function App(): JSX.Element {
               name={Routes.TABS.BTCWallet}
               options={{title: t('BTC.title')}}
               component={BTCWalletPage}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.BTCSignRecord}
+              options={{title: t('find.btcRecordTitle')}}
+              component={BTCSignRecordScreen}
             />
             <RootStack.Screen
               name={Routes.TABS.DARKMODE}

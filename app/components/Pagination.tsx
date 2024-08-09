@@ -35,7 +35,6 @@ const Pagination = ({
       }
     }
     setPageTitles(titles);
-    console.log('titles : ', titles);
   }, [count, page]);
   const changePage = (index: number) => {
     if (index < 0 || index >= count) {

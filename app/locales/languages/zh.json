@@ -48,6 +48,10 @@
       "recordFees": "手续费：",
       "recordFromAddress": "签名地址： ",
       "recordEVMType": "具体类型：",
+      "btcRecordTitle": "比特币签名记录",
+      "recordSignAt": "签名时间: ",
+      "deleteRecord" : "删除该条记录",
+      "deleteRecordConfirm": "删除记录后无法恢复，确认删除？",
       "recordsHint": "末日钱包会保存所有的签名请求记录。 你可以在这里查看你在签名时间和内容。 你可以点击每一条记录来查看详细信息。"
     },
     "tools": {

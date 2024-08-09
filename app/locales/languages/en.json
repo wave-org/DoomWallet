@@ -48,6 +48,10 @@
       "recordFees": "Fees: ",
       "recordFromAddress": "Signed by: ",
       "recordEVMType": "Type: ",
+      "btcRecordTitle": "BTC Sign Record",
+      "recordSignAt": "Signed at: ",
+      "deleteRecord" : "Delete Record",
+      "deleteRecordConfirm": "Are you sure to delete this record? Deleted records can't be recovered.",
       "recordsHint": "Doom Wallet will store the signed request data. You can check and review what you have signed here."
     },
     "tools": {
