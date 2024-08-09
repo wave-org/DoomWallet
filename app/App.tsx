@@ -28,6 +28,7 @@ import LanguagePage from './pages/Settings/LanguagePage';
 import DarkModePage from './pages/Settings/DarkModePage';
 import EVMWalletPage from './pages/Settings/EVM/EVMWallet';
 import BTCSignRecordScreen from './pages/Find/BTCSignRecord';
+import EVMSignRecordScreen from './pages/Find/EVMSignRecord';
 // import ABIImportScreen from './pages/Tools/ImportABI';
 import DerivationPathPage from './pages/Settings/EVM/DerivationPath';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -367,6 +368,11 @@ function App(): JSX.Element {
               name={Routes.TABS.BTCSignRecord}
               options={{title: t('find.btcRecordTitle')}}
               component={BTCSignRecordScreen}
+            />
+            <RootStack.Screen
+              name={Routes.TABS.EVMSignRecord}
+              options={{title: t('find.evmRecordTitle')}}
+              component={EVMSignRecordScreen}
             />
             <RootStack.Screen
               name={Routes.TABS.DARKMODE}

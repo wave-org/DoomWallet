@@ -128,13 +128,13 @@ const Item = ({item, onPress, theme}: ItemProps) => {
   }
   // EVM
   const record = item as EVMSignRecord;
-  let type = t('find.evmTransactionTypes.typedData');
+  let type = t('common.evmTransactionTypes.typedData');
   if (record.type === RequestType.legacyTransaction) {
-    type = t('find.evmTransactionTypes.legacyTransaction');
+    type = t('common.evmTransactionTypes.legacyTransaction');
   } else if (record.type === RequestType.transaction) {
-    type = t('find.evmTransactionTypes.transaction');
+    type = t('common.evmTransactionTypes.transaction');
   } else if (record.type === RequestType.personalMessage) {
-    type = t('find.evmTransactionTypes.personalMessage');
+    type = t('common.evmTransactionTypes.personalMessage');
   }
   return (
     <View
@@ -385,9 +385,12 @@ const FindPage = ({navigation}: {navigation: any}) => {
 
   const onClickSignRecord = (record: SignRecord) => {
     const route =
-      record.chainType === 'BTC' ? Routes.TABS.BTCSignRecord : 'TODO eth';
+      record.chainType === 'BTC'
+        ? Routes.TABS.BTCSignRecord
+        : Routes.TABS.EVMSignRecord;
     navigation.navigate(route, {
       record,
+      index: record.index,
     });
   };
 

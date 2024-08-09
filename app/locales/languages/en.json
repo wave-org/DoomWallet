@@ -18,7 +18,13 @@
     },
     "common": {
       "cancel": "Cancel",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "evmTransactionTypes": {
+        "transaction": "Transaction",
+        "legacyTransaction": "Legacy Transaction",
+        "typedData": "Typed Data",
+        "personalMessage": "Message"
+      }
     },
     "language": {
       "title": "Language",
@@ -32,12 +38,6 @@
       "beforeScan": "You need to use a hot wallet, like MetaMask or BlueWallet, to create a transaction and get a QR Code to sign that transaction. ",
       "scanButton": "Scan and Sign",
       "permessionText": "Doom Wallet needs camera permission to scan a QR code to sign Transaction.",
-      "evmTransactionTypes": {
-        "transaction": "Transaction",
-        "legacyTransaction": "Legacy Transaction",
-        "typedData": "Typed Data",
-        "personalMessage": "Message"
-      },
       "getPermissionButton": "Grant Camera Permission",
       "cameraPermissionBlocked": "Please go to Settings and grant the Camera permission.",
       "recordHeader": "Sign Records",
@@ -49,6 +49,7 @@
       "recordFromAddress": "Signed by: ",
       "recordEVMType": "Type: ",
       "btcRecordTitle": "BTC Sign Record",
+      "evmRecordTitle": "EVM Sign Record",
       "recordSignAt": "Signed at: ",
       "deleteRecord" : "Delete Record",
       "deleteRecordConfirm": "Are you sure to delete this record? Deleted records can't be recovered.",
@@ -239,12 +240,6 @@
     },
     "signEVM": {
       "title": "Sign EVM Transaction",
-      "transactionType": {
-        "transaction": "Transaction",
-        "message": "Message",
-        "typedData": "Typed Data",
-        "unknown": "Unknown"
-      },
       "invalidQR": "Invalid QR Code",
       "noFoundAddressToast": "Addresses can not be derived : The input addresses are not in the wallet",
       "invalidQRText": "Invalid UR, Can't sign. Please check the QR code",

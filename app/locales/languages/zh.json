@@ -18,7 +18,13 @@
     },
     "common": {
       "cancel": "取消",
-      "confirm": "确认"
+      "confirm": "确认",
+      "evmTransactionTypes": {
+        "transaction": "交易（EIP1559）",
+        "legacyTransaction": "旧版交易",
+        "typedData": "结构化数据",
+        "personalMessage": "消息签名"
+      }
     },
     "language": {
         "title": "语言",
@@ -31,12 +37,6 @@
       "title": "签名",
       "beforeScan": "你需要使用热钱包（如MetaMask和BlueWallet）发起一笔交易并获取一个二维码用于签名。",
       "scanButton": "扫描并签名",
-      "evmTransactionTypes": {
-        "transaction": "交易（EIP1559）",
-        "legacyTransaction": "旧版交易",
-        "typedData": "结构化数据",
-        "personalMessage": "消息签名"
-      },
       "permessionText": "末日钱包需要相机权限来扫描二维码。",
       "getPermissionButton": "获取相机权限",
       "cameraPermissionBlocked": "请到设置中开启相机权限。",
@@ -49,6 +49,7 @@
       "recordFromAddress": "签名地址： ",
       "recordEVMType": "具体类型：",
       "btcRecordTitle": "比特币签名记录",
+      "evmRecordTitle": "以太坊（EVM）签名记录",
       "recordSignAt": "签名时间: ",
       "deleteRecord" : "删除该条记录",
       "deleteRecordConfirm": "删除记录后无法恢复，确认删除？",
@@ -241,12 +242,6 @@
     },
     "signEVM": {
       "title": "签名EVM交易",
-      "transactionType": {
-        "transaction": "交易",
-        "message": "消息",
-        "typedData": "格式化数据",
-        "unknown": "未知类型"
-      },
       "invalidQR": "错误的二维码",
       "noFoundAddressToast": "该钱包无法派生得到这个交易的地址， 即输入地址不在这个钱包内，无法处理。",
       "invalidQRText": "二维码有问题， 无法签名，请检查该二维码。",

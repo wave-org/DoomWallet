@@ -3,40 +3,44 @@ import {
   SafeAreaView,
   Text,
   View,
-  TouchableOpacity,
   StyleSheet,
-  useWindowDimensions,
-  ActivityIndicator,
+  Button,
   ScrollView,
+  Alert,
 } from 'react-native';
-import * as wallet from '../../wallet';
-import QRCode from 'react-native-qrcode-svg';
-import {
-  SignRequest,
-  RequestType,
-  TransactionSignRequest,
-  EIP1559TransactionSignRequest,
-  MessageSignRequest,
-  TypedDataSignRequest,
-} from 'doom-wallet-core';
-import {Toast} from 'react-native-toast-message/lib/src/Toast';
-import {UR} from '@ngraveio/bc-ur';
+import {RequestType} from 'doom-wallet-core';
+
 import {useTheme} from '../../util/theme';
 import {useTranslation, Trans} from 'react-i18next';
 import {EVMDataDecoder} from '../../wallet/EVMDataDecoder';
+import {
+  EVMSignRecord,
+  changeRecordStatus,
+  deleteRecord,
+  TransactionStatus,
+} from '../../wallet/signRecord';
+import SimpleToggleButton from '../../components/SimpleToggleButton';
+import {DateTime} from 'luxon';
 
-const EVMSignPage = ({route}: {route: any}) => {
-  const ur = route.params.ur as UR;
-  const scrollViewRef = React.useRef<ScrollView>(null);
-  // if the address or type is wrong.
-  const [wrongUr, setWrongUr] = React.useState<boolean>(false);
-  const [request, setRequest] = React.useState<SignRequest | undefined | null>(
-    undefined,
-  );
+const EVMSignRecordScreen = ({
+  route,
+  navigation,
+}: {
+  navigation: any;
+  route: any;
+}) => {
+  const record = route.params.record as EVMSignRecord;
   const [fromAddress, setFromAddress] = React.useState<string>('');
   const [decodedData, setDecodedData] = React.useState<string>('');
-  const [type, setType] = React.useState<string>('');
   const {t} = useTranslation();
+  let type = t('common.evmTransactionTypes.typedData');
+  if (record.type === RequestType.legacyTransaction) {
+    type = t('common.evmTransactionTypes.legacyTransaction');
+  } else if (record.type === RequestType.transaction) {
+    type = t('common.evmTransactionTypes.transaction');
+  } else if (record.type === RequestType.personalMessage) {
+    type = t('common.evmTransactionTypes.personalMessage');
+  }
 
   const decodeData = async (data: string) => {
     let decoded: string | undefined;
@@ -60,93 +64,61 @@ const EVMSignPage = ({route}: {route: any}) => {
   };
 
   React.useEffect(() => {
-    try {
-      const req = wallet.parseEVMRequest(ur);
-      const derivedAddress = wallet.getDerivedAddressByPath(req.derivationPath);
-      if (req.address === undefined) {
-        setFromAddress(derivedAddress);
-      } else if (derivedAddress !== req.address) {
-        setWrongUr(true);
-        // console.log('address can not be derived');
-        Toast.show({
-          type: 'error',
-          text1: t('signEVM.invalidQR'),
-          text2: t('signEVM.noFoundAddressToast'),
-          position: 'bottom',
-          bottomOffset: 100,
-          visibilityTime: 2500,
-        });
-        setFromAddress(req.address);
-      } else {
-        setFromAddress(req.address);
-      }
-      setRequest(req);
-      if (req instanceof EIP1559TransactionSignRequest) {
-        decodeData(req.payload.data);
-      } else if (req instanceof TransactionSignRequest) {
-        decodeData(req.payload.data);
-      }
-      let typeText = t('common.evmTransactionTypes.typedData');
-      if (req.type === RequestType.legacyTransaction) {
-        typeText = t('common.evmTransactionTypes.legacyTransaction');
-      } else if (req.type === RequestType.transaction) {
-        typeText = t('common.evmTransactionTypes.transaction');
-      } else if (req.type === RequestType.personalMessage) {
-        typeText = t('common.evmTransactionTypes.personalMessage');
-      }
-      setType(typeText);
-    } catch (error) {
-      let errorMessage = (error as Error).message;
-      Toast.show({
-        type: 'error',
-        text1: t('signEVM.invalidQR'),
-        text2: errorMessage,
-        position: 'bottom',
-        bottomOffset: 100,
-        visibilityTime: 2500,
-      });
-      setWrongUr(true);
-      setRequest(null);
-      // console.log(error);
+    setFromAddress(record.address);
+    if (record.type === RequestType.transaction) {
+      decodeData(record.transaction!.data);
+    } else if (record.type === RequestType.legacyTransaction) {
+      decodeData(record.legacyTransaction!.data);
     }
-  }, [ur, t]);
+    navigation.setOptions({
+      title: `${t('find.evmRecordTitle')} #${record.index}`,
+    });
+  }, [record, navigation, t]);
   const theme = useTheme();
-  const [signedUrText, setSignedUrText] = React.useState<string>('');
-  const {width} = useWindowDimensions();
 
-  if (request === undefined) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <ActivityIndicator color={theme.colors.primary} />
-      </SafeAreaView>
-    );
+  const txStatusTitleList = [
+    t('find.recordSuccess'),
+    t('find.recordFailed'),
+    t('find.recordPending'),
+  ];
+  let defaultSelectedIndex = 0;
+  switch (record.status) {
+    case 'failed':
+      defaultSelectedIndex = 1;
+      break;
+    case 'pending':
+      defaultSelectedIndex = 2;
+      break;
   }
 
-  if (request === null) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={[styles.errorText, {color: theme.colors.error}]}>
-          <Trans>signEVM.invalidQRText</Trans>
-        </Text>
-      </SafeAreaView>
-    );
-  }
+  const statusList: TransactionStatus[] = ['success', 'failed', 'pending'];
+  const changeStatus = (index: number) => {
+    changeRecordStatus(record.index, statusList[index]);
+  };
 
-  const sign = () => {
-    const signedUr = wallet.signEVMRequest(request);
-    setSignedUrText(signedUr);
-    setTimeout(() => {
-      if (scrollViewRef.current) {
-        scrollViewRef.current.scrollToEnd({animated: true});
-      }
-    }, 100);
+  const onDelete = () => {
+    Alert.alert(t('find.deleteRecord'), t('find.deleteRecordConfirm'), [
+      {
+        text: t('common.cancel'),
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: t('common.confirm'),
+        style: 'destructive',
+        onPress: async () => {
+          deleteRecord(record.index);
+          navigation.goBack();
+        },
+      },
+    ]);
   };
 
   const payloadView = () => {
-    switch (request.type) {
+    switch (record.type) {
       case RequestType.transaction: {
         // eth transaction, EIP1559 transaction
-        const payload = request.payload;
+        const payload = record.transaction!;
         return (
           <View style={styles.payloadView}>
             <View style={styles.line}>
@@ -232,7 +204,7 @@ const EVMSignPage = ({route}: {route: any}) => {
         );
       }
       case RequestType.legacyTransaction: {
-        const payload = request.payload;
+        const payload = record.legacyTransaction!;
         return (
           <View style={styles.payloadView}>
             <View style={styles.line}>
@@ -310,7 +282,7 @@ const EVMSignPage = ({route}: {route: any}) => {
         );
       }
       case RequestType.personalMessage: {
-        const payload = (request as MessageSignRequest).payload;
+        const payload = record.message!;
         return (
           <View style={styles.payloadView}>
             <Text style={[styles.highlightText, {color: theme.colors.title}]}>
@@ -332,7 +304,7 @@ const EVMSignPage = ({route}: {route: any}) => {
       }
 
       case RequestType.typedData: {
-        const payload = (request as TypedDataSignRequest).payload;
+        const payload = record.typedData!;
         let formattedPayload = '';
         try {
           formattedPayload = JSON.stringify(payload, null, 4);
@@ -365,13 +337,29 @@ const EVMSignPage = ({route}: {route: any}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
+      <ScrollView style={styles.scrollView}>
         <View style={styles.textContainer}>
-          {wrongUr ? (
-            <Text style={[styles.highlightText, {color: theme.colors.error}]}>
-              <Trans>signEVM.invalidQRText</Trans>
+          <View style={styles.line}>
+            <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+              <Trans>find.recordSignAt</Trans>
             </Text>
-          ) : null}
+            <Text style={[styles.lineText, {color: theme.colors.text}]}>
+              {DateTime.fromMillis(record.timestamp).toFormat(
+                'yyyy-MM-dd HH:mm:ss',
+              )}
+            </Text>
+          </View>
+          <View style={styles.line}>
+            <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+              <Trans>find.recordStatus</Trans>
+            </Text>
+            <SimpleToggleButton
+              titles={txStatusTitleList}
+              defaultSelectedIndex={defaultSelectedIndex}
+              onChange={changeStatus}
+              theme={theme}
+            />
+          </View>
           <View style={styles.line}>
             <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
               <Trans>signEVM.type</Trans>
@@ -386,64 +374,27 @@ const EVMSignPage = ({route}: {route: any}) => {
           <Text style={[styles.addressText, {color: theme.colors.text}]}>
             {fromAddress}
           </Text>
-          {request.address === undefined && (
-            <Text
-              style={{
-                marginBottom: 15,
-                color: theme.colors.placeholder,
-                fontSize: 13,
-                width: '100%',
-                textAlign: 'left',
-              }}>
-              <Trans>signEVM.noAddressCaption</Trans>
-            </Text>
-          )}
-          {request.type === RequestType.transaction ||
-          request.type === RequestType.legacyTransaction ? (
+
+          {record.type === RequestType.transaction ||
+          record.type === RequestType.legacyTransaction ? (
             <View style={styles.line}>
               <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
                 Chain ID:
               </Text>
               <Text style={[styles.lineText, {color: theme.colors.text}]}>
-                {request.chainID}
+                {record.chainID}
               </Text>
             </View>
           ) : null}
           <View style={styles.line} />
           {payloadView()}
-          {signedUrText === '' && !wrongUr ? (
-            <TouchableOpacity
-              activeOpacity={0.6}
-              style={[
-                styles.button,
-                {
-                  backgroundColor: theme.colors.primary,
-                },
-              ]}
-              onPress={sign}>
-              <Text style={[styles.buttonText, {color: theme.colors.inverse}]}>
-                <Trans>signEVM.sign</Trans>
-              </Text>
-            </TouchableOpacity>
-          ) : null}
 
-          {!wrongUr && signedUrText !== '' ? (
-            <Text style={[styles.highlightText, {color: theme.colors.title}]}>
-              <Trans>signEVM.result</Trans>
-            </Text>
-          ) : null}
+          <Button
+            title={t('find.deleteRecord')}
+            color={theme.colors.error}
+            onPress={onDelete}
+          />
         </View>
-        {signedUrText !== '' && !wrongUr ? (
-          <View
-            style={[
-              styles.qrCodeContainer,
-              {
-                backgroundColor: '#DFE0E2',
-              },
-            ]}>
-            <QRCode size={width - 40} value={signedUrText} />
-          </View>
-        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
@@ -547,4 +498,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EVMSignPage;
+export default EVMSignRecordScreen;

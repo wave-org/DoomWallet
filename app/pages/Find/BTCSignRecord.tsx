@@ -88,6 +88,12 @@ const BTCSignRecordScreen = ({
       break;
   }
 
+  React.useEffect(() => {
+    navigation.setOptions({
+      title: `${t('find.btcRecordTitle')} #${record.index}`,
+    });
+  }, [record, navigation, t]);
+
   const statusList: TransactionStatus[] = ['success', 'failed', 'pending'];
   const changeStatus = (index: number) => {
     changeRecordStatus(record.index, statusList[index]);
