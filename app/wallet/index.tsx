@@ -15,6 +15,8 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
 import {UR} from '@ngraveio/bc-ur';
 import {getPreviousVersion} from '../util/upgrade';
+import database from '../util/database';
+import {EVMDataDecoder} from './EVMDataDecoder';
 
 export type Wallet = {
   EVMWallet: EVMWallet;
@@ -439,6 +441,9 @@ export async function resetWallet() {
   walletSecret = null;
   await EncryptedStorage.removeItem(KEY_WALLET_HEADER);
   await Keychain.resetGenericPassword();
+  // remove data in database
+  await database.clearAll();
+  await EVMDataDecoder.reomveAllData();
 }
 
 export function parseEVMRequest(ur: UR) {

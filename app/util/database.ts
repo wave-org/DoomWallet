@@ -77,6 +77,7 @@ export const checkIfNeedtoMigrateData = () => {
 
 const clearAll = async () => {
   await defaultInstance.clearAll();
+  await evmABIInstance.clearAll();
 };
 
 const migrateData = async () => {
