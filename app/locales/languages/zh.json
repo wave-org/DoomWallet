@@ -53,6 +53,7 @@
       "recordSignAt": "签名时间: ",
       "deleteRecord" : "删除该条记录",
       "deleteRecordConfirm": "删除记录后无法恢复，确认删除？",
+      "recordAutoSaveHint": "末日钱包会自动保存已签名的数据，以供未来查看检查。",
       "recordsHint": "末日钱包会保存所有的签名请求记录。 你可以在这里查看你在签名时间和内容。 你可以点击每一条记录来查看详细信息。"
     },
     "tools": {

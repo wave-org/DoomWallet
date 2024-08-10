@@ -8,6 +8,8 @@ import {
   useWindowDimensions,
   ActivityIndicator,
   ScrollView,
+  Alert,
+  Button,
 } from 'react-native';
 import * as wallet from '../../wallet';
 import QRCode from 'react-native-qrcode-svg';
@@ -24,6 +26,13 @@ import {UR} from '@ngraveio/bc-ur';
 import {useTheme} from '../../util/theme';
 import {useTranslation, Trans} from 'react-i18next';
 import {EVMDataDecoder} from '../../wallet/EVMDataDecoder';
+import {
+  createEVMSignRecord,
+  changeRecordStatus,
+  deleteRecord,
+  TransactionStatus,
+} from '../../wallet/signRecord';
+import SimpleToggleButton from '../../components/SimpleToggleButton';
 
 const EVMSignPage = ({route}: {route: any}) => {
   const ur = route.params.ur as UR;
@@ -113,6 +122,7 @@ const EVMSignPage = ({route}: {route: any}) => {
   const theme = useTheme();
   const [signedUrText, setSignedUrText] = React.useState<string>('');
   const {width} = useWindowDimensions();
+  const [recordIndex, setRecordIndex] = React.useState<number>(-1);
 
   if (request === undefined) {
     return (
@@ -135,11 +145,43 @@ const EVMSignPage = ({route}: {route: any}) => {
   const sign = () => {
     const signedUr = wallet.signEVMRequest(request);
     setSignedUrText(signedUr);
+    // save sign record
+    const record = createEVMSignRecord(request, fromAddress);
+    setRecordIndex(record.index);
     setTimeout(() => {
       if (scrollViewRef.current) {
         scrollViewRef.current.scrollToEnd({animated: true});
       }
     }, 100);
+  };
+
+  const txStatusTitleList = [
+    t('find.recordSuccess'),
+    t('find.recordFailed'),
+    t('find.recordPending'),
+  ];
+  const defaultSelectedIndex = 2;
+  const statusList: TransactionStatus[] = ['success', 'failed', 'pending'];
+  const changeStatus = (index: number) => {
+    changeRecordStatus(recordIndex, statusList[index]);
+  };
+
+  const onDelete = () => {
+    Alert.alert(t('find.deleteRecord'), t('find.deleteRecordConfirm'), [
+      {
+        text: t('common.cancel'),
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: t('common.confirm'),
+        style: 'destructive',
+        onPress: async () => {
+          deleteRecord(recordIndex);
+          setRecordIndex(-1);
+        },
+      },
+    ]);
   };
 
   const payloadView = () => {
@@ -442,6 +484,35 @@ const EVMSignPage = ({route}: {route: any}) => {
               },
             ]}>
             <QRCode size={width - 40} value={signedUrText} />
+          </View>
+        ) : null}
+        {recordIndex > -1 ? (
+          <View style={styles.textContainer}>
+            <Text
+              style={{
+                color: theme.colors.placeholder,
+                fontSize: 15,
+                marginBottom: 5,
+                width: '100%',
+              }}>
+              <Trans>find.recordAutoSaveHint</Trans>
+            </Text>
+            <View style={[styles.line, {marginBottom: 10}]}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                <Trans>find.recordStatus</Trans>
+              </Text>
+              <SimpleToggleButton
+                titles={txStatusTitleList}
+                defaultSelectedIndex={defaultSelectedIndex}
+                onChange={changeStatus}
+                theme={theme}
+              />
+            </View>
+            <Button
+              title={t('find.deleteRecord')}
+              color={theme.colors.error}
+              onPress={onDelete}
+            />
           </View>
         ) : null}
       </ScrollView>

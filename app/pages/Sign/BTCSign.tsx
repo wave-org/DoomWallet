@@ -7,6 +7,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  Alert,
+  Button,
 } from 'react-native';
 import * as wallet from '../../wallet';
 import {BTCSignRequest} from 'doom-wallet-core';
@@ -15,6 +17,13 @@ import {UR} from '@ngraveio/bc-ur';
 import AnimatedQRCode from '../../components/AnimatedQRCode';
 import {useTheme} from '../../util/theme';
 import {useTranslation, Trans} from 'react-i18next';
+import {
+  createBTCSignRecord,
+  changeRecordStatus,
+  deleteRecord,
+  TransactionStatus,
+} from '../../wallet/signRecord';
+import SimpleToggleButton from '../../components/SimpleToggleButton';
 
 const BTCSignPage = ({route}: {route: any}) => {
   const ur = route.params.ur as UR;
@@ -60,6 +69,7 @@ const BTCSignPage = ({route}: {route: any}) => {
   }, [ur, t]);
 
   const [urList, setUrList] = React.useState<string[]>([]);
+  const [recordIndex, setRecordIndex] = React.useState<number>(-1);
 
   if (request === undefined) {
     return (
@@ -81,12 +91,44 @@ const BTCSignPage = ({route}: {route: any}) => {
 
   const sign = () => {
     const signedUr = wallet.signBTCRequest(request);
+    // save sign record
+    const record = createBTCSignRecord(request);
+    setRecordIndex(record.index);
     setUrList(signedUr);
     setTimeout(() => {
       if (scrollViewRef.current) {
         scrollViewRef.current.scrollToEnd({animated: true});
       }
     }, 100);
+  };
+
+  const txStatusTitleList = [
+    t('find.recordSuccess'),
+    t('find.recordFailed'),
+    t('find.recordPending'),
+  ];
+  const defaultSelectedIndex = 2;
+  const statusList: TransactionStatus[] = ['success', 'failed', 'pending'];
+  const changeStatus = (index: number) => {
+    changeRecordStatus(recordIndex, statusList[index]);
+  };
+
+  const onDelete = () => {
+    Alert.alert(t('find.deleteRecord'), t('find.deleteRecordConfirm'), [
+      {
+        text: t('common.cancel'),
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: t('common.confirm'),
+        style: 'destructive',
+        onPress: async () => {
+          deleteRecord(recordIndex);
+          setRecordIndex(-1);
+        },
+      },
+    ]);
   };
 
   const addressesView = () => {
@@ -269,6 +311,35 @@ const BTCSignPage = ({route}: {route: any}) => {
         </View>
         {urList.length !== 0 && !wrongUr && !notThisWallet ? (
           <AnimatedQRCode urList={urList} />
+        ) : null}
+        {recordIndex > -1 ? (
+          <View style={styles.textContainer}>
+            <Text
+              style={{
+                color: theme.colors.placeholder,
+                fontSize: 15,
+                marginBottom: 5,
+                width: '100%',
+              }}>
+              <Trans>find.recordAutoSaveHint</Trans>
+            </Text>
+            <View style={[styles.line, {marginBottom: 10}]}>
+              <Text style={[styles.lineLabel, {color: theme.colors.title}]}>
+                <Trans>find.recordStatus</Trans>
+              </Text>
+              <SimpleToggleButton
+                titles={txStatusTitleList}
+                defaultSelectedIndex={defaultSelectedIndex}
+                onChange={changeStatus}
+                theme={theme}
+              />
+            </View>
+            <Button
+              title={t('find.deleteRecord')}
+              color={theme.colors.error}
+              onPress={onDelete}
+            />
+          </View>
         ) : null}
       </ScrollView>
     </SafeAreaView>
