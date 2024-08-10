@@ -329,6 +329,8 @@ const FindPage = ({navigation}: {navigation: any}) => {
         } else {
           refreshRecords(recordPage);
         }
+      } else {
+        setRecords([]);
       }
     }, [recordPage]),
   );
